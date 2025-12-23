@@ -1,17 +1,24 @@
-@import "tailwindcss";
+/* Fix browser autofill background and text color for dark input fields */
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #3A4483 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Custom root variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Optional: dark mode support */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,6 +26,7 @@
   }
 }
 
+/* Base body styling */
 body {
   background: var(--background);
   color: var(--foreground);

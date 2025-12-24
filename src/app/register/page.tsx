@@ -27,33 +27,29 @@ export default function RegisterPage() {
 					<input
 						type="text"
 						placeholder="Username"
-						className="p-3 rounded-lg bg-[#3A4483] text-white outline-none w-full"
+						className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
 					/>
 					<hr className="border-t-4 border-[#29388A] my-0 rounded" />
 					<input
 						type="password"
 						placeholder="Password"
-						className="p-3 rounded-lg bg-[#3A4483] text-white outline-none w-full"
+						className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
 					/>
 					<hr className="border-t-4 border-[#29388A] my-0 rounded" />
 
 					<input
 						type="text"
 						placeholder="email"
-						className="p-3 rounded-lg bg-[#3A4483] text-white outline-none w-full"
+						className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
 					/>
 					<hr className="border-t-4 border-[#29388A] my-0 rounded" />
-					<input
-						type="text"
-						placeholder="Currency"
-						className="p-3 rounded-lg bg-[#3A4483] text-white outline-none w-full"
-					/>
-					<hr className="border-t-4 border-[#29388A] my-0 rounded" />
+					<label htmlFor="date">Monthly circle date</label>
 					<input
 						type="date"
 						placeholder="Monthly Circle Date"
-						className="p-3 rounded-lg bg-[#3A4483] text-white outline-none w-full"
+						className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
 					/>
+
 					<hr className="border-t-4 border-[#29388A] my-0 rounded" />
 
 					<button

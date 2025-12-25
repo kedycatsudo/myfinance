@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 type SidebarProps = {
 	className?: string;
 	activePath?: string;
@@ -18,15 +19,17 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 	return (
 		<aside
 			className={
-				"w-full bg-[#727272] opacity-75 flex flex-col items-center relative" +
+				"flex flex-col flex-grow w-full bg-[#727272] opacity-75 items-center" +
 				(className ? ` ${className}` : "")
 			}
 		>
-			<img
+			<Image
 				src="/Menu.svg"
 				alt="Menu icon"
-				className="mt-2 w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
-			/>{" "}
+				width={80}
+				height={80}
+				className="w-8 h-8 mt-2 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-20 lg:h-20"
+			/>
 			{navItems.map(({ href, label }) => {
 				const isActive = activePath === href;
 				return (
@@ -41,7 +44,7 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 						<Link
 							href={href}
 							className={
-								`block text-xs md:text-m lg:text-xl font-bold cursor-pointer hover:text-blue-200 text-center w-full py-2 z-[9999] ` +
+								`block text-xs md:text-m lg:text-xl font-bold cursor-pointer hover:text-blue-200 text-center py-2 z-[9999] ` +
 								(isActive ? "text-white" : "text-[#A5A5A5]")
 							}
 						>

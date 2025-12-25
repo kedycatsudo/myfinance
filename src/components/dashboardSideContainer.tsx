@@ -20,7 +20,7 @@ export default function DashboardSideContainer({
 }: RecentContainerProps) {
 	return (
 		<div
-			className={`flex flex-col items-center justify-center w-40 h-128 rounded-xl pt-2 pb-2 px-1 bg-[#3A4483]/75 ${className}`}
+			className={`flex flex-col rounded-xl pt-2 pb-2 px-1 bg-[#3A4483]/75 ${className}`}
 			style={{ minWidth: 0 }}
 		>
 			<Section title="Recently Investment" entries={investments} />
@@ -31,8 +31,8 @@ export default function DashboardSideContainer({
 
 function Section({ title, entries }: { title: string; entries: Entry[] }) {
 	return (
-		<div className="w-full flex flex-col items-center">
-			<h3 className="text-white font-bold text-sm mb-0.5">{title}</h3>
+		<div className="flex flex-col items-center">
+			<h3 className=" text-white font-bold text-sm mb-0.5">{title}</h3>
 			{/* Thick Divider */}
 			<div className="w-full h-2 mb-1 rounded bg-[#29388A]" />
 			{entries.map((e, idx) => (
@@ -53,15 +53,15 @@ function EntryCard({ name, price, date }: Entry) {
 	return (
 		<div className="flex flex-col items-center justify-center mb-1 w-full">
 			{/* Name */}
-			<span className="text-white text-base font-semibold text-[15px]">
+			<span className="text-white text-base font-semibold text-xs md:text-m lg:text-xl">
 				{name}
 			</span>
 			{/* Price Box */}
-			<div className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-sm shadow-inner">
+			<div className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-xs md:text-m lg:text-xl shadow-inner">
 				{price}
 			</div>
 			{/* Date Box */}
-			<div className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-1 py-0.5 font-medium text-[#e7e7e7] text-xs">
+			<div className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-1 py-0.5 font-medium text-[#e7e7e7] text-xs md:text-m lg:text-xl">
 				{date}
 			</div>
 		</div>

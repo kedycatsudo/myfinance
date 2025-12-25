@@ -1,7 +1,6 @@
 "use client";
 import SideBar from "@/components/sideBar";
 import DashboardSideContainer from "@/components/dashboardSideContainer";
-import Link from "next/link";
 import MobileMenuButton from "@/components/mobileBurgerMenu";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -9,8 +8,8 @@ import Image from "next/image";
 export default function Dashboard() {
 	const pathName = usePathname();
 	return (
-		<main className="min-h-screen bg-[#A9AECE] flex flex-row items-center justify-center relative px-2">
-			<div className="w-fit flex flex-col items-center relative gap-5">
+		<main className="min-h-screen bg-[#A9AECE] flex flex-row items-center  relative px-2">
+			<div className=" w-20 sm:w-32 md:w-32 lg:w-48 flex flex-col items-center relative gap-5">
 				<Image
 					src="/images/myfinancelogo.png"
 					alt="MyFinance Logo"
@@ -36,15 +35,14 @@ export default function Dashboard() {
 							date: "2025-12-03",
 						},
 					]}
-					className="z-20"
 				/>
 			</div>
 
 			{/* Main Content */}
-			<section className="w-full flex flex-col items-center justify-center  relative">
+			<section className=" w-full flex flex-col items-center justify-center">
 				{/* Place your main content here */}
-				<div className="flex flex-col">
-					<h1 className=" w-full text-3xl sm:text-5xl md:text-7xl font-bold text-[#1E1552] text-center z-10">
+				<div className="flex flex-col absolute top-5 px-2">
+					<h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-[#1E1552] text-center z-10">
 						DASHBOARD
 					</h1>
 

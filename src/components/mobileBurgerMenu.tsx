@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-
 export type MenuItem = {
 	href: string;
 	label: string;
@@ -23,7 +23,13 @@ export default function MobileMenuButton({ menuItems }: MobileMenuButtonProps) {
 					className="bg-[#3A4483] opacity-75 rounded-full p-4 shadow-lg"
 					aria-label="Open menu"
 				>
-					<img src="/Menu.svg" alt="Menu icon" className="w-8 h-8" />
+					<Image
+						src="/Menu.svg"
+						alt="Menu icon"
+						width={32}
+						height={32}
+						className="w-8 h-8"
+					/>
 				</button>
 			</div>
 

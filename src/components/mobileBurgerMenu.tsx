@@ -1,11 +1,17 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
 
-export default function MobileMenuButton({
-	menuContent,
-}: {
-	menuContent: React.ReactNode;
-}) {
+export type MenuItem = {
+	href: string;
+	label: string;
+};
+
+type MobileMenuButtonProps = {
+	menuItems: MenuItem[];
+};
+
+export default function MobileMenuButton({ menuItems }: MobileMenuButtonProps) {
 	const [open, setOpen] = useState(false);
 
 	return (
@@ -30,10 +36,7 @@ export default function MobileMenuButton({
 						onClick={() => setOpen(false)}
 					/>
 					{/* Menu modal with scale & slide animation */}
-					<div
-						className="relative z-10 mx-4 w-full max-w-xs bg-[#3A4483] rounded-2xl shadow-2xl p-6 
-            animate-slide-down"
-					>
+					<div className="relative z-10 mx-4 w-full max-w-xs bg-[#3A4483] rounded-2xl shadow-2xl p-6 animate-slide-down">
 						{/* Close button */}
 						<button
 							className="absolute top-3 right-3 text-white text-2xl"
@@ -42,7 +45,18 @@ export default function MobileMenuButton({
 						>
 							×
 						</button>
-						{menuContent}
+						<nav className="flex flex-col gap-6 text-center">
+							{menuItems.map((item) => (
+								<Link
+									key={item.href}
+									href={item.href}
+									className="text-white font-bold text-xl hover:text-blue-200"
+									onClick={() => setOpen(false)} // close when clicking a link
+								>
+									{item.label}
+								</Link>
+							))}
+						</nav>
 					</div>
 				</div>
 			)}

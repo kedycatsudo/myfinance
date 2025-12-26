@@ -19,7 +19,7 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 	return (
 		<aside
 			className={
-				"flex flex-col flex-grow w-full bg-[#727272] opacity-75 items-center" +
+				"flex flex-col w-full bg-[#727272] opacity-75 items-center" +
 				(className ? ` ${className}` : "")
 			}
 		>
@@ -37,19 +37,20 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 						key={label}
 						className={
 							// If active, apply your special highlight style
-							(isActive ? "w-full bg-[#3A4483] opacity-75 rounded" : "w-full") +
+							(isActive ? " w-full bg-[#3A4483] opacity rounded" : "w-full") +
 							" relative"
 						}
 					>
 						<Link
 							href={href}
 							className={
-								`block text-xs md:text-m lg:text-xl font-bold cursor-pointer hover:text-blue-200 text-center py-2 z-[9999] ` +
-								(isActive ? "text-white" : "text-[#A5A5A5]")
+								`block text-xs md:text-m lg:text-xl font-bold cursor-pointer hover:text-[#1E1552] text-center py-2 z-[9999] ` +
+								(isActive ? "text-white z-[9999]" : "text-[#A5A5A5]")
 							}
 						>
 							{label}
 						</Link>
+						<div className="w-full h-2 bg-[#3A4483] rounded" />
 					</div>
 				);
 			})}

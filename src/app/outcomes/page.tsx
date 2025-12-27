@@ -9,7 +9,7 @@ import PieChart from "@/components/pieChart";
 /* frameworks import */
 import { usePathname } from "next/navigation";
 
-export default function Dashboard() {
+export default function Outcomes() {
 	const pathName = usePathname();
 	return (
 		<main className="flex flex-col xs:flex-row min-h-screen bg-[#A9AECE] gap-1">
@@ -22,14 +22,14 @@ export default function Dashboard() {
 				{/*recently investment and miscs */}
 				<div className="flex flex-row xs:flex-col relative gap-2 items-center">
 					<RecentSideInfo
-						header="Recent investments"
+						header="Recent Paid"
 						items={[
 							{ name: "data", amount: 2300, date: Date.now() },
 							{ name: "data", amount: 2300, date: Date.now() },
 						]}
 					/>
 					<RecentSideInfo
-						header="Recent Misceleneous"
+						header="Upcoming payment"
 						items={[
 							{ name: "data", amount: 2300, date: Date.now() },
 							{ name: "data", amount: 2300, date: Date.now() },
@@ -43,13 +43,8 @@ export default function Dashboard() {
 				{/* header and welcome message */}
 				<div className="flex flex-col">
 					<h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
-						DASHBOARD
+						Outcomes
 					</h1>
-					<p className="text-x xs:text-xl font-bold text-[#1E1552] max-w-[750px] text-center z-10">
-						Welcome to MyFinance Dashboard. Congratulations, your colour is
-						<span className="text-green-700"> green </span>
-						so far this month.
-					</p>
 				</div>
 				<div className="flex xs:hidden flex-col items-center gap-5">
 					<SideBar
@@ -59,14 +54,14 @@ export default function Dashboard() {
 					{/*recently investment and miscs */}
 					<div className="flex flex-row xs:flex-col relative gap-1 items-center">
 						<RecentSideInfo
-							header="Recent investments"
+							header="Recent Paid"
 							items={[
 								{ name: "data", amount: 2300, date: Date.now() },
 								{ name: "data", amount: 2300, date: Date.now() },
 							]}
 						/>
 						<RecentSideInfo
-							header="Recent Misc"
+							header="Upcoming payment"
 							items={[
 								{ name: "data", amount: 2300, date: Date.now() },
 								{ name: "data", amount: 2300, date: Date.now() },
@@ -77,7 +72,7 @@ export default function Dashboard() {
 				{/*current Incomes and outcomes snapshots */}
 				<div className="flex flex-row justify-center items-center gap-1 w-full">
 					<FinancialSnapShot
-						header="Current Outcomes"
+						header="Quick catch up for this month"
 						items={[
 							{
 								name: "data",
@@ -95,7 +90,7 @@ export default function Dashboard() {
 					/>
 
 					<FinancialSnapShot
-						header="Current Incomes"
+						header="Outcome Sources"
 						items={[
 							{
 								name: "data",
@@ -139,42 +134,6 @@ export default function Dashboard() {
 					/>
 				</div>
 				{/* recent outcomes */}
-				<div className="pl-1 flex flex-col xs:flex-row items-center w-full gap-5">
-					<FinancialSnapShot
-						header="Recent Outcomes"
-						items={[
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-						]}
-					></FinancialSnapShot>
-					<FinancialSnapShot
-						header="Recent Incomes"
-						items={[
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-						]}
-					></FinancialSnapShot>
-				</div>
 			</section>
 
 			<MobileMenuButton

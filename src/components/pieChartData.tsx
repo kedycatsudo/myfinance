@@ -13,7 +13,7 @@ type InOutSnapshotProps = {
 	className?: string;
 };
 
-export default function FinancialSnapShot({
+export default function PieChartData({
 	header,
 	items,
 	className,
@@ -36,10 +36,24 @@ export default function FinancialSnapShot({
 				{items.map((item, idx) => (
 					<React.Fragment key={item.name}>
 						<div className="flex flex-row justify-between items-center py-2 gap-1">
-							<span className="text-white text-s xs:text-xl">{item.name}</span>
+							<div className="flex gap-1">
+								<span className="text-white text-s xs:text-xl">
+									{item.name}
+								</span>
+								<span
+									style={{
+										display: "inline-block",
+										width: 14,
+										height: 14,
+										borderRadius: "50%",
+										background: "#4FD1C5",
+										marginRight: 8,
+									}}
+								/>
+							</div>
 
 							<div className="flex flex-col xs:flex-row gap-1">
-								<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner">
+								<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
 									{item.amount.toLocaleString(undefined, {
 										minimumFractionDigits: 2,
 									})}
@@ -62,10 +76,8 @@ export default function FinancialSnapShot({
 			{/* Total Row */}
 			{(header === "Current Outcomes" || header === "Current Incomes") && (
 				<div className="flex items-center justify-between py-2 gap-4 w-full">
-					<span className="text-white font-semibold text-l xs:text-xl">
-						Total{" "}
-					</span>
-					<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
+					<span className="text-white font-semibold">Total </span>
+					<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-xs md:text-sm lg:text-sm shadow-inner">
 						{total.toLocaleString(undefined, { minimumFractionDigits: 2 })}$
 					</span>
 				</div>

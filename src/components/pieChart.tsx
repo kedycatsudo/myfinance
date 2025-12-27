@@ -5,7 +5,12 @@ type PieData = {
 	amount: number;
 };
 
-type PieChartProps = { data: PieData[]; size?: number; colors?: string[] };
+type PieChartProps = {
+	data: PieData[];
+	size?: number;
+	colors?: string[];
+	className?: string;
+};
 
 // Some default colors, enough for most use cases
 const defaultColors = [
@@ -24,7 +29,12 @@ function getColor(idx: number, custom?: string[]) {
 	return defaultColors[idx % defaultColors.length];
 }
 
-export default function PieChart({ data, size = 200, colors }: PieChartProps) {
+export default function PieChart({
+	data,
+	size = 200,
+	colors,
+	className,
+}: PieChartProps) {
 	const total = data.reduce((sum, d) => sum + Math.max(0, d.amount), 0) || 1;
 	const radius = size / 2 - 8;
 	const cx = size / 2,
@@ -45,7 +55,11 @@ export default function PieChart({ data, size = 200, colors }: PieChartProps) {
 		return slice;
 	});
 	return (
-		<div className="flex flex-col items-center">
+		<div
+			className={
+				"flex flex-col items-center" + (className ? ` ${className}` : "")
+			}
+		>
 			{/* Pie chart */}
 			<svg
 				width={size}

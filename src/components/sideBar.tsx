@@ -44,7 +44,7 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 						<Link
 							href={href}
 							className={
-								`block text-xs md:text-m lg:text-xl font-bold cursor-pointer hover:text-[#1E1552] text-center py-2 z-[9999] ` +
+								`block text-s xs:text-xl font-bold cursor-pointer hover:text-[#1E1552] text-center py-2 z-[9999] ` +
 								(isActive ? "text-white z-[9999]" : "text-[#A5A5A5]")
 							}
 						>

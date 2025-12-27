@@ -20,7 +20,7 @@ export default function MobileMenuButton({ menuItems }: MobileMenuButtonProps) {
 			<div className="flex justify-center [@media(min-width:450px)]:hidden fixed bottom-4 left-0 w-full z-50">
 				<button
 					onClick={() => setOpen(true)}
-					className="bg-[#3A4483] opacity-75 rounded-full p-4 shadow-lg"
+					className="bg-[#727272] rounded-full p-4 shadow-lg"
 					aria-label="Open menu"
 				>
 					<Image

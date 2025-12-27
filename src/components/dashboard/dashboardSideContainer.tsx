@@ -20,7 +20,7 @@ export default function DashboardSideContainer({
 }: RecentContainerProps) {
 	return (
 		<div
-			className={`flex flex-col rounded-xl px-2 bg-[#3A4483]/75 ${className}`}
+			className={`flex flex-row xs:flex-col rounded-xl px-2 bg-[#3A4483]/75 ${className}`}
 		>
 			<Section title="Recently Investment" entries={investments} />
 			<Section title="Recently Miscs" entries={miscs} />

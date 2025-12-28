@@ -6,6 +6,7 @@ import MobileMenuButton from "@/components/mobileBurgerMenu";
 import FinancialSnapShot from "@/components/dashboard/inOutMiniSnaps";
 import PieChartData from "@/components/pieChartData";
 import PieChart from "@/components/pieChart";
+import CatchUpTheMonth from "@/components/outcomes/catchUpTheMonth";
 /* frameworks import */
 import { usePathname } from "next/navigation";
 
@@ -71,41 +72,80 @@ export default function Outcomes() {
 				</div>
 				{/*current Incomes and outcomes snapshots */}
 				<div className="flex flex-row justify-center items-center gap-1 w-full">
-					<FinancialSnapShot
-						header="Quick catch up for this month"
+					<CatchUpTheMonth
+						header="Quick Catch Up For This Month"
 						items={[
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "",
+								name: "Payments in the loop",
+								data: "4 payments",
 							},
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
+								name: "Total Outgoing",
+								data: "500.00$",
+							},
+							{
+								name: "Paid Outgoing amount",
+								data: "500.00 $",
+							},
+							{
+								name: "Paid Paynebts",
+								data: "3 payments",
+							},
+							{
+								name: "Coming Payments",
+								data: "3 payments",
+							},
+							{
+								name: "Misc",
+								data: "600",
+							},
+							{
+								name: "Outcome Sources",
+								data: "4 sources",
+							},
+							{
+								name: "Reset Date",
+								data: "-/01-",
 							},
 						]}
-					/>
-
-					<FinancialSnapShot
+					></CatchUpTheMonth>
+					<CatchUpTheMonth
 						header="Outcome Sources"
 						items={[
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
+								name: "Mortgage",
+								data: "2300",
 							},
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
+								name: "Grocery",
+								data: "500.00$",
+							},
+							{
+								name: "Utilities",
+								data: "500.00 $",
+							},
+							{
+								name: "gas",
+								data: "32300",
+							},
+							{
+								name: "debt",
+								data: "2300",
+							},
+							{
+								name: "subscription",
+								data: "600",
+							},
+							{
+								name: "investment",
+								data: "2300",
+							},
+							{
+								name: "Reset Date",
+								data: "2300",
 							},
 						]}
-					/>
+					></CatchUpTheMonth>
 				</div>
 				{/* chartpie summary */}
 				<div className="pl-1 flex flex-col xs:flex-row  items-center w-full gap-1">

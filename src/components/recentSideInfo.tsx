@@ -26,7 +26,7 @@ export default function RecentSideInfo({
 				<div className="w-full flex flex-col">
 					{items.map((item, idx) => (
 						<React.Fragment key={item.name}>
-							<div className="w-full flex flex-row justify-between items-center py-2 gap-1">
+							<div className="w-full flex flex-row justify-between items-center py-2 gap-">
 								<span className="text-white text-s xs:text-xl">
 									{item.name}
 								</span>

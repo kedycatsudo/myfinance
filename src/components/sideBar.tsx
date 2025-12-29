@@ -19,7 +19,7 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 	return (
 		<aside
 			className={
-				"flex flex-col w-full bg-[#727272] opacity-75 items-center" +
+				"flex flex-col w-full bg-[#989899] opacity-75 items-center" +
 				(className ? ` ${className}` : "")
 			}
 		>
@@ -45,7 +45,7 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 							href={href}
 							className={
 								`block text-s xs:text-xl font-bold cursor-pointer hover:text-[#1E1552] text-center py-2 z-[9999] ` +
-								(isActive ? "text-white z-[9999]" : "text-[#A5A5A5]")
+								(isActive ? "text-white z-[9999]" : "text-[#1E1552]")
 							}
 						>
 							{label}

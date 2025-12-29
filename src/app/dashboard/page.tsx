@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 export default function Dashboard() {
 	const pathName = usePathname();
 	return (
-		<main className="flex flex-col xs:flex-row min-h-screen bg-[#A9AECE] gap-1">
+		<main className="flex flex-col xs:flex-row min-h-screen gap-1">
 			{/* Side containers */}
 			<div className="hidden xs:flex flex-col items-center gap-5">
 				<SideBar

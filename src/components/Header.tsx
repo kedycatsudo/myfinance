@@ -11,9 +11,9 @@ export default function Header() {
 					alt="MyFinance Logo"
 					width={80}
 					height={80}
-					className="w-8 h-8 sm:w-10 sm:h-10 md:w-16 md:h-16 lg:w-20 lg:h-20 shadow-lg rounded-full object-cover z-[9999] mt-2"
+					className="w-10 h-10 sm:w-10 sm:h-10 md:w-16 md:h-16 lg:w-20 lg:h-20 shadow-lg rounded-full object-cover z-[9999] mt-2"
 				/>
-				<div className="p-1 bg-[#29388A] rounded font-bold text-[#a9deff] text-xs md:text-sm lg:text-sm shadow-inner">
+				<div className="p-1 bg-[#29388A] rounded font-bold text-[#a9deff] text-xs xs:text-xl lg:text-sm shadow-inner">
 					<DateTimeDisplay />
 				</div>
 			</div>

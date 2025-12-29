@@ -7,13 +7,14 @@ import FinancialSnapShot from "@/components/dashboard/inOutMiniSnaps";
 import PieChartData from "@/components/pieChartData";
 import PieChart from "@/components/pieChart";
 import CatchUpTheMonth from "@/components/outcomes/catchUpTheMonth";
+import SourcesDetailsContainer from "@/components/sourcesDetailsContainer/sourcesDetailsContainer";
 /* frameworks import */
 import { usePathname } from "next/navigation";
 
 export default function Outcomes() {
 	const pathName = usePathname();
 	return (
-		<main className="flex flex-col xs:flex-row min-h-screen bg-[#A9AECE] gap-1">
+		<main className="flex flex-col xs:flex-row min-h-screen gap-1">
 			{/* Side containers */}
 			<div className="hidden xs:flex flex-col items-center gap-5">
 				<SideBar
@@ -25,15 +26,15 @@ export default function Outcomes() {
 					<RecentSideInfo
 						header="Recent Paid"
 						items={[
-							{ name: "data", amount: 2300, date: Date.now() },
-							{ name: "data", amount: 2300, date: Date.now() },
+							{ name: "data1", amount: 2300, date: Date.now() },
+							{ name: "data2", amount: 2300, date: Date.now() },
 						]}
 					/>
 					<RecentSideInfo
 						header="Upcoming payment"
 						items={[
-							{ name: "data", amount: 2300, date: Date.now() },
-							{ name: "data", amount: 2300, date: Date.now() },
+							{ name: "data3", amount: 2300, date: Date.now() },
+							{ name: "data4", amount: 2300, date: Date.now() },
 						]}
 					/>
 				</div>
@@ -44,7 +45,7 @@ export default function Outcomes() {
 				{/* header and welcome message */}
 				<div className="flex flex-col">
 					<h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
-						Outcomes
+						OUTCOMES
 					</h1>
 				</div>
 				<div className="flex xs:hidden flex-col items-center gap-5">
@@ -57,15 +58,15 @@ export default function Outcomes() {
 						<RecentSideInfo
 							header="Recent Paid"
 							items={[
-								{ name: "data", amount: 2300, date: Date.now() },
-								{ name: "data", amount: 2300, date: Date.now() },
+								{ name: "data1", amount: 2300, date: Date.now() },
+								{ name: "data2", amount: 2300, date: Date.now() },
 							]}
 						/>
 						<RecentSideInfo
 							header="Upcoming payment"
 							items={[
-								{ name: "data", amount: 2300, date: Date.now() },
-								{ name: "data", amount: 2300, date: Date.now() },
+								{ name: "data3", amount: 2300, date: Date.now() },
+								{ name: "data4", amount: 2300, date: Date.now() },
 							]}
 						/>
 					</div>
@@ -159,19 +160,22 @@ export default function Outcomes() {
 						header="Pie Chart Data"
 						items={[
 							{
-								name: "data",
+								name: "data1",
 								amount: 2300,
 								date: Date.now(),
 								description: "description",
 							},
 							{
-								name: "data",
+								name: "data2",
 								amount: 2300,
 								date: Date.now(),
 								description: "description",
 							},
 						]}
 					/>
+				</div>
+				<div className="flex flex-col w-full">
+					<SourcesDetailsContainer header="Outcome Sources"></SourcesDetailsContainer>
 				</div>
 				{/* recent outcomes */}
 			</section>

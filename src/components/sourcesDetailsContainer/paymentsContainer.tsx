@@ -2,25 +2,29 @@
 import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import { useState } from "react";
+import PaymentField from "./paymentField";
 type PaymentsContainerProps = {
 	name: string;
 	onClick: () => void;
+	amount: number;
 	open: boolean;
 	openPayments: { [paymentId: string]: boolean };
 	setOpenPayments: Dispatch<SetStateAction<{ [paymentId: string]: boolean }>>;
 };
 const paymentFields = [
-	{ id: "paymentName" },
-	{ type: "credit card" },
-	{ paymentAmount: "400" },
-	{ date: "-/25/-" },
-	{ loop: "monthly" },
-	{ status: "paid" },
+	{ id: 1, field: "paymentName", variable: "Kub" },
+	{ id: 2, field: "type", variable: "credit card" },
+	{ id: 3, field: "payment amount", variable: "400" },
+	{ id: 4, field: "date", variable: "12/25/2025" },
+	{ id: 5, field: "loop", variable: "true" },
+	{ id: 6, field: "status", variable: "paid" },
 ];
+
 export default function PaymentsContainer({
 	onClick,
 	open,
 	name,
+	amount,
 	openPayments,
 	setOpenPayments,
 }: PaymentsContainerProps) {
@@ -47,6 +51,21 @@ export default function PaymentsContainer({
 				>
 					{name}
 				</h1>
+				<h1
+					className={`text-2xl xs:text-3xl text-[#FFFFF] font-bold mr-2`}
+					onClick={onClick}
+					onKeyDown={(e) => {
+						if (e.key === "Enter" || e.key === " ") {
+							e.preventDefault();
+							onClick();
+						}
+					}}
+					tabIndex={0}
+					role="button"
+				>
+					{amount + ".00$"}
+				</h1>
+
 				<Image
 					onClick={onClick}
 					src="/sourceArrowBig.svg"
@@ -56,6 +75,17 @@ export default function PaymentsContainer({
 					className={`w-8 h-8 transition-transform ${open ? "rotate-90" : ""}`}
 				/>
 			</div>
+			{open && (
+				<div className="">
+					{paymentFields.map((field) => (
+						<PaymentField
+							key={field.id}
+							field={field.field}
+							variable={field.variable}
+						></PaymentField>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

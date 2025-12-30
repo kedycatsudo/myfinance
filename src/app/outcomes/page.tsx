@@ -89,7 +89,7 @@ export default function Outcomes() {
 								data: "500.00 $",
 							},
 							{
-								name: "Paid Paynebts",
+								name: "Paid Payments",
 								data: "3 payments",
 							},
 							{
@@ -154,10 +154,16 @@ export default function Outcomes() {
 						data={[
 							{ name: "Outcomes", amount: 1200 },
 							{ name: "Incomes", amount: 2500 },
+							{ name: "Incomes", amount: 2500 },
+							{ name: "Incomes", amount: 2500 },
+							{ name: "Incomes", amount: 2500 },
+							{ name: "Incomes", amount: 2500 },
+							{ name: "Incomes", amount: 2500 },
+							{ name: "Incomes", amount: 2500 },
 						]}
 					/>
 					<PieChartData
-						header="Pie Chart Data"
+						header="Pie Chart Data For Outcome Sources"
 						items={[
 							{
 								name: "data1",
@@ -167,6 +173,42 @@ export default function Outcomes() {
 							},
 							{
 								name: "data2",
+								amount: 2300,
+								date: Date.now(),
+								description: "description",
+							},
+							{
+								name: "data1",
+								amount: 2300,
+								date: Date.now(),
+								description: "description",
+							},
+							{
+								name: "data1",
+								amount: 2300,
+								date: Date.now(),
+								description: "description",
+							},
+							{
+								name: "data1",
+								amount: 2300,
+								date: Date.now(),
+								description: "description",
+							},
+							{
+								name: "data1",
+								amount: 2300,
+								date: Date.now(),
+								description: "description",
+							},
+							{
+								name: "data1",
+								amount: 2300,
+								date: Date.now(),
+								description: "description",
+							},
+							{
+								name: "data1",
 								amount: 2300,
 								date: Date.now(),
 								description: "description",

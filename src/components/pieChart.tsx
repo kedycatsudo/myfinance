@@ -84,7 +84,6 @@ export default function PieChart({
 					/>
 				))}
 				{/* Center hole for donut */}
-				<circle r={radius - size / 1} cx={cx} cy={cy} fill="#fff" />
 			</svg>
 		</div>
 	);

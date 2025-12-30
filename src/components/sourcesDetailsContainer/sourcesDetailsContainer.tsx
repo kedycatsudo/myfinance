@@ -6,9 +6,9 @@ type SourcesDetailsContainer = {
 	header: string;
 };
 const sources = [
-	{ id: "Groccery", source: "Utilities" },
-	{ id: "rent", source: "Rent" },
-	{ id: "utilities", source: "Groccery" },
+	{ id: "salary", source: "Salary" },
+	{ id: "upwork", source: "Upwork" },
+	{ id: "investment", source: "Investment" },
 	// ...add your sources here
 ];
 export default function SourcesDetailsContainer({
@@ -20,7 +20,7 @@ export default function SourcesDetailsContainer({
 	}>({});
 
 	return (
-		<div className="flex flex-col h-[1000px] bg-[#989899] opacity-75 items-center gap-2 px-1">
+		<div className="flex flex-col rounded bg-[#989899] opacity-75 items-center gap-2 px-1">
 			<h1 className="text-2xl xs:text-3xl text-[#1E1552] font-bold">
 				{header}
 			</h1>

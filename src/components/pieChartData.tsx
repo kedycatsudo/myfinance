@@ -50,6 +50,7 @@ export default function PieChartData({
 										marginRight: 8,
 									}}
 								/>
+								<p>{item.description}</p>
 							</div>
 
 							<div className="flex flex-col xs:flex-row gap-1">

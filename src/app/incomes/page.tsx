@@ -3,13 +3,14 @@
 import SideBar from "@/components/sideBar";
 import RecentSideInfo from "@/components/recentSideInfo";
 import MobileMenuButton from "@/components/mobileBurgerMenu";
-import FinancialSnapShot from "@/components/dashboard/inOutMiniSnaps";
 import PieChartData from "@/components/pieChartData";
 import PieChart from "@/components/pieChart";
+import CatchUpTheMonth from "@/components/outcomes/catchUpTheMonth";
+import SourcesDetailsContainer from "@/components/sourcesDetailsContainer/sourcesDetailsContainer";
 /* frameworks import */
 import { usePathname } from "next/navigation";
 
-export default function Dashboard() {
+export default function Incomes() {
 	const pathName = usePathname();
 	return (
 		<main className="flex flex-col xs:flex-row min-h-screen gap-1">
@@ -22,17 +23,17 @@ export default function Dashboard() {
 				{/*recently investment and miscs */}
 				<div className="flex flex-row xs:flex-col relative gap-2 items-center">
 					<RecentSideInfo
-						header="Recent investment"
+						header="Recent Earned"
 						items={[
-							{ name: "data", amount: 2300, date: Date.now() },
-							{ name: "data", amount: 2300, date: Date.now() },
+							{ name: "data1", amount: 2300, date: Date.now() },
+							{ name: "data2", amount: 2300, date: Date.now() },
 						]}
 					/>
 					<RecentSideInfo
-						header="Recent Misceleneous"
+						header="Upcoming Earning"
 						items={[
-							{ name: "data", amount: 2300, date: Date.now() },
-							{ name: "data", amount: 2300, date: Date.now() },
+							{ name: "data3", amount: 2300, date: Date.now() },
+							{ name: "data4", amount: 2300, date: Date.now() },
 						]}
 					/>
 				</div>
@@ -43,13 +44,8 @@ export default function Dashboard() {
 				{/* header and welcome message */}
 				<div className="flex flex-col">
 					<h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
-						DASHBOARD
+						INCOMES
 					</h1>
-					<p className="text-x xs:text-xl font-bold text-[#1E1552] max-w-[750px] text-center z-10">
-						Welcome to MyFinance Dashboard. Congratulations, your colour is
-						<span className="text-green-700"> green </span>
-						so far this month.
-					</p>
 				</div>
 				<div className="flex xs:hidden flex-col items-center gap-5">
 					<SideBar
@@ -59,58 +55,73 @@ export default function Dashboard() {
 					{/*recently investment and miscs */}
 					<div className="flex flex-row xs:flex-col relative gap-1 items-center">
 						<RecentSideInfo
-							header="Recently Invested"
+							header="Recent Earned"
 							items={[
-								{ name: "data", amount: 2300, date: Date.now() },
-								{ name: "data", amount: 2300, date: Date.now() },
+								{ name: "data1", amount: 2300, date: Date.now() },
+								{ name: "data2", amount: 2300, date: Date.now() },
 							]}
 						/>
 						<RecentSideInfo
-							header="Recent Misc"
+							header="Upcoming Earning"
 							items={[
-								{ name: "data", amount: 2300, date: Date.now() },
-								{ name: "data", amount: 2300, date: Date.now() },
+								{ name: "data3", amount: 2300, date: Date.now() },
+								{ name: "data4", amount: 2300, date: Date.now() },
 							]}
 						/>
 					</div>
 				</div>
 				{/*current Incomes and outcomes snapshots */}
 				<div className="flex flex-row justify-center items-center gap-1 w-full">
-					<FinancialSnapShot
-						header="Current Outcomes"
+					<CatchUpTheMonth
+						header="Quick Catch Up For This Month"
 						items={[
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "",
+								name: "Earnings in the loop",
+								data: "4 Earnings",
 							},
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
+								name: "Total Incoming",
+								data: "500.00$",
+							},
+							{
+								name: "Got Paid Amount",
+								data: "500.00 $",
+							},
+							{
+								name: "Got Paid Earning",
+								data: "3 earnings",
+							},
+							{
+								name: "Coming Earnings",
+								data: "3 earnings",
+							},
+							{
+								name: "Income Sources",
+								data: "4 sources",
+							},
+							{
+								name: "Reset Date",
+								data: "-/01-",
 							},
 						]}
-					/>
-
-					<FinancialSnapShot
-						header="Current Incomes"
+					></CatchUpTheMonth>
+					<CatchUpTheMonth
+						header="Income Sources"
 						items={[
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
+								name: "Salary",
+								data: "2300",
 							},
 							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
+								name: "Upwork",
+								data: "500.00$",
+							},
+							{
+								name: "Investment",
+								data: "500.00 $",
 							},
 						]}
-					/>
+					></CatchUpTheMonth>
 				</div>
 				{/* chartpie summary */}
 				<div className="pl-1 flex flex-col xs:flex-row  items-center w-full gap-1">
@@ -121,16 +132,16 @@ export default function Dashboard() {
 						]}
 					/>
 					<PieChartData
-						header="Pie Chart Data"
+						header="Pie Chart Data For Income Sources"
 						items={[
 							{
-								name: "data",
+								name: "data1",
 								amount: 2300,
 								date: Date.now(),
 								description: "description",
 							},
 							{
-								name: "data",
+								name: "data2",
 								amount: 2300,
 								date: Date.now(),
 								description: "description",
@@ -138,43 +149,10 @@ export default function Dashboard() {
 						]}
 					/>
 				</div>
-				{/* recent outcomes */}
-				<div className="pl-1 flex flex-col xs:flex-row items-center w-full gap-5">
-					<FinancialSnapShot
-						header="Recent Outcomes"
-						items={[
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-						]}
-					></FinancialSnapShot>
-					<FinancialSnapShot
-						header="Recent Incomes"
-						items={[
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-							{
-								name: "data",
-								amount: 2300,
-								date: Date.now(),
-								description: "description",
-							},
-						]}
-					></FinancialSnapShot>
+				<div className="flex flex-col w-full">
+					<SourcesDetailsContainer header="Income Sources"></SourcesDetailsContainer>
 				</div>
+				{/* recent outcomes */}
 			</section>
 
 			<MobileMenuButton

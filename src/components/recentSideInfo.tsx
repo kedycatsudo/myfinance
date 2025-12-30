@@ -51,7 +51,9 @@ export default function RecentSideInfo({
 				</div>
 				<div className="w-full h-1 my-2 bg-[#29388A] rounded" />
 				{/* Total Row */}
-				{(header === "Current Outcomes" || header === "Current Incomes") && (
+				{(header === "Current Outcomes" ||
+					header === "Current Incomes" ||
+					header === "Income Sources") && (
 					<div className="flex items-center justify-between py-2 gap-4 w-full">
 						<span className="text-white font-semibold">
 							Total{" "}

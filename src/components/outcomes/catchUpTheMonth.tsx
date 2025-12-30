@@ -32,7 +32,7 @@ export default function CatchUpTheMonth({ header, items }: InOutSnapshotProps) {
 							<span className="text-white text-s xs:text-xl">{item.name}</span>
 
 							<div className="flex flex-col xs:flex-row gap-1">
-								<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner">
+								<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 text-[#a9deff] font-bold text-xs xs:text-xl shadow-inner">
 									{item.data.toLocaleString(undefined, {
 										minimumFractionDigits: 2,
 									})}

@@ -4,11 +4,19 @@ import Image from "next/image";
 import { useState } from "react";
 import PaymentsContainer from "./paymentsContainer";
 import InformationContainer from "./informationContainer";
+import { usePathname } from "next/navigation";
 type SourceContainerProps = {
 	source: string;
 	open: boolean;
 	onClick: () => void;
 };
+type Info = {
+	id: number;
+	infoPair: string;
+	data: string;
+};
+
+let datas: Info[] = [];
 const payments = [
 	{ id: "KUB", name: "Kub", amount: 500 },
 	{ id: "Cell", name: "Cell", amount: 500 },
@@ -16,7 +24,7 @@ const payments = [
 ];
 const earnings = [{ id: "KUB", name: "Spaces In the City", amount: 500 }];
 
-const informations = [
+const OutcomeInfo = [
 	{ id: 1, infoPair: "Monthly cycle amount", data: "400.00$" },
 	{ id: 2, infoPair: "Current amount for this month", data: "400.00$" },
 	{ id: 3, infoPair: "Description", data: "description" },
@@ -28,6 +36,28 @@ const EarningInfo = [
 	{ id: 3, infoPair: "Description", data: "description" },
 	{ id: 4, infoPair: "Average monthly total payment", data: "400.00$" },
 ];
+const InvestmentInfo = [
+	{
+		id: 1,
+		infoPair: "contribution to growth of capital",
+		data: "400.00$/+%10",
+	},
+	{
+		id: 2,
+		infoPair: "Crypto Asset`s growth",
+		data: "400.00$/+%10",
+	},
+	{
+		id: 3,
+		infoPair: "description",
+		data: "description",
+	},
+	{
+		id: 4,
+		infoPair: "Share of capital",
+		data: "400.00$/+%10",
+	},
+];
 
 export default function SourceContainer({
 	source,
@@ -38,6 +68,12 @@ export default function SourceContainer({
 	const [openPayments, setOpenPayments] = useState<{
 		[paymentId: string]: boolean;
 	}>({});
+	const pathname = usePathname();
+	let datas: Info[] = [];
+	if (pathname === "/outcomes") datas = OutcomeInfo;
+	if (pathname === "/incomes") datas = EarningInfo;
+	if (pathname === "/investments") datas = InvestmentInfo;
+	console.log(datas);
 
 	return (
 		<div
@@ -89,11 +125,11 @@ export default function SourceContainer({
 				)}
 				{open && (
 					<div className="w-full bg-[#0D1A63] gap-2 rounded z-[9999] mt-auto p-1 relative">
-						{informations.map((info) => (
+						{datas.map((data) => (
 							<InformationContainer
-								key={info.id}
-								infoPair={info.infoPair}
-								data={info.data}
+								key={data.id}
+								infoPair={data.infoPair}
+								data={data.data}
 							></InformationContainer>
 						))}
 						{open && (

@@ -83,7 +83,6 @@ export default function PieChart({
 						}}
 					/>
 				))}
-				{/* Center hole for donut */}
 			</svg>
 		</div>
 	);

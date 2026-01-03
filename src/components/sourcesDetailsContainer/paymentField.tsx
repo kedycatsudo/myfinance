@@ -1,14 +1,14 @@
 "use client";
 type PaymentFieldProps = {
 	field: string;
-	variable: string;
+	name: string;
 };
 
-export default function PaymentField({ field, variable }: PaymentFieldProps) {
+export default function PaymentField({ field, name }: PaymentFieldProps) {
 	return (
 		<div className="flex gap-1">
 			<p>{field}:</p>
-			<p>{variable}</p>
+			<p>{name}</p>
 		</div>
 	);
 }

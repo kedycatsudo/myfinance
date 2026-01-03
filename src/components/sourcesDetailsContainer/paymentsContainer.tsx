@@ -1,5 +1,6 @@
 "use client";
 import { Dispatch, SetStateAction } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import PaymentField from "./paymentField";
@@ -11,15 +12,27 @@ type PaymentsContainerProps = {
 	openPayments: { [paymentId: string]: boolean };
 	setOpenPayments: Dispatch<SetStateAction<{ [paymentId: string]: boolean }>>;
 };
-const paymentFields = [
-	{ id: 1, field: "paymentName", variable: "Kub" },
-	{ id: 2, field: "type", variable: "credit card" },
-	{ id: 3, field: "payment amount", variable: "400" },
-	{ id: 4, field: "date", variable: "12/25/2025" },
-	{ id: 5, field: "loop", variable: "true" },
-	{ id: 6, field: "status", variable: "paid" },
-];
 
+type Fields = { id: number; name: string };
+
+const paymentFields = [
+	{ id: 1, field: "Name", name: "Kub" },
+	{ id: 2, field: "type", name: "credit card" },
+	{ id: 3, field: "amount", name: "400" },
+	{ id: 4, field: "date", name: "12/25/2025" },
+	{ id: 5, field: "loop", name: "true" },
+	{ id: 6, field: "status", name: "paid" },
+];
+const investmentField = [
+	{ id: 1, field: "Name", name: "Bitcoin" },
+	{ id: 2, field: "term", name: "short" },
+	{ id: 3, field: "amount", name: "400" },
+	{ id: 4, field: "entry date", name: "12/25/2025" },
+	{ id: 5, field: "exit date", name: "12122025" },
+	{ id: 6, field: "result", name: "profit" },
+	{ id: 7, field: "result amount", name: "100.00$" },
+	{ id: 8, field: "status", name: "closed" },
+];
 export default function PaymentsContainer({
 	onClick,
 	open,
@@ -31,6 +44,10 @@ export default function PaymentsContainer({
 	const [openPaymentFields, setOpenPaymentFields] = useState<{
 		[FieldId: string]: boolean;
 	}>({});
+	const pathName = usePathname();
+	let datasField: Fields[] = [];
+	if (pathName === "/investments") datasField = investmentField;
+	else datasField = paymentFields;
 	return (
 		<div
 			className={` text-[#FFFFF] w-full flex flex-col rounded gap-2 p-2 cursor-pointer transition-all ${open ? "bg-[#29388A]" : ""}`}
@@ -77,11 +94,11 @@ export default function PaymentsContainer({
 			</div>
 			{open && (
 				<div className="">
-					{paymentFields.map((field) => (
+					{datasField.map((field) => (
 						<PaymentField
 							key={field.id}
-							field={field.field}
-							variable={field.variable}
+							field={field.name}
+							name={field.name}
 						></PaymentField>
 					))}
 				</div>

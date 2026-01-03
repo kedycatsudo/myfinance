@@ -16,14 +16,21 @@ type Info = {
 	data: string;
 };
 
-let datas: Info[] = [];
+type Field = {
+	id: number;
+	name: string;
+	amount: number;
+};
 const payments = [
-	{ id: "KUB", name: "Kub", amount: 500 },
-	{ id: "Cell", name: "Cell", amount: 500 },
-	{ id: "Wifi", name: "Wifi", amount: 500 },
+	{ id: 1, name: "Kub", amount: 500 },
+	{ id: 2, name: "Cell", amount: 500 },
+	{ id: 3, name: "Wifi", amount: 500 },
 ];
-const earnings = [{ id: "KUB", name: "Spaces In the City", amount: 500 }];
-
+const earnings = [{ id: 1, name: "Spaces In the City", amount: 500 }];
+const investmentAccount = [
+	{ id: 1, name: "Binance", amount: 500 },
+	{ id: 2, name: "robinhood", amount: 800 },
+];
 const OutcomeInfo = [
 	{ id: 1, infoPair: "Monthly cycle amount", data: "400.00$" },
 	{ id: 2, infoPair: "Current amount for this month", data: "400.00$" },
@@ -69,11 +76,21 @@ export default function SourceContainer({
 		[paymentId: string]: boolean;
 	}>({});
 	const pathname = usePathname();
-	let datas: Info[] = [];
-	if (pathname === "/outcomes") datas = OutcomeInfo;
-	if (pathname === "/incomes") datas = EarningInfo;
-	if (pathname === "/investments") datas = InvestmentInfo;
-	console.log(datas);
+	let datasInfo: Info[] = [];
+	let datasPaymentsOrEarnings: Field[] = [];
+
+	if (pathname === "/outcomes") {
+		datasInfo = OutcomeInfo;
+		datasPaymentsOrEarnings = payments;
+	}
+	if (pathname === "/incomes") {
+		datasInfo = EarningInfo;
+		datasPaymentsOrEarnings = earnings;
+	}
+	if (pathname === "/investments") {
+		datasInfo = InvestmentInfo;
+		datasPaymentsOrEarnings = investmentAccount;
+	}
 
 	return (
 		<div
@@ -107,16 +124,16 @@ export default function SourceContainer({
 			<div className="flex flex-col xs:flex-row gap-2 w-full">
 				{open && (
 					<div className="mt-2 p-3 rounded transition-all">
-						{earnings.map((earning) => (
+						{datasPaymentsOrEarnings.map((data) => (
 							<PaymentsContainer
-								key={earning.id}
-								amount={earning.amount}
-								name={earning.name}
-								open={!!openPayments[earning.id]}
+								key={data.id}
+								amount={data.amount}
+								name={data.name}
+								open={!!openPayments[data.id]}
 								onClick={() =>
 									setOpenPayments((prev) => ({
 										...prev,
-										[earning.id]: !prev[earning.id],
+										[data.id]: !prev[data.id],
 									}))
 								}
 							/>
@@ -125,7 +142,7 @@ export default function SourceContainer({
 				)}
 				{open && (
 					<div className="w-full bg-[#0D1A63] gap-2 rounded z-[9999] mt-auto p-1 relative">
-						{datas.map((data) => (
+						{datasInfo.map((data) => (
 							<InformationContainer
 								key={data.id}
 								infoPair={data.infoPair}

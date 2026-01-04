@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import TotalRow from "./totalRow";
 type FinancialItem = { name: string; amount: number; date: date };
 
 type InOutSnapshotProps = {
@@ -16,7 +17,7 @@ export default function RecentSideInfo({
 	const total = items.reduce((sum, item) => sum + item.amount, 0);
 
 	return (
-		<div className="flex-1">
+		<div className="flex-1 w-full">
 			<div className="w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg">
 				<h3 className="text-white font-bold text-l xs:text-xl mb-2 text-center">
 					{header}
@@ -51,28 +52,7 @@ export default function RecentSideInfo({
 				</div>
 				<div className="w-full h-1 my-2 bg-[#29388A] rounded" />
 				{/* Total Row */}
-				{(header === "Current Outcomes" ||
-					header === "Current Incomes" ||
-					header === "Income Sources") && (
-					<div className="flex items-center justify-between py-2 gap-4 w-full">
-						<span className="text-white font-semibold">
-							Total{" "}
-							<span
-								style={{
-									display: "inline-block",
-									width: 14,
-									height: 14,
-									borderRadius: "50%",
-									background: "#4FD1C5",
-									marginRight: 8,
-								}}
-							/>
-						</span>
-						<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-xs md:text-sm lg:text-sm shadow-inner">
-							{total.toLocaleString(undefined, { minimumFractionDigits: 2 })}$
-						</span>
-					</div>
-				)}
+				<TotalRow total={total}></TotalRow>
 			</div>
 		</div>
 	);

@@ -9,7 +9,7 @@ export default function Profile() {
 
 	return (
 		<main className="flex flex-col xs:flex-row min-h-screen gap-1">
-			<div className="hidden xs:flex flex-col items-center gap-5">
+			<div className="hidden xs:flex flex-col items-center gap-5 ">
 				<SideBar
 					activePath={pathName}
 					className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
@@ -22,13 +22,7 @@ export default function Profile() {
 						PROFILE
 					</h1>
 				</div>
-				<div className="flex xs:hidden flex-col items-center gap-5">
-					<SideBar
-						activePath={pathName}
-						className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
-					/>
-					{/*recently investment and miscs */}
-				</div>
+
 				<CatchUpTheMonth
 					header="Quick Catch Up For This Month"
 					items={[

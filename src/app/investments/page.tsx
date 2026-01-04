@@ -9,7 +9,7 @@ import CatchUpTheMonth from "@/components/outcomes/catchUpTheMonth";
 import SourcesDetailsContainer from "@/components/sourcesDetailsContainer/sourcesDetailsContainer";
 /* frameworks import */
 import { usePathname } from "next/navigation";
-
+import SourcesList from "@/components/sourcesList";
 export default function Investments() {
 	const pathName = usePathname();
 	return (
@@ -21,7 +21,7 @@ export default function Investments() {
 					className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
 				/>
 				{/*recently investment and miscs */}
-				<div className="flex flex-row xs:flex-col relative gap-2 items-center">
+				<div className="w-full flex flex-row xs:flex-col relative gap-2 items-center">
 					<RecentSideInfo
 						header="Recent Profit"
 						items={[
@@ -98,38 +98,38 @@ export default function Investments() {
 								},
 							]}
 						></CatchUpTheMonth>
-						<CatchUpTheMonth
+						<SourcesList
 							header="Open Positions"
 							items={[
 								{
 									name: "Crypto: Binance/Bitcoin",
-									data: "500$ / %+55 / +25$",
+									data: [500, 55, 25],
 								},
 								{
 									name: "Crypto: Binance/Bitcoin",
-									data: "500$ / %+55 / +25$",
+									data: [500, 55, 25],
 								},
 								{
 									name: "Crypto: Binance/Bitcoin",
-									data: "500$ / %+55 / +25$",
+									data: [500, 55, 25],
 								},
 							]}
-						></CatchUpTheMonth>
+						></SourcesList>
 					</div>
 					<div className="w- full flex flex-col gap-2">
-						<CatchUpTheMonth
+						<SourcesList
 							header="Investment Sources"
 							items={[
 								{
 									name: "Crypto",
-									data: "500.00$",
+									data: [500],
 								},
 								{
 									name: "Forex",
-									data: "500.00$",
+									data: [500],
 								},
 							]}
-						></CatchUpTheMonth>
+						></SourcesList>
 						<CatchUpTheMonth
 							header="Quick Summary"
 							items={[

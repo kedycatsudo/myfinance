@@ -9,7 +9,7 @@ import CatchUpTheMonth from "@/components/outcomes/catchUpTheMonth";
 import SourcesDetailsContainer from "@/components/sourcesDetailsContainer/sourcesDetailsContainer";
 /* frameworks import */
 import { usePathname } from "next/navigation";
-
+import SourcesList from "@/components/sourcesList";
 export default function Incomes() {
 	const pathName = usePathname();
 	return (
@@ -105,23 +105,23 @@ export default function Incomes() {
 							},
 						]}
 					></CatchUpTheMonth>
-					<CatchUpTheMonth
+					<SourcesList
 						header="Income Sources"
 						items={[
 							{
 								name: "Salary",
-								data: "2300",
+								data: [2300],
 							},
 							{
 								name: "Upwork",
-								data: "500.00$",
+								data: [2300],
 							},
 							{
 								name: "Investment",
-								data: "500.00 $",
+								data: [2300],
 							},
 						]}
-					></CatchUpTheMonth>
+					></SourcesList>
 				</div>
 				{/* chartpie summary */}
 				<div className="pl-1 flex flex-col xs:flex-row  items-center w-full gap-1">

@@ -48,21 +48,6 @@ export default function CatchUpTheMonth({ header, items }: InOutSnapshotProps) {
 				))}
 			</div>
 			<div className="w-full h-1 my-2 bg-[#29388A] rounded" />
-			{/* Total Row */}
-			{(header === "Current Outcomes" ||
-				header === "Current Incomes" ||
-				header === "Current Incomes" ||
-				header === "Quick Catch Up For This Month" ||
-				header === "Outcome Sources") && (
-				<div className="flex items-center justify-between py-2 gap-4 w-full">
-					<span className="text-white font-semibold text-l xs:text-xl">
-						Total{" "}
-					</span>
-					<span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
-						{total.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-					</span>
-				</div>
-			)}
 		</div>
 	);
 }

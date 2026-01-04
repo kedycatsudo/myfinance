@@ -19,7 +19,7 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 	return (
 		<aside
 			className={
-				"flex flex-col w-full bg-[#989899] opacity-75 items-center" +
+				"flex flex-col w-full bg-[#989899] opacity-75 items-center w-[180px] min-w-[180px]" +
 				(className ? ` ${className}` : "")
 			}
 		>
@@ -50,7 +50,7 @@ export default function SideBar({ className, activePath }: SidebarProps) {
 						>
 							{label}
 						</Link>
-						<div className="w-full h-2 bg-[#3A4483] rounded" />
+						<div className="w-full h-2 bg-[#29388A] rounded" />
 					</div>
 				);
 			})}

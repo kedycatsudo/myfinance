@@ -3,7 +3,7 @@
 import SideBar from "@/components/sideBar";
 import RecentSideInfo from "@/components/recentSideInfo";
 import MobileMenuButton from "@/components/mobileBurgerMenu";
-import FinancialSnapShot from "@/components/dashboard/inOutMiniSnaps";
+import SourcesList from "@/components/sourcesList";
 import PieChartData from "@/components/pieChartData";
 import PieChart from "@/components/pieChart";
 import CatchUpTheMonth from "@/components/outcomes/catchUpTheMonth";
@@ -110,43 +110,43 @@ export default function Outcomes() {
 							},
 						]}
 					></CatchUpTheMonth>
-					<CatchUpTheMonth
+					<SourcesList
 						header="Outcome Sources"
 						items={[
 							{
 								name: "Mortgage",
-								data: "2300",
+								data: [2300],
 							},
 							{
 								name: "Grocery",
-								data: "500.00$",
+								data: [2300],
 							},
 							{
 								name: "Utilities",
-								data: "500.00 $",
+								data: [2300],
 							},
 							{
 								name: "gas",
-								data: "32300",
+								data: [2300],
 							},
 							{
 								name: "debt",
-								data: "2300",
+								data: [2300],
 							},
 							{
 								name: "subscription",
-								data: "600",
+								data: [2300],
 							},
 							{
 								name: "investment",
-								data: "2300",
+								data: [2300],
 							},
 							{
 								name: "Reset Date",
-								data: "2300",
+								data: [2300],
 							},
 						]}
-					></CatchUpTheMonth>
+					></SourcesList>
 				</div>
 				{/* chartpie summary */}
 				<div className="pl-1 flex flex-col xs:flex-row  items-center w-full gap-1">

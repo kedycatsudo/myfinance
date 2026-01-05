@@ -162,7 +162,7 @@ export default function Investments() {
 						]}
 					/>
 					<PieChartData
-						header="Pie Chart Data For Investment Sources"
+						header="Pie Chart Data"
 						items={[
 							{
 								name: "	Crypto",

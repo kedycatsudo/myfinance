@@ -97,7 +97,7 @@ export default function PaymentsContainer({
 					{datasField.map((field) => (
 						<PaymentField
 							key={field.id}
-							field={field.name}
+							field={field.field}
 							name={field.name}
 						></PaymentField>
 					))}

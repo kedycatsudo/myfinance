@@ -74,6 +74,7 @@ export default function Dashboard() {
 						/>
 					</div>
 				</div>
+
 				{/*current Incomes and outcomes snapshots */}
 				<div className="flex flex-row justify-center items-center gap-1 w-full">
 					<FinancialSnapShot

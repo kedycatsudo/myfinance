@@ -1,60 +1,77 @@
-// src/app/login/page.tsx
-import Link from "next/link";
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
+import { useTheme } from '@/context/ThemeContext';
+import { useModal } from '@/context/ModalContext';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
-	return (
-		<main className="min-h-screen bg-[#A9AECE] flex flex-col items-center justify-center relative px-2 sm:px-4">
-			<img
-				src="/images/myfinancelogo.png"
-				alt="MyFinance Logo"
-				className="
-          absolute top-1 left-1 sm:top-8 sm:left-8 lg:top-12 lg:left-12
-          w-20 h-20
-          sm:w-20 sm:h-20
-          md:w-36 md:h-36
-          lg:w-40 lg:h-40
-          shadow-lg rounded-full
-          object-cover
-        "
-			/>
+  const { login } = useAuth();
+  const { showModal } = useModal();
+  const router = useRouter();
 
-			{/* Centered Login header above the box */}
-			<h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-[#1E1552] mb-8 w-full text-center z-10">
-				Login
-			</h1>
+  // Form State
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-			<div className="bg-[#3A4483] opacity-75 rounded-2xl flex flex-col justify-center items-center border-4 border-[#29388A] w-full max-w-md sm:max-w-lg md:max-w-xl px-4 py-8">
-				<form className="w-full flex flex-col gap-1 sm:gap-4 md:gap-6">
-					<input
-						type="text"
-						placeholder="Username"
-						className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
-					/>
-					<hr className="border-t-4 border-[#29388A] my-0 rounded" />
-					<input
-						type="password"
-						placeholder="Password"
-						className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
-					/>
-					<hr className="border-t-4 border-[#29388A] my-0 rounded" />
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    // call authContext's login
 
-					<button
-						type="submit"
-						className="mt-4 p-3 rounded-lg bg-[#1E1552] opacity-50 text-white font-bold hover:bg-[#18123d] hover:opacity-100 transition w-full"
-					>
-						Submit
-					</button>
-				</form>
-				<p className="text-xs text-white mt-4 opacity-70 text-center">
-					Don&apos;t have an account?
-					<Link
-						href="/register"
-						className="font-bold underline cursor-pointer hover:text-blue-200 ml-1"
-					>
-						Create an account
-					</Link>
-				</p>
-			</div>
-		</main>
-	);
+    const res = login(username, password);
+    showModal(res.message); // show feedback as modal (success or error)
+    if (res.success) {
+      // clear the form
+      setUsername('');
+      setPassword('');
+      router.push('/dashboard');
+    }
+  }
+  return (
+    <main className="flex flex-col items-center justify-center relative px-2 sm:px-4">
+      <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] mb-8 w-full text-center z-10">
+        Login
+      </h1>
+      <div className="bg-[#3A4483] opacity-75 rounded-2xl flex flex-col justify-center items-center border-4 border-[#29388A] w-full max-w-md sm:max-w-lg md:max-w-xl px-4 py-8">
+        <form className="w-full flex flex-col gap-1 sm:gap-4 md:gap-6" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
+            required
+          />
+          <hr className="border-t-4 border-[#29388A] my-0 rounded" />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
+            required
+          />
+          <hr className="border-t-4 border-[#29388A] my-0 rounded" />
+
+          <button
+            type="submit"
+            className="mt-4 p-3 rounded-lg bg-[#1E1552] opacity-50 text-white font-bold hover:bg-[#18123d] hover:opacity-100 transition w-full"
+          >
+            Submit
+          </button>
+        </form>
+        <p className="text-xs text-white mt-4 opacity-70 text-center">
+          You don't have an account yet?
+          <Link
+            href="/register"
+            className="font-bold underline cursor-pointer hover:text-blue-200 ml-1"
+          >
+            Register
+          </Link>
+        </p>
+      </div>
+    </main>
+  );
 }

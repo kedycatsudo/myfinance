@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     //Simulate "auth" (never do this in production), use a backend + hash check
     const user = users.find((u) => u.username === username);
     if (!user) {
-      return { success: false, message: 'Login failed' };
+      return { success: false, message: 'User not founded' };
     }
     // WARNING: Hash comparison is backend-only
     //For now, fake just check string match(if using a real hash)

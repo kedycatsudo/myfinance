@@ -1,65 +1,84 @@
 'use client';
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import NotificationModal from '@/components/modals/NotificationModal';
 import { useTheme } from '@/context/ThemeContext';
+import { useModal } from '@/context/ModalContext';
+import { useRouter } from 'next/navigation';
+
 export default function RegisterPage() {
   const { theme, toggleTheme } = useTheme();
-  //form state
+  const { register } = useAuth();
+  const { showModal } = useModal();
+  const router = useRouter();
+
+  //Form State
   const [username, setUsername] = useState('');
-  const [password, setPasswor] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [monthlyCircleDate, setMonthlyCircleDate] = useState('');
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    // Call AuthContext's register
+
+    const res = register({ username, email, monthlyCircleDate, password });
+    showModal(res.message); // show feedback as modal (success or error)
+    if (res.success) {
+      // clear the form
+      setUsername('');
+      setPassword('');
+      setEmail('');
+      setMonthlyCircleDate('');
+      router.push('/login');
+    }
+  }
   return (
-    <main className="min-h-screen bg-[#A9AECE] flex flex-col items-center justify-center relative px-2 sm:px-4">
-      <img
-        src="/images/myfinancelogo.png"
-        alt="MyFinance Logo"
-        className="
-    absolute top-1 left-1 sm:top-8 sm:left-8 lg:top-12 lg:left-12
-    w-20 h-20
-    sm:w-20 sm:h-20
-    md:w-36 md:h-36
-    lg:w-40 lg:h-40
-    shadow-lg rounded-full
-    object-cover
-  "
-      />
-      <button onClick={toggleTheme}>Switch Theme</button>
-      {/* Centered Register header above the box */}
-      <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-[#1E1552] mb-8 w-full text-center z-10">
+    <main className="flex flex-col items-center justify-center relative px-2 sm:px-4">
+      <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] mb-8 w-full text-center z-10">
         Register
       </h1>
-
-      <div className="bg-[#3A4483] opacity-75 rounded-2xl flex flex-col justify-center items-center border-4 border-[#29388A] w-full max-w-md sm:max-w-lg md:max-w-l px-4 py-8">
-        <form className="w-full flex flex-col gap-1 sm:gap-4 md:gap-6">
+      <div className="bg-[#3A4483] opacity-75 rounded-2xl flex flex-col justify-center items-center border-4 border-[#29388A] w-full max-w-md sm:max-w-lg md:max-w-xl px-4 py-8">
+        <form className="w-full flex flex-col gap-1 sm:gap-4 md:gap-6" onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
+            required
           />
           <hr className="border-t-4 border-[#29388A] my-0 rounded" />
           <input
             type="password"
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
+            required
           />
           <hr className="border-t-4 border-[#29388A] my-0 rounded" />
-
           <input
-            type="text"
-            placeholder="email"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
-          />
+            required
+          />{' '}
           <hr className="border-t-4 border-[#29388A] my-0 rounded" />
           <label htmlFor="date">Monthly circle date</label>
           <input
+            id="date"
             type="date"
             placeholder="Monthly Circle Date"
+            value={monthlyCircleDate}
+            onChange={(e) => setMonthlyCircleDate(e.target.value)}
             className="p-3 rounded-lg bg-[#3A4483] text-1xl sm:text-2xl md:text-3xl text-white outline-none w-full"
+            required
           />
-
           <hr className="border-t-4 border-[#29388A] my-0 rounded" />
-
           <button
             type="submit"
             className="mt-4 p-3 rounded-lg bg-[#1E1552] opacity-50 text-white font-bold hover:bg-[#18123d] hover:opacity-100 transition w-full"

@@ -7,11 +7,22 @@ import PieChartData from '@/components/PieChartData';
 import PieChart from '@/components/PieChart';
 import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
-/* frameworks import */
-import { usePathname } from 'next/navigation';
 import SourcesList from '@/components/SourcesList';
+import { usePathname } from 'next/navigation';
+import { demoDashboardData } from '@/data/dashboardDemoData';
+
 export default function Incomes() {
   const pathName = usePathname();
+  const {
+    recentInvestments,
+    recentMisc,
+    currentIncomes,
+    currentOutcomes,
+    pieChart,
+    pieChartData,
+    recentIncomes,
+    recentOutcomes,
+  } = demoDashboardData;
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
@@ -124,7 +135,7 @@ export default function Incomes() {
           ></SourcesList>
         </div>
         {/* chartpie summary */}
-        <div className="pl-1 flex flex-col xs:flex-row  items-center w-full gap-1">
+        <div className="pl-1 flex flex-col md:flex-row  items-center w-full gap-1">
           <PieChart
             data={[
               { name: 'Outcomes', amount: 1200 },

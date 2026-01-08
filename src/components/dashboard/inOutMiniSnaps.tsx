@@ -1,55 +1,46 @@
 'use client';
 import React from 'react';
 import TotalRow from '../TotalRow';
-type FinancialItem = {
-  name: string;
-  amount: number;
-  date: date;
-  description?: string;
-  data?: string;
+import type { FinancialSnapshotItem } from '@/types/dashboard';
+
+type FinancialSnapShotProps = {
+  header: string;
+  items: FinancialSnapshotItem[];
+  className?: string;
 };
 
-type InOutSnapshotProps = {
-  header: string;
-  items: FinancialItem[];
-  className?: string;
-  pathName?: string;
-};
+// Senior note: Don't control rendering like "if pathName === ..." in this component;
+// delegate conditional hiding to parent where possible!
 
 export default function FinancialSnapShot({
   header,
   items,
-  className,
-  description,
-  data,
-  amount,
-  pathName,
-}: InOutSnapshotProps) {
-  const total = items.reduce((sum, item) => sum + item.amount, 0);
+  className = '',
+}: FinancialSnapShotProps) {
+  const total = items.reduce((sum, item) => sum + Number(item.amount), 0);
 
-  if (pathName === 'outcomes') return null;
   return (
     <div
-      className={'w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg'}
+      className={`w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg ${className}`}
     >
       <h3 className="text-white font-bold text-l xs:text-xl mb-2 text-center">{header}</h3>
       <div className="w-full h-1 mb-0.5 bg-[#29388A] rounded" />
       {/* Items */}
       <div className="w-full">
         {items.map((item, idx) => (
-          <React.Fragment key={item.name}>
+          <React.Fragment key={item.name + '-' + item.date}>
             <div className="flex flex-row justify-between items-center py-2 gap-1">
               <span className="text-white text-s xs:text-xl">{item.name}</span>
               <div className="flex flex-col xs:flex-row gap-1">
                 <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner text-[#a9deff]">
-                  {item.amount.toLocaleString(undefined, {
+                  {Number(item.amount).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                   })}
                   $
-                </span>{' '}
+                </span>
                 <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
                   {new Date(item.date).toLocaleDateString()}
-                </span>{' '}
+                </span>
               </div>
             </div>
 
@@ -62,7 +53,7 @@ export default function FinancialSnapShot({
       </div>
       <div className="w-full h-1 my-2 bg-[#29388A] rounded" />
       {/* Total Row */}
-      <TotalRow total={total}></TotalRow>
+      <TotalRow total={total} />
     </div>
   );
 }

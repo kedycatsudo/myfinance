@@ -116,7 +116,7 @@ export default function Investments() {
               ]}
             ></SourcesList>
           </div>
-          <div className="w- full flex flex-col gap-2">
+          <div className="w-full flex flex-col gap-2">
             <SourcesList
               header="Investment Sources"
               items={[
@@ -154,7 +154,7 @@ export default function Investments() {
           </div>
         </div>
         {/* chartpie summary */}
-        <div className="flex flex-col  items-center w-full gap-1">
+        <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
           <PieChart
             data={[
               { name: 'Crypto', amount: 1200 },

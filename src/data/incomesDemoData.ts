@@ -1,5 +1,6 @@
 import { IncomesCatchUpTheMonth, IncomesSourceListItem } from "@/types/incomes"
 export const demoIncomesData = {
+    //shows small summary of the current month
     catchUptheMonth: [
         { name: 'Total Incoming', data: '500.00$' },
         { name: 'Got Paid Amount', data: '500.00$' },
@@ -13,6 +14,7 @@ export const demoIncomesData = {
         { name: "Upwork", amount: 5000.00 },
         { name: "Investment", amount: 5000.00 },
     ] as IncomesSourceListItem[],
+    //for 
     pieDataRaw: [
         { name: "Outcomes", amount: 1200 },
         { name: "Incomes", amount: 1200 },

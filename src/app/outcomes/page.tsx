@@ -48,13 +48,13 @@ export default function Outcomes() {
             OUTCOMES
           </h1>
         </div>
-        <div className="flex xs:hidden flex-col items-center gap-5">
+        <div className=" w-full flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
           {/*recently investment and miscs */}
-          <div className="flex flex-row xs:flex-col relative gap-1 items-center">
+          <div className="w-full flex flex-col relative gap-1 items-center">
             <RecentSideInfo
               header="Recent Paid"
               items={[
@@ -149,7 +149,7 @@ export default function Outcomes() {
           ></SourcesList>
         </div>
         {/* chartpie summary */}
-        <div className="pl-1 flex flex-col xs:flex-row  items-center w-full gap-1">
+        <div className="pl-1 flex flex-col md:flex-row  items-center w-full gap-1">
           <PieChart
             data={[
               { name: 'Outcomes', amount: 1200 },

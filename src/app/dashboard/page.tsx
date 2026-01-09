@@ -39,8 +39,8 @@ export default function Dashboard() {
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
         {/*recently investment and miscs */}
-        <div className="flex flex-row xs:flex-col relative gap-2 items-center">
-          <RecentSideInfo header="Recent investment" items={recentInvestments} />
+        <div className=" w-full flex flex-col relative gap-2 items-center">
+          <RecentSideInfo header="Recent invested" items={recentInvestments} />
           <RecentSideInfo header="Recent Misceleneous" items={recentMisc} />
         </div>
       </div>
@@ -48,7 +48,7 @@ export default function Dashboard() {
       {/* Main Content */}
       <section className="w-full flex flex-col flex-start items-center gap-5">
         {/* header and welcome message */}
-        <div className="flex flex-col">
+        <div className="flex flex-col md:flex-row">
           <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
             DASHBOARD
           </h1>
@@ -58,18 +58,18 @@ export default function Dashboard() {
             so far this month.
           </p>
         </div>
-        <div className="flex xs:hidden flex-col items-center gap-5">
+        <div className="w-full flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
-          <div className="flex flex-row xs:flex-col relative gap-1 items-center">
+          <div className="w-full flex flex-col relative gap-1 items-center">
             <RecentSideInfo header="Recently Invested" items={recentInvestments} />
-            <RecentSideInfo header="Recent Misc" items={recentMisc} />
+            <RecentSideInfo header="Recent Miscelenous" items={recentMisc} />
           </div>
         </div>
 
-        <div className="flex flex-row justify-center items-center gap-1 w-full">
+        <div className="flex flex-col  justify-center items-center gap-1 w-full">
           <FinancialSnapShot header="Current Outcomes" items={currentOutcomes} />
           <FinancialSnapShot header="Current Incomes" items={currentIncomes} />
         </div>
@@ -86,7 +86,7 @@ export default function Dashboard() {
             }))}
           />
         </div>
-        <div className="pl-1 flex flex-col xs:flex-row items-center w-full gap-5">
+        <div className="pl-1 flex flex-col l:flex-row items-center w-full gap-5">
           <FinancialSnapShot header="Recent Outcomes" items={recentOutcomes} />
           <FinancialSnapShot header="Recent Incomes" items={recentIncomes} />
         </div>

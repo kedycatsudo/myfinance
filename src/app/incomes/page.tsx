@@ -54,13 +54,13 @@ export default function Incomes() {
             INCOMES
           </h1>
         </div>
-        <div className="flex xs:hidden flex-col items-center gap-5">
+        <div className=" w-full flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
           {/*recently investment and miscs */}
-          <div className="flex flex-row xs:flex-col relative gap-1 items-center">
+          <div className="flex flex-col w-full relative gap-1 items-center">
             <RecentSideInfo header="Recent Earned" items={recentIncomes}></RecentSideInfo>
             <RecentSideInfo header="Upcoming Earning" items={recentIncomes}></RecentSideInfo>
           </div>

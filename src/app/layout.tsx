@@ -4,7 +4,9 @@ import Header from '@/components/Header';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ModalProvider } from '@/context/ModalContext';
+import { OutcomesProvioder } from '@/context/OutcomesContext';
 import AppModal from '@/components/modals/AppModal';
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
@@ -12,9 +14,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AuthProvider>
           <ThemeProvider>
             <ModalProvider>
-              <Header></Header>
-              {children}
-              <AppModal />
+              <OutcomesProvioder>
+                {' '}
+                {/* 👈 Wrap everything in OutcomesProvider */}
+                <Header />
+                {children}
+                <AppModal />
+              </OutcomesProvioder>
             </ModalProvider>
           </ThemeProvider>
         </AuthProvider>

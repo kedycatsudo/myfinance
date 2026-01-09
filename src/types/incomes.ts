@@ -3,7 +3,8 @@ export type IncomesCatchUpTheMonth = {
     name: string
     data: string
 }
-export type IncomesSourceList = {
+//also used for piechart
+export type IncomesSourceListItem = {
     name: string
     amount: number
 }

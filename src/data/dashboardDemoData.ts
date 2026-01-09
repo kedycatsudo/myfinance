@@ -34,4 +34,5 @@ export const demoDashboardData = {
         { id: "13", name: "Freelance", amount: 2300, date: now, description: "Side Project" },
         { id: "14", name: "Invest", amount: 2300, date: now, description: "Return" },
     ] as FinancialSnapshotItem[],
+
 }

@@ -8,7 +8,7 @@ import PieChartData from '@/components/PieChartData';
 import PieChart from '@/components/PieChart';
 import { usePathname } from 'next/navigation';
 import { demoDashboardData } from '@/data/dashboardDemoData';
-
+import { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/utils/chartColors';
 export default function Dashboard() {
   const pathName = usePathname();
   const {
@@ -21,7 +21,15 @@ export default function Dashboard() {
     recentOutcomes,
     recentIncomes,
   } = demoDashboardData;
+  const pieDataRaw = [
+    { name: 'Outcomes', amount: 2000 },
+    { name: 'Incomes', amount: 4000 },
+  ];
 
+  const pieDataWithColors = pieDataRaw.map((item, idx) => ({
+    ...item,
+    color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
+  }));
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
@@ -66,8 +74,17 @@ export default function Dashboard() {
           <FinancialSnapShot header="Current Incomes" items={currentIncomes} />
         </div>
         <div className="pl-1 flex flex-col md:flex-row  items-center w-full gap-1">
-          <PieChart data={pieChart} />
-          <PieChartData header="Pie Chart Data" items={pieChartData} />
+          <PieChart data={pieDataWithColors} />
+          <PieChartData
+            header="Pie Chart Data"
+            items={pieDataWithColors.map((d, idx) => ({
+              name: d.name,
+              amount: d.amount,
+              date: Date.now(),
+              description: 'description',
+              color: d.color,
+            }))}
+          />
         </div>
         <div className="pl-1 flex flex-col xs:flex-row items-center w-full gap-5">
           <FinancialSnapShot header="Recent Outcomes" items={recentOutcomes} />

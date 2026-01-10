@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { ModalProvider } from '@/context/ModalContext';
 import { OutcomesProvioder } from '@/context/OutcomesContext';
 import AppModal from '@/components/modals/AppModal';
+import { IncomesProvider } from '@/context/IncomesContext';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -14,13 +15,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AuthProvider>
           <ThemeProvider>
             <ModalProvider>
-              <OutcomesProvioder>
-                {' '}
-                {/* 👈 Wrap everything in OutcomesProvider */}
-                <Header />
-                {children}
-                <AppModal />
-              </OutcomesProvioder>
+              <IncomesProvider>
+                <OutcomesProvioder>
+                  {' '}
+                  {/* 👈 Wrap everything in OutcomesProvider */}
+                  <Header />
+                  {children}
+                  <AppModal />
+                </OutcomesProvioder>
+              </IncomesProvider>
             </ModalProvider>
           </ThemeProvider>
         </AuthProvider>

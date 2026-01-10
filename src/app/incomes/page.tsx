@@ -9,28 +9,102 @@ import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
-import { demoDashboardData } from '@/data/dashboardDemoData';
-import { demoIncomesData } from '@/data/incomesDemoData';
 import { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
+
+import { useIncomesContext } from '@/context/IncomesContext';
+import { useMemo } from 'react';
+
 export default function Incomes() {
   const pathName = usePathname();
-  const {
-    recentInvestments,
-    recentMisc,
-    currentIncomes,
-    currentOutcomes,
-    pieChart,
-    pieChartData,
-    recentIncomes,
-    recentOutcomes,
-  } = demoDashboardData;
-  const { catchUptheMonth, incomeSourceList } = demoIncomesData;
-  const pieDataRaw = incomeSourceList;
+  const { incomes } = useIncomesContext();
 
+  // All payments under all sources, flattened and sorted by date desc
+  const allPayments = useMemo(
+    () =>
+      incomes
+        .flatMap((src) =>
+          src.payments.map((p) => ({
+            ...p,
+            sourceName: src.name,
+          })),
+        )
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+    [incomes],
+  );
+
+  // Top N = 5 "Recent Earned", "Upcoming Earning"
+  const recentEarned = allPayments
+    .filter((p) => p.status === 'paid')
+    .slice(0, 5)
+    .map((p) => ({
+      name: p.name,
+      amount: p.amount,
+      date: new Date(p.date).getTime(),
+    }));
+
+  const upcomingEarning = allPayments
+    .filter((p) => p.status === 'coming')
+    .slice(0, 5)
+    .map((p) => ({
+      name: p.name,
+      amount: p.amount,
+      date: new Date(p.date).getTime(),
+    }));
+
+  // Income Source List items (total per source)
+  const incomeSourceList = incomes.map((src) => ({
+    name: src.name,
+    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
+  }));
+
+  // Catch up: catch the month, using core summary of payments
+  const catchUptheMonth = [
+    {
+      name: 'Total Incoming',
+      data: incomeSourceList.reduce((sum, src) => sum + src.amount, 0).toFixed(2) + '$',
+    },
+    {
+      name: 'Got Paid Amount',
+      data:
+        allPayments
+          .filter((p) => p.status === 'paid')
+          .reduce((sum, p) => sum + p.amount, 0)
+          .toFixed(2) + '$',
+    },
+    {
+      name: 'Got Paid Earning',
+      data: `${allPayments.filter((p) => p.status === 'paid').length} earnings`,
+    },
+    {
+      name: 'Coming Earnings',
+      data: `${allPayments.filter((p) => p.status === 'coming').length} earnings`,
+    },
+    {
+      name: 'Income Sources',
+      data: `${incomes.length} sources`,
+    },
+    {
+      name: 'Reset Date',
+      data: '-/01-',
+    },
+  ];
+
+  // Pie Chart data (per source)
+  const pieDataRaw = incomeSourceList;
   const pieDataWithColors = pieDataRaw.map((item, idx) => ({
     ...item,
     color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
   }));
+
+  // PieChartData (first N payments, can customize)
+  const pieChartData = allPayments.slice(0, 8).map((p, idx) => ({
+    name: p.name,
+    amount: p.amount,
+    date: new Date(p.date).getTime(),
+    description: p.sourceName,
+    color: CATEGORY_COLORS[p.sourceName] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
+  }));
+
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
@@ -39,10 +113,9 @@ export default function Incomes() {
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
-        {/*recently investment and miscs */}
         <div className="flex flex-row xs:flex-col relative gap-2 items-center">
-          <RecentSideInfo header="Recent Earned" items={recentIncomes}></RecentSideInfo>
-          <RecentSideInfo header="Upcoming Earning" items={recentIncomes}></RecentSideInfo>
+          <RecentSideInfo header="Recent Earned" items={recentEarned} />
+          <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
         </div>
       </div>
 
@@ -54,43 +127,29 @@ export default function Incomes() {
             INCOMES
           </h1>
         </div>
-        <div className=" w-full flex xs:hidden flex-col items-center gap-5">
+        <div className="w-full flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
-          {/*recently investment and miscs */}
           <div className="flex flex-col w-full relative gap-1 items-center">
-            <RecentSideInfo header="Recent Earned" items={recentIncomes}></RecentSideInfo>
-            <RecentSideInfo header="Upcoming Earning" items={recentIncomes}></RecentSideInfo>
+            <RecentSideInfo header="Recent Earned" items={recentEarned} />
+            <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
           </div>
         </div>
-        {/*current Incomes and outcomes snapshots */}
+        {/*current Incomes snapshots */}
         <div className="flex flex-row justify-center items-center gap-1 w-full">
-          <CatchUpTheMonth
-            header="Quick Monthly Catch Up"
-            items={catchUptheMonth}
-          ></CatchUpTheMonth>
-          <SourcesList header="Income Sources" items={incomeSourceList}></SourcesList>
+          <CatchUpTheMonth header="Quick Monthly Catch Up" items={catchUptheMonth} />
+          <SourcesList header="Income Sources" items={incomeSourceList} />
         </div>
         {/* chartpie summary */}
-        <div className="pl-1 flex flex-col md:flex-row  items-center w-full gap-1">
+        <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
           <PieChart data={pieDataWithColors} />
-          <PieChartData
-            header="Pie Chart Data"
-            items={pieDataWithColors.map((d, idx) => ({
-              name: d.name,
-              amount: d.amount,
-              date: Date.now(),
-              description: 'description',
-              color: d.color,
-            }))}
-          />
+          <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>
         <div className="flex flex-col w-full">
-          <SourcesDetailsContainer header="Income Sources"></SourcesDetailsContainer>
+          <SourcesDetailsContainer header="Income Sources" />
         </div>
-        {/* recent outcomes */}
       </section>
 
       <MobileMenuButton

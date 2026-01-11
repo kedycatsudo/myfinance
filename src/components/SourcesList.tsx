@@ -1,16 +1,15 @@
 'use client';
 import React from 'react';
 import TotalRow from './TotalRow';
-import type { IncomesSourceListItem } from '@/types/incomes';
+import { FinancePayment } from '@/types/finance';
 type SourcesListProps = {
   header: string;
-  items: IncomesSourceListItem[];
+  items: FinancePayment[];
   className?: string;
 };
 
 export default function SourcesList({ header, items, className = '' }: SourcesListProps) {
   const total = items.reduce((sum, item) => sum + item.amount, 0);
-
   return (
     <div
       className={`w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg ${className}`}

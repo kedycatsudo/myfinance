@@ -1,23 +1,19 @@
 'use client';
-/* components import */
 import SideBar from '@/components/SideBar';
 import RecentSideInfo from '@/components/RecentSideInfo';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
 import PieChartData from '@/components/PieChartData';
-import PieChart from '@/components/PieChart';
+import PieChart, { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
 import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
-import { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
-
-import { useIncomesContext } from '@/context/IncomesContext';
+import { useIncomesContext } from '@/context/FinanceGenericContext';
 import { useMemo } from 'react';
 
 export default function Incomes() {
   const pathName = usePathname();
-  const { incomes } = useIncomesContext();
-
+  const { data: incomes } = useIncomesContext();
   // All payments under all sources, flattened and sorted by date desc
   const allPayments = useMemo(
     () =>
@@ -89,20 +85,18 @@ export default function Incomes() {
     },
   ];
 
-  // Pie Chart data (per source)
-  const pieDataRaw = incomeSourceList;
-  const pieDataWithColors = pieDataRaw.map((item, idx) => ({
+  // ----- Consistent Color Picking: Assign colors in parent -----
+  const pieDataWithColors = incomeSourceList.map((item, idx) => ({
     ...item,
     color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
   }));
 
-  // PieChartData (first N payments, can customize)
-  const pieChartData = allPayments.slice(0, 8).map((p, idx) => ({
-    name: p.name,
-    amount: p.amount,
-    date: new Date(p.date).getTime(),
-    description: p.sourceName,
-    color: CATEGORY_COLORS[p.sourceName] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
+  // PieChartData (for list, chart, legend)
+  const pieChartData = pieDataWithColors.map((item) => ({
+    name: item.name,
+    amount: item.amount,
+    color: item.color,
+    description: item.name,
   }));
 
   return (
@@ -118,16 +112,14 @@ export default function Incomes() {
           <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
         </div>
       </div>
-
       {/* Main Content */}
       <section className="w-full flex flex-col flex-start items-center gap-5">
-        {/* header and welcome message */}
         <div className="flex flex-col">
           <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
             INCOMES
           </h1>
         </div>
-        <div className="w-full flex xs:hidden flex-col items-center gap-5">
+        <div className=" flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
@@ -137,12 +129,11 @@ export default function Incomes() {
             <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
           </div>
         </div>
-        {/*current Incomes snapshots */}
         <div className="flex flex-row justify-center items-center gap-1 w-full">
           <CatchUpTheMonth header="Quick Monthly Catch Up" items={catchUptheMonth} />
           <SourcesList header="Income Sources" items={incomeSourceList} />
         </div>
-        {/* chartpie summary */}
+        {/* Core fix: Pass pieDataWithColors to BOTH components */}
         <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
           <PieChart data={pieDataWithColors} />
           <PieChartData header="Pie Chart Data" items={pieChartData} />
@@ -151,7 +142,6 @@ export default function Incomes() {
           <SourcesDetailsContainer header="Income Sources" />
         </div>
       </section>
-
       <MobileMenuButton
         menuItems={[
           { href: '/dashboard', label: 'Dashboard' },

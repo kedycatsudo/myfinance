@@ -5,18 +5,17 @@ import RecentSideInfo from '@/components/RecentSideInfo';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
 import SourcesList from '@/components/SourcesList';
 import PieChartData from '@/components/PieChartData';
-import PieChart from '@/components/PieChart';
+import PieChart, { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
 import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
-import { useOutcomesContext } from '@/context/OutcomesContext';
+import { useOutcomesContext } from '@/context/FinanceGenericContext';
 import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function Outcomes() {
   const pathName = usePathname();
-  const { outcomes } = useOutcomesContext();
+  const { data: outcomes } = useOutcomesContext();
 
-  /** Example: Extracting useful data for children */
   // Flat list of latest payments across all sources, sorted newest first
   const allPayments = useMemo(
     () =>
@@ -30,7 +29,8 @@ export default function Outcomes() {
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
     [outcomes],
   );
-  //Top N=5 recent paid, upcoming payments etc
+
+  // Top N=5 recent paid, upcoming payments etc
   const recentPaid = allPayments
     .filter((p) => p.status === 'paid')
     .slice(0, 5)
@@ -45,8 +45,27 @@ export default function Outcomes() {
       date: new Date(p.date).getTime(),
     }));
 
-  // For PieChart: by source, to see sources pie
+  // For SourcesList: aggregate total amount per source
+  const sourcesListItems = outcomes.map((src) => ({
+    name: src.name,
+    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
+  }));
 
+  // Setup pie data and their color (ALWAYS match color for both PieChart & PieChartData)
+  const pieDataWithColors = sourcesListItems.map((src, idx) => ({
+    ...src,
+    color: CATEGORY_COLORS[src.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
+  }));
+
+  // PieChartData: same pie slice list to ensure 1-to-1 color match
+  const pieChartPaymentData = pieDataWithColors.map((src) => ({
+    name: src.name,
+    amount: src.amount,
+    color: src.color,
+    description: src.name,
+  }));
+
+  // Snapshot stats
   const catchUpItems = [
     {
       name: 'Payments in the loop',
@@ -86,23 +105,6 @@ export default function Outcomes() {
     },
   ];
 
-  //For  SourcesList:aggregate total maount per source
-
-  const sourcesListItems = outcomes.map((src) => ({
-    name: src.name,
-    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
-  }));
-  const pieData = sourcesListItems.map((src) => ({
-    name: src.name,
-    amount: src.amount,
-  }));
-  //PieChartData:map from all payments
-  const pieChartPaymentData = allPayments.slice(0, 8).map((p) => ({
-    name: p.name,
-    amount: p.amount,
-    date: new Date(p.date).getTime(),
-    description: p.type,
-  }));
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
@@ -119,7 +121,6 @@ export default function Outcomes() {
 
       {/* Main Content */}
       <section className="w-full flex flex-col flex-start items-center gap-5">
-        {/* header and welcome message */}
         <div className="flex flex-col">
           <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
             OUTCOMES
@@ -138,17 +139,11 @@ export default function Outcomes() {
         {/*current Outgoings snapshots */}
         <div className="flex flex-row justify-center items-center gap-1 w-full">
           <CatchUpTheMonth header="Quick Catch Up For This Month" items={catchUpItems} />
-          <SourcesList
-            header="Outcome Sources"
-            items={sourcesListItems.map((src) => ({
-              name: src.name,
-              amount: src.amount,
-            }))}
-          />
+          <SourcesList header="Outcome Sources" items={sourcesListItems} />
         </div>
-        {/* chartpie summary */}
         <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
-          <PieChart data={pieData} />
+          {/*------ COLOR SYNC IS HERE --------*/}
+          <PieChart data={pieDataWithColors} />
           <PieChartData header="Pie Chart Data For Outcome Sources" items={pieChartPaymentData} />
         </div>
         <div className="flex flex-col w-full">

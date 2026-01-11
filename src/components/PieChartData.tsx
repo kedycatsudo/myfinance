@@ -1,15 +1,14 @@
 'use client';
 import React from 'react';
 import TotalRow from './TotalRow';
-import { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/utils/chartColors';
+// import { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/utils/chartColors';
 type FinancialItem = {
   name: string;
   amount: number;
-  date: number | string;
+  date?: number | string;
   color?: string;
   description?: string;
 };
-
 type InOutSnapshotProps = {
   header: string;
   items: FinancialItem[];
@@ -39,8 +38,7 @@ export default function PieChartData({ header, items, className }: InOutSnapshot
                     width: 14,
                     height: 14,
                     borderRadius: '50%',
-                    background:
-                      item.color || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
+                    background: item.color, // use only color assigned by parent!
                     marginRight: 8,
                   }}
                 />
@@ -49,9 +47,6 @@ export default function PieChartData({ header, items, className }: InOutSnapshot
               <div className="flex flex-col xs:flex-row gap-1">
                 <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
                   {item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}$
-                </span>
-                <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
-                  {new Date(item.date).toLocaleDateString()}
                 </span>
               </div>
             </div>

@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 type DataKey = 'incomes' | 'outcomes' | 'investments';
-// You can import these types:
+
 import { FinanceSource } from '@/types/finance';
 import { InvestmentSource } from '@/types/investments';
 
@@ -11,8 +11,6 @@ type ContextDataMap = {
   outcomes: FinanceSource[];
   investments: InvestmentSource[];
 };
-
-// The context type is generic
 type FinanceGenericContextType<K extends DataKey> = {
   data: ContextDataMap[K];
   setData: React.Dispatch<React.SetStateAction<ContextDataMap[K]>>;
@@ -42,28 +40,19 @@ function createGenericContext<K extends DataKey>(file: K) {
           setLoading(false);
         })
         .catch((err) => {
-          setError(err.message || `Error loading ${file} data`);
+          setError(err.message || `Could not fetch /data/${file}.json`);
           setData([] as ContextDataMap[K]);
           setLoading(false);
         });
-    }, []);
+    }, [file]);
 
-    // Type guard to ensure item has an 'id' property
-    function hasId(item: any): item is { id: string } {
-      return item && typeof item.id === 'string';
-    }
-
+    // CRUD logic works for both
     const addSource = (source: ContextDataMap[K][number]) =>
       setData((prev) => [...prev, source] as ContextDataMap[K]);
     const updateSource = (updated: ContextDataMap[K][number]) =>
-      setData(
-        (prev) =>
-          prev.map((s) =>
-            hasId(s) && hasId(updated) && s.id === updated.id ? updated : s,
-          ) as ContextDataMap[K],
-      );
+      setData((prev) => prev.map((s) => (s.id === updated.id ? updated : s)) as ContextDataMap[K]);
     const removeSource = (sourceId: string) =>
-      setData((prev) => prev.filter((s) => !(hasId(s) && s.id === sourceId)) as ContextDataMap[K]);
+      setData((prev) => prev.filter((s) => s.id !== sourceId) as ContextDataMap[K]);
 
     return (
       <Ctx.Provider
@@ -83,7 +72,6 @@ function createGenericContext<K extends DataKey>(file: K) {
   return [Provider, useGeneric] as const;
 }
 
-// Export specific providers/hooks for each case:
 export const [IncomesProvider, useIncomesContext] = createGenericContext('incomes');
 export const [OutcomesProvider, useOutcomesContext] = createGenericContext('outcomes');
 export const [InvestmentsProvider, useInvestmentsContext] = createGenericContext('investments');

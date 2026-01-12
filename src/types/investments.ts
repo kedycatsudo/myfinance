@@ -14,6 +14,7 @@ export type InvestmentItem = {
     result: InvestmentResult;
     resultAmount: number | null;
     status: InvestmentStatus;
+
 };
 
 export type InvestmentSource = SourceBase & {

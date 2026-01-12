@@ -30,6 +30,7 @@ export default function Investments() {
         .sort((a, b) => new Date(b.entryDate).getTime() - new Date(a.entryDate).getTime()),
     [investments],
   );
+  x;
 
   // Recent Profits (closed with profit > 0)
   const recentProfit = allInvestmentItems

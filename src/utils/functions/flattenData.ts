@@ -15,7 +15,7 @@ export function flattenPayments<S extends { name: string; payments: P[] }, P ext
 }
 
 // Utility for investments (for your InvestmentSource shape)
-export function flattenInvestments<S extends { name: string; type: string; items: I[] }, I extends { entryDate: string | number; exitDate?: string | null; assetName: string; term: string; investedAmount: string; result: string; resultAmount: number; status: string }>(
+export function flattenInvestments<S extends { name: string; type: string; items: I[] }, I extends { entryDate: string; exitDate?: string; assetName: string; term: string; investedAmount: number; result: string; resultAmount: number; status: string }>(
     sources: S[]
 ): (I & { sourceName: string; sourceType: string })[] {
     return sources

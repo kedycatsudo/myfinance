@@ -61,21 +61,21 @@ export default function Dashboard() {
   const currentOutcomes = [
     {
       name: 'Total Outcomes',
-      data: totalOutcomes + ' $',
+      data: totalOutcomes,
     },
     {
       name: 'Outcome Sources',
-      data: outcomes.length.toString(),
+      data: outcomes.length,
     },
   ];
   const currentIncomes = [
     {
       name: 'Total Incomes',
-      data: totalIncomes.toFixed(2) + ' $',
+      data: totalIncomes,
     },
     {
       name: 'Income Sources',
-      data: incomes.length.toString(),
+      data: incomes.length,
     },
   ];
 

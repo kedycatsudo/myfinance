@@ -31,7 +31,9 @@ export default function RecentSideInfo({ header, items, className = '' }: Recent
               <div className="w-full flex flex-row justify-between items-center py-2 gap-1">
                 <span className="text-white">{item.name}</span>
                 <div className="flex flex-col md:flex-row">
-                  <span>{item.data} $</span>
+                  <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
+                    {item.data} $
+                  </span>
                   <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
                     {item.date ? new Date(item.date).toLocaleDateString() : ''}
                   </span>

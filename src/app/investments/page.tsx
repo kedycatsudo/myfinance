@@ -10,7 +10,6 @@ import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/source
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useInvestmentsContext } from '@/context/FinanceGenericContext';
-import { useMemo } from 'react';
 import {
   RecentProfits,
   RecentLoss,
@@ -28,7 +27,15 @@ import {
 export default function Investments() {
   const pathName = usePathname();
   const { data: investments, loading, error } = useInvestmentsContext();
-
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (!investments || investments.length === 0) {
+    return <div>No incomes found</div>;
+  }
   const recentProfit = RecentProfits({ data: investments });
   const profitThisMonth = ProfitsThisMonth({ data: investments });
   const profitThisMonthAmount = ProfitThisMonthAmount({ data: investments });
@@ -88,7 +95,7 @@ export default function Investments() {
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
-      <div className="hidden xs:flex flex-col items-center gap-5">
+      <div className="hidden xs:flex flex-col items-center gap-5 flex-shrink-0 xs:w-64">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."

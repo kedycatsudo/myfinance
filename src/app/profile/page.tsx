@@ -1,6 +1,5 @@
 'use client';
 import SideBar from '@/components/SideBar';
-import RecentSideInfo from '@/components/RecentSideInfo';
 import { usePathname } from 'next/navigation';
 import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
@@ -9,7 +8,7 @@ export default function Profile() {
 
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
-      <div className="hidden xs:flex flex-col items-center gap-5 ">
+      <div className="hidden xs:flex flex-col items-center gap-5 flex-shrink-0 xs:w-64">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."

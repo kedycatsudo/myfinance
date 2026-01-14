@@ -15,7 +15,6 @@ import {
   UpcomingPayment,
   TotalOutcomes,
   PaidOutcomePayments,
-  TotalOutcomesPaidAmount,
   UpcomingPayments,
   UpcomingAmount,
   OutcomeSourcesList,
@@ -100,19 +99,19 @@ export default function Outcomes() {
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
-      <div className="hidden xs:flex flex-col items-center gap-5">
+      <div className="hidden xs:flex flex-col items-center gap-5 flex-shrink-0 xs:w-64">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
-        <div className="flex flex-row xs:flex-col relative gap-2 items-center">
+        <div className="w-full flex flex-row xs:flex-col relative gap-2 items-center">
           <RecentSideInfo header="Recent Paid" items={recentPaid} />
           <RecentSideInfo header="Upcoming payment" items={upcomingPayments} />
         </div>
       </div>
 
       {/* Main Content */}
-      <section className="w-full flex flex-col flex-start items-center gap-5">
+      <section className="w-full flex flex-col flex-start items-center gap-5 ">
         <div className="flex flex-col">
           <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
             OUTCOMES

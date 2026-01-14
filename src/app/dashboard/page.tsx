@@ -116,7 +116,7 @@ export default function Dashboard() {
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
-      <div className=" hidden xs:flex flex-col items-center gap-5">
+      <div className="hidden xs:flex flex-col items-center gap-5 flex-shrink-0 xs:w-64">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."

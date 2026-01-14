@@ -5,7 +5,6 @@ type DataKey = 'incomes' | 'outcomes' | 'investments';
 
 import { FinanceSource } from '@/types/finance';
 import { InvestmentSource } from '@/types/investments';
-import Incomes from '@/app/incomes/page';
 
 type ContextDataMap = {
   incomes: FinanceSource[];

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { useTheme } from '@/context/ThemeContext';
 import { useModal } from '@/context/ModalContext';
 import { useRouter } from 'next/navigation';
 
@@ -63,7 +62,7 @@ export default function LoginPage() {
           </button>
         </form>
         <p className="text-xs text-white mt-4 opacity-70 text-center">
-          You don't have an account yet?
+          Don&apos;t forget to save your work!{' '}
           <Link
             href="/register"
             className="font-bold underline cursor-pointer hover:text-blue-200 ml-1"

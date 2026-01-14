@@ -5,6 +5,7 @@ type DataKey = 'incomes' | 'outcomes' | 'investments';
 
 import { FinanceSource } from '@/types/finance';
 import { InvestmentSource } from '@/types/investments';
+import Incomes from '@/app/incomes/page';
 
 type ContextDataMap = {
   incomes: FinanceSource[];
@@ -65,6 +66,7 @@ function createGenericContext<K extends DataKey>(file: K) {
 
   function useGeneric() {
     const ctx = useContext(Ctx);
+
     if (!ctx) throw new Error('Must be used inside Provider');
     return ctx;
   }

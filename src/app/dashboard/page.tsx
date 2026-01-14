@@ -62,6 +62,7 @@ export default function Dashboard() {
     {
       name: 'Total Outcomes',
       data: totalOutcomes,
+      unit: '$',
     },
     {
       name: 'Outcome Sources',
@@ -72,6 +73,7 @@ export default function Dashboard() {
     {
       name: 'Total Incomes',
       data: totalIncomes,
+      unit: '$',
     },
     {
       name: 'Income Sources',
@@ -83,11 +85,13 @@ export default function Dashboard() {
   const recentOutcomes = allOutcomePayments.slice(0, 5).map((p) => ({
     name: p.name,
     data: p.amount,
+    unit: '$',
   }));
 
   const recentIncomes = allIncomePayments.slice(0, 5).map((p) => ({
     name: p.name,
     data: p.amount,
+    unit: '$',
   }));
 
   const recentInvestments = allInvestmentPositions
@@ -97,6 +101,7 @@ export default function Dashboard() {
       name: `${item.sourceName}: ${item.assetName}`,
       data: Number(item.investedAmount ?? 0),
       date: item.entryDate || '',
+      unit: '$',
     }));
 
   const recentMisc = allInvestmentPositions
@@ -106,11 +111,12 @@ export default function Dashboard() {
       name: `${item.sourceName}: ${item.assetName}`,
       data: Number(item.investedAmount ?? 0),
       date: item.entryDate || '',
+      unit: '$',
     }));
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
-      <div className="hidden xs:flex flex-col items-center gap-5">
+      <div className=" hidden xs:flex flex-col items-center gap-5">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."

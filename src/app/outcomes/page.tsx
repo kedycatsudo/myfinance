@@ -9,102 +9,94 @@ import PieChart, { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/Pi
 import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
 import { useOutcomesContext } from '@/context/FinanceGenericContext';
-import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
-
+import {
+  RecentPaid,
+  UpcomingPayment,
+  TotalOutcomes,
+  PaidOutcomePayments,
+  TotalOutcomesPaidAmount,
+  UpcomingPayments,
+  UpcomingAmount,
+  OutcomeSourcesList,
+} from '@/utils/functions/dataCalculations/outcomeDataCalculations';
+import { TotalIncomesPaidAmount } from '@/utils/functions/dataCalculations/incomesDataCalculations';
 export default function Outcomes() {
   const pathName = usePathname();
-  const { data: outcomes } = useOutcomesContext();
-
-  // Flat list of latest payments across all sources, sorted newest first
-  const allPayments = useMemo(
-    () =>
-      outcomes
-        .flatMap((src) =>
-          src.payments.map((p) => ({
-            ...p,
-            sourceName: src.name,
-          })),
-        )
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-    [outcomes],
-  );
+  const { data: outcomes, loading, error } = useOutcomesContext();
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (!outcomes || outcomes.length === 0) {
+    return <div>No incomes found</div>;
+  }
 
   // Top N=5 recent paid, upcoming payments etc
-  const recentPaid = allPayments
-    .filter((p) => p.status === 'paid')
-    .slice(0, 5)
-    .map((p) => ({ name: p.name, amount: p.amount, date: new Date(p.date).getTime() }));
+  const recentPaid = RecentPaid({ data: outcomes });
 
-  const recentUpcoming = allPayments
-    .filter((p) => p.status === 'coming')
-    .slice(0, 5)
-    .map((p) => ({
-      name: p.name,
-      amount: p.amount,
-      date: new Date(p.date).getTime(),
-    }));
-
+  const upcomingPayments = UpcomingPayment({ data: outcomes });
+  const totalOutcomes = TotalOutcomes({ data: outcomes });
+  const paidOutcomePayments = PaidOutcomePayments({ data: outcomes });
+  const totalOutcomesPaidAmount = TotalIncomesPaidAmount({ data: outcomes });
+  const upcomginPayments = UpcomingPayments({ data: outcomes });
+  const upcomingAmount = UpcomingAmount({ data: outcomes });
   // For SourcesList: aggregate total amount per source
-  const sourcesListItems = outcomes.map((src) => ({
-    name: src.name,
+  const outcomeSourceList = OutcomeSourcesList({ data: outcomes });
+
+  // ----- Consistent Color Picking: Assign colors in parent -----
+  const pieDataRaw = outcomes.map((src) => ({
+    name: src.sourceName,
     amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
+    description: src.description,
+  }));
+  const pieDataWithColors = pieDataRaw.map((item, idx) => ({
+    ...item,
+    color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
   }));
 
-  // Setup pie data and their color (ALWAYS match color for both PieChart & PieChartData)
-  const pieDataWithColors = sourcesListItems.map((src, idx) => ({
-    ...src,
-    color: CATEGORY_COLORS[src.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
-  }));
-
-  // PieChartData: same pie slice list to ensure 1-to-1 color match
-  const pieChartPaymentData = pieDataWithColors.map((src) => ({
-    name: src.name,
-    amount: src.amount,
-    color: src.color,
-    description: src.name,
+  // Pie chart data legend
+  const pieChartData = pieDataWithColors.map((d) => ({
+    sourceName: d.name,
+    amount: d.amount,
+    date: Date.now(),
+    description: d.description,
+    color: d.color,
   }));
 
   // Snapshot stats
-  const catchUpItems = [
+  const catchUptheMonth = [
     {
-      name: 'Payments in the loop',
-      data: `${allPayments.filter((p) => p.loop).length} payments`,
+      name: 'Total Outcomes',
+      data: totalOutcomes,
+      unit: '$',
     },
     {
-      name: 'Total Outgoing',
-      data:
-        allPayments
-          .filter((p) => p.status !== 'coming')
-          .reduce((sum, p) => sum + p.amount, 0)
-          .toFixed(2) + ' $',
+      name: 'Got Paid Payments',
+      data: paidOutcomePayments.length,
     },
     {
-      name: 'Paid Outgoing amount',
-      data:
-        allPayments
-          .filter((p) => p.status === 'paid')
-          .reduce((sum, p) => sum + p.amount, 0)
-          .toFixed(2) + ' $',
+      name: 'Got Paid Amount',
+      data: totalOutcomesPaidAmount,
+      unit: '$',
+    },
+
+    {
+      name: 'UpComing Payments',
+      data: upcomginPayments.length,
     },
     {
-      name: 'Paid Payments',
-      data: `${allPayments.filter((p) => p.status === 'paid').length} payments`,
-    },
-    {
-      name: 'Coming Payments',
-      data: `${allPayments.filter((p) => p.status === 'coming').length} payments`,
-    },
-    {
-      name: 'Outcome Sources',
-      data: `${outcomes.length} sources`,
+      name: 'Upcoming Amount',
+      data: upcomingAmount,
+      unit: '$',
     },
     {
       name: 'Reset Date',
       data: '-/01-',
     },
   ];
-
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
@@ -115,7 +107,7 @@ export default function Outcomes() {
         />
         <div className="flex flex-row xs:flex-col relative gap-2 items-center">
           <RecentSideInfo header="Recent Paid" items={recentPaid} />
-          <RecentSideInfo header="Upcoming payment" items={recentUpcoming} />
+          <RecentSideInfo header="Upcoming payment" items={upcomingPayments} />
         </div>
       </div>
 
@@ -133,18 +125,18 @@ export default function Outcomes() {
           />
           <div className="w-full flex flex-col relative gap-1 items-center">
             <RecentSideInfo header="Recent Paid" items={recentPaid} />
-            <RecentSideInfo header="Upcoming payment" items={recentUpcoming} />
+            <RecentSideInfo header="Upcoming payment" items={upcomingPayments} />
           </div>
         </div>
         {/*current Outgoings snapshots */}
         <div className="flex flex-row justify-center items-center gap-1 w-full">
-          <CatchUpTheMonth header="Quick Catch Up For This Month" items={catchUpItems} />
-          <SourcesList header="Outcome Sources" items={sourcesListItems} />
+          <CatchUpTheMonth header="Quick Catch Up For This Month" items={catchUptheMonth} />
+          <SourcesList header="Outcome Sources" items={outcomeSourceList} />
         </div>
         <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
           {/*------ COLOR SYNC IS HERE --------*/}
           <PieChart data={pieDataWithColors} />
-          <PieChartData header="Pie Chart Data For Outcome Sources" items={pieChartPaymentData} />
+          <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>
         <div className="flex flex-col w-full">
           <SourcesDetailsContainer header="Outcome Sources" />

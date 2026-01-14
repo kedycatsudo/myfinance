@@ -2,9 +2,14 @@
 import React from 'react';
 import TotalRow from './TotalRow';
 import { FinancePayment } from '@/types/finance';
+type SourceListItem = {
+  name: string;
+  amount: number;
+  unit?: string;
+};
 type SourcesListProps = {
   header: string;
-  items: FinancePayment[];
+  items: SourceListItem[];
   className?: string;
 };
 
@@ -23,10 +28,9 @@ export default function SourcesList({ header, items, className = '' }: SourcesLi
             <div className="flex flex-row justify-between items-center py-2 gap-1">
               <span className="text-white text-s xs:text-xl">{item.name}</span>
               <div className="flex flex-col xs:flex-row gap-1">
-                <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 text-[#a9deff] font-bold text-xs xs:text-xl shadow-inner">
-                  {typeof item.amount === 'number'
-                    ? item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })
-                    : '—'}
+                <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner text-[#a9deff]">
+                  {item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  {item.unit ? item.unit : ''}
                 </span>
               </div>
             </div>

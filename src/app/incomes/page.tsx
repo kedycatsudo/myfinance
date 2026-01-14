@@ -9,75 +9,64 @@ import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/source
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useIncomesContext } from '@/context/FinanceGenericContext';
-import { useMemo } from 'react';
-
+import {
+  TotalIncomes,
+  PaidIncomePayments,
+  TotalIncomesPaidAmount,
+  RecentEarned,
+  IncomesUpcoming,
+  UpcomingIncomeAmount,
+  UpcomingEarning,
+  IncomeSourceList,
+} from '@/utils/functions/dataCalculations/incomesDataCalculations';
 export default function Incomes() {
   const pathName = usePathname();
-  const { data: incomes } = useIncomesContext();
-  // All payments under all sources, flattened and sorted by date desc
-  const allPayments = useMemo(
-    () =>
-      incomes
-        .flatMap((src) =>
-          src.payments.map((p) => ({
-            ...p,
-            sourceName: src.name,
-          })),
-        )
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
-    [incomes],
-  );
+  const { data: incomes, loading, error } = useIncomesContext();
 
-  // Top N = 5 "Recent Earned", "Upcoming Earning"
-  const recentEarned = allPayments
-    .filter((p) => p.status === 'paid')
-    .slice(0, 5)
-    .map((p) => ({
-      name: p.name,
-      amount: p.amount,
-      date: new Date(p.date).getTime(),
-    }));
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (!incomes || incomes.length === 0) {
+    return <div>No incomes found</div>;
+  }
 
-  const upcomingEarning = allPayments
-    .filter((p) => p.status === 'coming')
-    .slice(0, 5)
-    .map((p) => ({
-      name: p.name,
-      amount: p.amount,
-      date: new Date(p.date).getTime(),
-    }));
-
-  // Income Source List items (total per source)
-  const incomeSourceList = incomes.map((src) => ({
-    name: src.name,
-    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
-  }));
-
+  const totalIncomes = TotalIncomes({ data: incomes });
+  const paidIncomePayments = PaidIncomePayments({ data: incomes });
+  const totalIncomesPaidAmount = TotalIncomesPaidAmount({ data: incomes });
+  const recentEarned = RecentEarned({ data: incomes });
+  const incomesUpcoming = IncomesUpcoming({ data: incomes });
+  const upcomingIncomeAmount = UpcomingIncomeAmount({ data: incomes });
+  const upcomingEarning = UpcomingEarning({ data: incomes });
+  const incomesSourceList = IncomeSourceList({ data: incomes });
   // Catch up: catch the month, using core summary of payments
+
   const catchUptheMonth = [
     {
-      name: 'Total Incoming',
-      data: incomeSourceList.reduce((sum, src) => sum + src.amount, 0).toFixed(2) + '$',
+      name: 'Total Incomes',
+      data: totalIncomes,
+      unit: '$',
+    },
+    {
+      name: 'Got Paid Payments',
+      data: paidIncomePayments.length,
     },
     {
       name: 'Got Paid Amount',
-      data:
-        allPayments
-          .filter((p) => p.status === 'paid')
-          .reduce((sum, p) => sum + p.amount, 0)
-          .toFixed(2) + '$',
+      data: totalIncomesPaidAmount,
+      unit: '$',
+    },
+
+    {
+      name: 'UpComing Payments',
+      data: incomesUpcoming.length,
     },
     {
-      name: 'Got Paid Earning',
-      data: `${allPayments.filter((p) => p.status === 'paid').length} earnings`,
-    },
-    {
-      name: 'Coming Earnings',
-      data: `${allPayments.filter((p) => p.status === 'coming').length} earnings`,
-    },
-    {
-      name: 'Income Sources',
-      data: `${incomes.length} sources`,
+      name: 'Upcoming Amount',
+      data: upcomingIncomeAmount,
+      unit: '$',
     },
     {
       name: 'Reset Date',
@@ -86,17 +75,23 @@ export default function Incomes() {
   ];
 
   // ----- Consistent Color Picking: Assign colors in parent -----
-  const pieDataWithColors = incomeSourceList.map((item, idx) => ({
+  const pieDataRaw = incomes.map((src) => ({
+    name: src.sourceName,
+    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
+    description: src.description,
+  }));
+  const pieDataWithColors = pieDataRaw.map((item, idx) => ({
     ...item,
     color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
   }));
 
-  // PieChartData (for list, chart, legend)
-  const pieChartData = pieDataWithColors.map((item) => ({
-    name: item.name,
-    amount: item.amount,
-    color: item.color,
-    description: item.name,
+  // Pie chart data legend
+  const pieChartData = pieDataWithColors.map((d) => ({
+    sourceName: d.name,
+    amount: d.amount,
+    date: Date.now(),
+    description: d.description,
+    color: d.color,
   }));
 
   return (
@@ -131,10 +126,10 @@ export default function Incomes() {
         </div>
         <div className="flex flex-row justify-center items-center gap-1 w-full">
           <CatchUpTheMonth header="Quick Monthly Catch Up" items={catchUptheMonth} />
-          <SourcesList header="Income Sources" items={incomeSourceList} />
+          <SourcesList header="Income Sources" items={incomesSourceList} />
         </div>
         {/* Core fix: Pass pieDataWithColors to BOTH components */}
-        <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
+        <div className="pl-1 flex flex-col md:flex-row  items-center w-full gap-1">
           <PieChart data={pieDataWithColors} />
           <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>

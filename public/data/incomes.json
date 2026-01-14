@@ -1,7 +1,7 @@
 [
   {
     "id": "salary",
-    "name": "Salary",
+    "sourceName": "Salary",
     "description": "Main salary from full-time job",
     "payments": [
       {
@@ -26,7 +26,7 @@
   },
   {
     "id": "upwork",
-    "name": "Upwork",
+    "sourceName": "Upwork",
     "description": "Freelance clients via Upwork",
     "payments": [
       {
@@ -51,7 +51,7 @@
   },
   {
     "id": "investment_returns",
-    "name": "Investment Returns",
+    "sourceName": "Investment Returns",
     "description": "Income from stock & crypto investments",
     "payments": [
       {
@@ -76,7 +76,7 @@
   },
   {
     "id": "misc_income",
-    "name": "Miscellaneous Income",
+    "sourceName": "Miscellaneous Income",
     "description": "Other periodic or unexpected income sources",
     "payments": [
       {

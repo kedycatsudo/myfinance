@@ -5,6 +5,7 @@ import { FinancePayment } from '@/types/finance';
 type FinancialSnapshotItem = {
   name: string;
   data: number;
+  unit?: string;
 };
 type FinancialSnapShotProps = {
   header: string;
@@ -21,7 +22,6 @@ export default function FinancialSnapShot({
   className = '',
 }: FinancialSnapShotProps) {
   const total = items.reduce((sum, item) => sum + item.data, 0);
-
   return (
     <div
       className={`w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg ${className}`}
@@ -36,7 +36,8 @@ export default function FinancialSnapShot({
               <span className="text-white text-s xs:text-xl">{item.name}</span>
               <div className="flex flex-col xs:flex-row gap-1">
                 <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner text-[#a9deff]">
-                  {item.data} $
+                  {item.data.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  {item.unit ? item.unit : ''}
                 </span>
                 {/* <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
                   {new Date(item.date).toLocaleDateString()}

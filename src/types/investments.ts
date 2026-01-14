@@ -20,4 +20,5 @@ export type InvestmentItem = {
 export type InvestmentSource = SourceBase & {
     type: "crypto" | "forex";
     items: InvestmentItem[];
+    name?: string
 };

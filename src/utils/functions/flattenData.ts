@@ -1,14 +1,15 @@
 // Utility for incomes/outcomes
-export function flattenPayments<S extends { name: string; payments: P[] }, P extends { date: string | number; amount: number; name: string }>(
+export function flattenPayments<S extends { sourceName: string; payments: P[] }, P extends { date: string | number; amount: number; name: string, status: string }>(
     sources: S[]
 ): (P & { sourceName: string })[] {
     return sources
         .flatMap(src =>
             src.payments.map(p => ({
                 ...p,
-                sourceName: src.name,
+                sourceName: src.sourceName,
                 name: p.name,
-                amount: p.amount
+                amount: p.amount,
+                status: p.status
             }))
         )
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

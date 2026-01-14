@@ -7,6 +7,7 @@ type RecentSideInfoItem = {
   name: string;
   data: number;
   date: string | number;
+  unit?: string;
 };
 
 type RecentSideInfoProps = {
@@ -31,8 +32,9 @@ export default function RecentSideInfo({ header, items, className = '' }: Recent
               <div className="w-full flex flex-row justify-between items-center py-2 gap-1">
                 <span className="text-white">{item.name}</span>
                 <div className="flex flex-col md:flex-row">
-                  <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
-                    {item.data} $
+                  <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner text-[#a9deff]">
+                    {item.data.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    {item.unit ? item.unit : ''}
                   </span>
                   <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
                     {item.date ? new Date(item.date).toLocaleDateString() : ''}

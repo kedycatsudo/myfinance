@@ -11,7 +11,7 @@ type SideBarProps = {
 export default function SideBar({ className = '', activePath }: SideBarProps) {
   return (
     <aside
-      className={`flex flex-col bg-[#989899] opacity-75 items-center w-[180px] min-w-[180px] ${className}`}
+      className={`w-full flex flex-col bg-[#989899] opacity-75 items-center w-[180px] min-w-[180px] ${className}`}
       aria-label="Sidebar Navigation"
     >
       <Image

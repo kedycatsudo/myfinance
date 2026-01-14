@@ -1,8 +1,12 @@
 'use client';
 import React from 'react';
 import TotalRow from '../TotalRow';
-import type { FinancialSnapshotItem } from '@/types/dashboard';
-
+import { FinancePayment } from '@/types/finance';
+type FinancialSnapshotItem = {
+  name: string;
+  data: number;
+  unit?: string;
+};
 type FinancialSnapShotProps = {
   header: string;
   items: FinancialSnapshotItem[];
@@ -17,8 +21,7 @@ export default function FinancialSnapShot({
   items,
   className = '',
 }: FinancialSnapShotProps) {
-  const total = items.reduce((sum, item) => sum + Number(item.amount), 0);
-
+  const total = items.reduce((sum, item) => sum + item.data, 0);
   return (
     <div
       className={`w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg ${className}`}
@@ -28,19 +31,17 @@ export default function FinancialSnapShot({
       {/* Items */}
       <div className="w-full">
         {items.map((item, idx) => (
-          <React.Fragment key={item.name + '-' + item.date}>
+          <React.Fragment key={item.name + '-' + item.data}>
             <div className="flex flex-row justify-between items-center py-2 gap-1">
               <span className="text-white text-s xs:text-xl">{item.name}</span>
               <div className="flex flex-col xs:flex-row gap-1">
                 <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner text-[#a9deff]">
-                  {Number(item.amount).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                  })}
-                  $
+                  {item.data.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  {item.unit ? item.unit : ''}
                 </span>
-                <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
+                {/* <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
                   {new Date(item.date).toLocaleDateString()}
-                </span>
+                </span> */}
               </div>
             </div>
 
@@ -52,8 +53,7 @@ export default function FinancialSnapShot({
         ))}
       </div>
       <div className="w-full h-1 my-2 bg-[#29388A] rounded" />
-      {/* Total Row */}
-      <TotalRow total={total} />
+      {(header === 'Recent Outcomes' || header === 'Recent Incomes') && <TotalRow total={total} />}
     </div>
   );
 }

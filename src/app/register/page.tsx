@@ -3,12 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
-import { useTheme } from '@/context/ThemeContext';
 import { useModal } from '@/context/ModalContext';
 import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
-  const { theme, toggleTheme } = useTheme();
   const { register } = useAuth();
   const { showModal } = useModal();
   const router = useRouter();

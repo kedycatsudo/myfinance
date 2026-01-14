@@ -5,6 +5,14 @@ import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ModalProvider } from '@/context/ModalContext';
 import AppModal from '@/components/modals/AppModal';
+
+// Import ONLY from your generic context now!
+import {
+  InvestmentsProvider,
+  IncomesProvider,
+  OutcomesProvider,
+} from '@/context/FinanceGenericContext';
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
@@ -12,9 +20,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AuthProvider>
           <ThemeProvider>
             <ModalProvider>
-              <Header></Header>
-              {children}
-              <AppModal />
+              <InvestmentsProvider>
+                <IncomesProvider>
+                  <OutcomesProvider>
+                    {' '}
+                    {/* spelling! */}
+                    <Header />
+                    {children}
+                    <AppModal />
+                  </OutcomesProvider>
+                </IncomesProvider>
+              </InvestmentsProvider>
             </ModalProvider>
           </ThemeProvider>
         </AuthProvider>

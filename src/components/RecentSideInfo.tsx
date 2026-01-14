@@ -1,37 +1,43 @@
 'use client';
 import React from 'react';
 import TotalRow from './TotalRow';
-import type { RecentItem } from '@/types/dashboard'; // <-- use shared type
+
+// Define the type directly for clarity since RecentItem is obsolete.
+type RecentSideInfoItem = {
+  name: string;
+  data: number;
+  date: string | number;
+  unit?: string;
+};
 
 type RecentSideInfoProps = {
   header: string;
-  items: RecentItem[];
+  items: RecentSideInfoItem[];
   className?: string;
 };
 
 export default function RecentSideInfo({ header, items, className = '' }: RecentSideInfoProps) {
-  const total = items.reduce((sum, item) => sum + item.amount, 0);
-
+  const total = items.reduce((sum, item) => sum + Number(item.data), 0);
   return (
     <div className={`flex-1 w-full ${className}`}>
       <div className="w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg">
         <h3 className="text-white font-bold text-l xs:text-xl mb-2 text-center">{header}</h3>
         <div className="w-full h-1 my-2 bg-[#29388A] rounded" />
-        {/* Items */}
         <div className="w-full flex flex-col">
+          {items.length === 0 && (
+            <div className="w-full text-center text-white opacity-60 py-5">No items</div>
+          )}
           {items.map((item, idx) => (
-            <React.Fragment key={item.name + String(item.date)}>
+            <React.Fragment key={item.name + '-' + item.date}>
               <div className="w-full flex flex-row justify-between items-center py-2 gap-1">
-                <span className="text-white ">{item.name}</span>
+                <span className="text-white">{item.name}</span>
                 <div className="flex flex-col md:flex-row">
-                  <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
-                    {Number(item.amount).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                    })}
-                    $
+                  <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner text-[#a9deff]">
+                    {item.data.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    {item.unit ? item.unit : ''}
                   </span>
                   <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
-                    {new Date(item.date).toLocaleDateString()}
+                    {item.date ? new Date(item.date).toLocaleDateString() : ''}
                   </span>
                 </div>
               </div>
@@ -43,7 +49,6 @@ export default function RecentSideInfo({ header, items, className = '' }: Recent
           ))}
         </div>
         <div className="w-full h-1 my-2 bg-[#29388A] rounded" />
-        {/* Total Row */}
         <TotalRow total={total} />
       </div>
     </div>

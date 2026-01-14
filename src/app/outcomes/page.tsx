@@ -1,227 +1,146 @@
 'use client';
-/* components import */
+
 import SideBar from '@/components/SideBar';
 import RecentSideInfo from '@/components/RecentSideInfo';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
 import SourcesList from '@/components/SourcesList';
 import PieChartData from '@/components/PieChartData';
-import PieChart from '@/components/PieChart';
+import PieChart, { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
 import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
-/* frameworks import */
+import { useOutcomesContext } from '@/context/FinanceGenericContext';
 import { usePathname } from 'next/navigation';
-
+import {
+  RecentPaid,
+  UpcomingPayment,
+  TotalOutcomes,
+  PaidOutcomePayments,
+  UpcomingPayments,
+  UpcomingAmount,
+  OutcomeSourcesList,
+} from '@/utils/functions/dataCalculations/outcomeDataCalculations';
+import { TotalIncomesPaidAmount } from '@/utils/functions/dataCalculations/incomesDataCalculations';
 export default function Outcomes() {
   const pathName = usePathname();
+  const { data: outcomes, loading, error } = useOutcomesContext();
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (!outcomes || outcomes.length === 0) {
+    return <div>No incomes found</div>;
+  }
+
+  // Top N=5 recent paid, upcoming payments etc
+  const recentPaid = RecentPaid({ data: outcomes });
+
+  const upcomingPayments = UpcomingPayment({ data: outcomes });
+  const totalOutcomes = TotalOutcomes({ data: outcomes });
+  const paidOutcomePayments = PaidOutcomePayments({ data: outcomes });
+  const totalOutcomesPaidAmount = TotalIncomesPaidAmount({ data: outcomes });
+  const upcomginPayments = UpcomingPayments({ data: outcomes });
+  const upcomingAmount = UpcomingAmount({ data: outcomes });
+  // For SourcesList: aggregate total amount per source
+  const outcomeSourceList = OutcomeSourcesList({ data: outcomes });
+
+  // ----- Consistent Color Picking: Assign colors in parent -----
+  const pieDataRaw = outcomes.map((src) => ({
+    name: src.sourceName,
+    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
+    description: src.description,
+  }));
+  const pieDataWithColors = pieDataRaw.map((item, idx) => ({
+    ...item,
+    color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
+  }));
+
+  // Pie chart data legend
+  const pieChartData = pieDataWithColors.map((d) => ({
+    sourceName: d.name,
+    amount: d.amount,
+    date: Date.now(),
+    description: d.description,
+    color: d.color,
+  }));
+
+  // Snapshot stats
+  const catchUptheMonth = [
+    {
+      name: 'Total Outcomes',
+      data: totalOutcomes,
+      unit: '$',
+    },
+    {
+      name: 'Got Paid Payments',
+      data: paidOutcomePayments.length,
+    },
+    {
+      name: 'Got Paid Amount',
+      data: totalOutcomesPaidAmount,
+      unit: '$',
+    },
+
+    {
+      name: 'UpComing Payments',
+      data: upcomginPayments.length,
+    },
+    {
+      name: 'Upcoming Amount',
+      data: upcomingAmount,
+      unit: '$',
+    },
+    {
+      name: 'Reset Date',
+      data: '-/01-',
+    },
+  ];
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
-      <div className="hidden xs:flex flex-col items-center gap-5">
+      <div className="hidden xs:flex flex-col items-center gap-5 flex-shrink-0 xs:w-64">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
-        {/*recently investment and miscs */}
-        <div className="flex flex-row xs:flex-col relative gap-2 items-center">
-          <RecentSideInfo
-            header="Recent Paid"
-            items={[
-              { name: 'data1', amount: 2300, date: Date.now() },
-              { name: 'data2', amount: 2300, date: Date.now() },
-            ]}
-          />
-          <RecentSideInfo
-            header="Upcoming payment"
-            items={[
-              { name: 'data3', amount: 2300, date: Date.now() },
-              { name: 'data4', amount: 2300, date: Date.now() },
-            ]}
-          />
+        <div className="w-full flex flex-row xs:flex-col relative gap-2 items-center">
+          <RecentSideInfo header="Recent Paid" items={recentPaid} />
+          <RecentSideInfo header="Upcoming payment" items={upcomingPayments} />
         </div>
       </div>
 
       {/* Main Content */}
-      <section className="w-full flex flex-col flex-start items-center gap-5">
-        {/* header and welcome message */}
+      <section className="w-full flex flex-col flex-start items-center gap-5 ">
         <div className="flex flex-col">
           <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
             OUTCOMES
           </h1>
         </div>
-        <div className=" w-full flex xs:hidden flex-col items-center gap-5">
+        <div className="w-full flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
-          {/*recently investment and miscs */}
           <div className="w-full flex flex-col relative gap-1 items-center">
-            <RecentSideInfo
-              header="Recent Paid"
-              items={[
-                { name: 'data1', amount: 2300, date: Date.now() },
-                { name: 'data2', amount: 2300, date: Date.now() },
-              ]}
-            />
-            <RecentSideInfo
-              header="Upcoming payment"
-              items={[
-                { name: 'data3', amount: 2300, date: Date.now() },
-                { name: 'data4', amount: 2300, date: Date.now() },
-              ]}
-            />
+            <RecentSideInfo header="Recent Paid" items={recentPaid} />
+            <RecentSideInfo header="Upcoming payment" items={upcomingPayments} />
           </div>
         </div>
-        {/*current Incomes and outcomes snapshots */}
+        {/*current Outgoings snapshots */}
         <div className="flex flex-row justify-center items-center gap-1 w-full">
-          <CatchUpTheMonth
-            header="Quick Catch Up For This Month"
-            items={[
-              {
-                name: 'Payments in the loop',
-                data: '4 payments',
-              },
-              {
-                name: 'Total Outgoing',
-                data: '500.00$',
-              },
-              {
-                name: 'Paid Outgoing amount',
-                data: '500.00 $',
-              },
-              {
-                name: 'Paid Payments',
-                data: '3 payments',
-              },
-              {
-                name: 'Coming Payments',
-                data: '3 payments',
-              },
-              {
-                name: 'Misc',
-                data: '600',
-              },
-              {
-                name: 'Outcome Sources',
-                data: '4 sources',
-              },
-              {
-                name: 'Reset Date',
-                data: '-/01-',
-              },
-            ]}
-          ></CatchUpTheMonth>
-          <SourcesList
-            header="Outcome Sources"
-            items={[
-              {
-                name: 'Mortgage',
-                data: [2300],
-              },
-              {
-                name: 'Grocery',
-                data: [2300],
-              },
-              {
-                name: 'Utilities',
-                data: [2300],
-              },
-              {
-                name: 'gas',
-                data: [2300],
-              },
-              {
-                name: 'debt',
-                data: [2300],
-              },
-              {
-                name: 'subscription',
-                data: [2300],
-              },
-              {
-                name: 'investment',
-                data: [2300],
-              },
-              {
-                name: 'Reset Date',
-                data: [2300],
-              },
-            ]}
-          ></SourcesList>
+          <CatchUpTheMonth header="Quick Catch Up For This Month" items={catchUptheMonth} />
+          <SourcesList header="Outcome Sources" items={outcomeSourceList} />
         </div>
-        {/* chartpie summary */}
-        <div className="pl-1 flex flex-col md:flex-row  items-center w-full gap-1">
-          <PieChart
-            data={[
-              { name: 'Outcomes', amount: 1200 },
-              { name: 'Incomes', amount: 2500 },
-              { name: 'Incomes', amount: 2500 },
-              { name: 'Incomes', amount: 2500 },
-              { name: 'Incomes', amount: 2500 },
-              { name: 'Incomes', amount: 2500 },
-              { name: 'Incomes', amount: 2500 },
-              { name: 'Incomes', amount: 2500 },
-            ]}
-          />
-          <PieChartData
-            header="Pie Chart Data For Outcome Sources"
-            items={[
-              {
-                name: 'data1',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-              {
-                name: 'data2',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-              {
-                name: 'data1',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-              {
-                name: 'data1',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-              {
-                name: 'data1',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-              {
-                name: 'data1',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-              {
-                name: 'data1',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-              {
-                name: 'data1',
-                amount: 2300,
-                date: Date.now(),
-                description: 'description',
-              },
-            ]}
-          />
+        <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
+          {/*------ COLOR SYNC IS HERE --------*/}
+          <PieChart data={pieDataWithColors} />
+          <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>
         <div className="flex flex-col w-full">
-          <SourcesDetailsContainer header="Outcome Sources"></SourcesDetailsContainer>
+          <SourcesDetailsContainer header="Outcome Sources" />
         </div>
-        {/* recent outcomes */}
       </section>
-
       <MobileMenuButton
         menuItems={[
           { href: '/dashboard', label: 'Dashboard' },

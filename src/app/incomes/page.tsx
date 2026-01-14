@@ -1,98 +1,142 @@
 'use client';
-/* components import */
 import SideBar from '@/components/SideBar';
 import RecentSideInfo from '@/components/RecentSideInfo';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
 import PieChartData from '@/components/PieChartData';
-import PieChart from '@/components/PieChart';
+import PieChart, { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
 import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
-import { demoDashboardData } from '@/data/dashboardDemoData';
-import { demoIncomesData } from '@/data/incomesDemoData';
-import { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
+import { useIncomesContext } from '@/context/FinanceGenericContext';
+import {
+  TotalIncomes,
+  PaidIncomePayments,
+  TotalIncomesPaidAmount,
+  RecentEarned,
+  IncomesUpcoming,
+  UpcomingIncomeAmount,
+  UpcomingEarning,
+  IncomeSourceList,
+} from '@/utils/functions/dataCalculations/incomesDataCalculations';
 export default function Incomes() {
   const pathName = usePathname();
-  const {
-    recentInvestments,
-    recentMisc,
-    currentIncomes,
-    currentOutcomes,
-    pieChart,
-    pieChartData,
-    recentIncomes,
-    recentOutcomes,
-  } = demoDashboardData;
-  const { catchUptheMonth, incomeSourceList } = demoIncomesData;
-  const pieDataRaw = incomeSourceList;
+  const { data: incomes, loading, error } = useIncomesContext();
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (!incomes || incomes.length === 0) {
+    return <div>No incomes found</div>;
+  }
+
+  const totalIncomes = TotalIncomes({ data: incomes });
+  const paidIncomePayments = PaidIncomePayments({ data: incomes });
+  const totalIncomesPaidAmount = TotalIncomesPaidAmount({ data: incomes });
+  const recentEarned = RecentEarned({ data: incomes });
+  const incomesUpcoming = IncomesUpcoming({ data: incomes });
+  const upcomingIncomeAmount = UpcomingIncomeAmount({ data: incomes });
+  const upcomingEarning = UpcomingEarning({ data: incomes });
+  const incomesSourceList = IncomeSourceList({ data: incomes });
+  // Catch up: catch the month, using core summary of payments
+
+  const catchUptheMonth = [
+    {
+      name: 'Total Incomes',
+      data: totalIncomes,
+      unit: '$',
+    },
+    {
+      name: 'Got Paid Payments',
+      data: paidIncomePayments.length,
+    },
+    {
+      name: 'Got Paid Amount',
+      data: totalIncomesPaidAmount,
+      unit: '$',
+    },
+
+    {
+      name: 'UpComing Payments',
+      data: incomesUpcoming.length,
+    },
+    {
+      name: 'Upcoming Amount',
+      data: upcomingIncomeAmount,
+      unit: '$',
+    },
+    {
+      name: 'Reset Date',
+      data: '-/01-',
+    },
+  ];
+
+  // ----- Consistent Color Picking: Assign colors in parent -----
+  const pieDataRaw = incomes.map((src) => ({
+    name: src.sourceName,
+    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
+    description: src.description,
+  }));
   const pieDataWithColors = pieDataRaw.map((item, idx) => ({
     ...item,
     color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
   }));
+
+  // Pie chart data legend
+  const pieChartData = pieDataWithColors.map((d) => ({
+    sourceName: d.name,
+    amount: d.amount,
+    date: Date.now(),
+    description: d.description,
+    color: d.color,
+  }));
+
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
       {/* Side containers */}
-      <div className="hidden xs:flex flex-col items-center gap-5">
+      <div className="hidden xs:flex flex-col items-center gap-5 flex-shrink-0 xs:w-64">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
-        {/*recently investment and miscs */}
         <div className="flex flex-row xs:flex-col relative gap-2 items-center">
-          <RecentSideInfo header="Recent Earned" items={recentIncomes}></RecentSideInfo>
-          <RecentSideInfo header="Upcoming Earning" items={recentIncomes}></RecentSideInfo>
+          <RecentSideInfo header="Recent Earned" items={recentEarned} />
+          <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
         </div>
       </div>
-
       {/* Main Content */}
       <section className="w-full flex flex-col flex-start items-center gap-5">
-        {/* header and welcome message */}
         <div className="flex flex-col">
           <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
             INCOMES
           </h1>
         </div>
-        <div className=" w-full flex xs:hidden flex-col items-center gap-5">
+        <div className=" flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
-          {/*recently investment and miscs */}
           <div className="flex flex-col w-full relative gap-1 items-center">
-            <RecentSideInfo header="Recent Earned" items={recentIncomes}></RecentSideInfo>
-            <RecentSideInfo header="Upcoming Earning" items={recentIncomes}></RecentSideInfo>
+            <RecentSideInfo header="Recent Earned" items={recentEarned} />
+            <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
           </div>
         </div>
-        {/*current Incomes and outcomes snapshots */}
         <div className="flex flex-row justify-center items-center gap-1 w-full">
-          <CatchUpTheMonth
-            header="Quick Monthly Catch Up"
-            items={catchUptheMonth}
-          ></CatchUpTheMonth>
-          <SourcesList header="Income Sources" items={incomeSourceList}></SourcesList>
+          <CatchUpTheMonth header="Quick Monthly Catch Up" items={catchUptheMonth} />
+          <SourcesList header="Income Sources" items={incomesSourceList} />
         </div>
-        {/* chartpie summary */}
+        {/* Core fix: Pass pieDataWithColors to BOTH components */}
         <div className="pl-1 flex flex-col md:flex-row  items-center w-full gap-1">
           <PieChart data={pieDataWithColors} />
-          <PieChartData
-            header="Pie Chart Data"
-            items={pieDataWithColors.map((d, idx) => ({
-              name: d.name,
-              amount: d.amount,
-              date: Date.now(),
-              description: 'description',
-              color: d.color,
-            }))}
-          />
+          <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>
         <div className="flex flex-col w-full">
-          <SourcesDetailsContainer header="Income Sources"></SourcesDetailsContainer>
+          <SourcesDetailsContainer header="Income Sources" />
         </div>
-        {/* recent outcomes */}
       </section>
-
       <MobileMenuButton
         menuItems={[
           { href: '/dashboard', label: 'Dashboard' },

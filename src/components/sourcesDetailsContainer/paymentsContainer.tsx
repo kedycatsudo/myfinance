@@ -41,6 +41,7 @@ export default function PaymentsContainer({
   openPayments,
   setOpenPayments,
 }: PaymentsContainerProps) {
+  const [openPaymentFields, setOpenPaymentFields] = useState<{
     [FieldId: string]: boolean;
   }>({});
   const pathName = usePathname();

@@ -20,6 +20,7 @@ import {
   OutcomeSourcesList,
 } from '@/utils/functions/dataCalculations/outcomeDataCalculations';
 import { TotalIncomesPaidAmount } from '@/utils/functions/dataCalculations/incomesDataCalculations';
+import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Outcomes() {
   const pathName = usePathname();
   const { data: outcomes, loading, error } = useOutcomesContext();
@@ -138,7 +139,13 @@ export default function Outcomes() {
           <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>
         <div className="flex flex-col w-full">
-          <SourcesDetailsContainer header="Outcome Sources" />
+          <SourcesDetailsContainer
+            header="Income Sources"
+            items={outcomes}
+            renderSource={(item, open, onClick) => (
+              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            )}
+          />
         </div>
       </section>
       <MobileMenuButton

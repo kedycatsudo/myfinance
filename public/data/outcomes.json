@@ -1,7 +1,7 @@
 [
   {
     "id": "bills",
-    "name": "Bills",
+    "sourceName": "Bills",
     "description": "Monthly utility and service bills",
     "payments": [
       {
@@ -35,7 +35,7 @@
   },
   {
     "id": "debts",
-    "name": "Debts",
+    "sourceName": "Debts",
     "description": "Recurring and personal debts",
     "payments": [
       {
@@ -60,7 +60,7 @@
   },
   {
     "id": "groceries",
-    "name": "Groceries",
+    "sourceName": "Groceries",
     "description": "Weekly food and household shopping expenses",
     "payments": [
       {
@@ -85,7 +85,7 @@
   },
   {
     "id": "miscellaneous",
-    "name": "Miscellaneous",
+    "sourceName": "Miscellaneous",
     "description": "Other occasional expenses",
     "payments": [
       {

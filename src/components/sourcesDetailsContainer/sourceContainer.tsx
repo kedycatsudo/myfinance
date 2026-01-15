@@ -1,91 +1,115 @@
-// SourceContainer.tsx
 'use client';
+
 import Image from 'next/image';
 import { useState } from 'react';
 import PaymentsContainer from './paymentsContainer';
 import InformationContainer from './informationContainer';
-import { usePathname } from 'next/navigation';
+import { FinanceSource, FinancePayment } from '@/types/finance';
+import { InvestmentSource, InvestmentItem } from '@/types/investments';
+
 type SourceContainerProps = {
-  source: string;
+  item: FinanceSource | InvestmentSource;
   open: boolean;
   onClick: () => void;
 };
-type Info = {
-  id: number;
-  infoPair: string;
-  data: string;
-};
 
-type Field = {
-  id: number;
-  name: string;
-  amount: number;
-};
-const payments = [
-  { id: 1, name: 'Kub', amount: 500 },
-  { id: 2, name: 'Cell', amount: 500 },
-  { id: 3, name: 'Wifi', amount: 500 },
-];
-const earnings = [{ id: 1, name: 'Spaces In the City', amount: 500 }];
-const investmentAccount = [
-  { id: 1, name: 'Binance', amount: 500 },
-  { id: 2, name: 'robinhood', amount: 800 },
-];
-const OutcomeInfo = [
-  { id: 1, infoPair: 'Monthly cycle amount', data: '400.00$' },
-  { id: 2, infoPair: 'Current amount for this month', data: '400.00$' },
-  { id: 3, infoPair: 'Description', data: 'description' },
-  { id: 4, infoPair: 'Average monthly total payment', data: '400.00$' },
-];
-const EarningInfo = [
-  { id: 1, infoPair: 'Monthly cycle amount', data: '400.00$' },
-  { id: 2, infoPair: 'Current amount for this month', data: '400.00$' },
-  { id: 3, infoPair: 'Description', data: 'description' },
-  { id: 4, infoPair: 'Average monthly total payment', data: '400.00$' },
-];
-const InvestmentInfo = [
-  {
-    id: 1,
-    infoPair: 'contribution to growth of capital',
-    data: '400.00$/+%10',
-  },
-  {
-    id: 2,
-    infoPair: 'Crypto Asset`s growth',
-    data: '400.00$/+%10',
-  },
-  {
-    id: 3,
-    infoPair: 'description',
-    data: 'description',
-  },
-  {
-    id: 4,
-    infoPair: 'Share of capital',
-    data: '400.00$/+%10',
-  },
-];
+// Type guards for discriminated union
+function isFinanceSource(a: FinanceSource | InvestmentSource): a is FinanceSource {
+  return 'payments' in a;
+}
+function isInvestmentSource(a: FinanceSource | InvestmentSource): a is InvestmentSource {
+  return 'items' in a;
+}
 
-export default function SourceContainer({ source, open, onClick }: SourceContainerProps) {
-  //payments state control
-  const [openPayments, setOpenPayments] = useState<{
-    [paymentId: string]: boolean;
-  }>({});
-  const pathname = usePathname();
-  let datasInfo: Info[] = [];
-  let datasPaymentsOrEarnings: Field[] = [];
+export default function SourceContainer({ item, open, onClick }: SourceContainerProps) {
+  const [openPayments, setOpenPayments] = useState<{ [id: string]: boolean }>({});
 
-  if (pathname === '/outcomes') {
-    datasInfo = OutcomeInfo;
-    datasPaymentsOrEarnings = payments;
-  }
-  if (pathname === '/incomes') {
-    datasInfo = EarningInfo;
-    datasPaymentsOrEarnings = earnings;
-  }
-  if (pathname === '/investments') {
-    datasInfo = InvestmentInfo;
-    datasPaymentsOrEarnings = investmentAccount;
+  // Info content and payment/asset display
+  let datasInfo: { id: number; infoPair: string; data: string | number }[] = [];
+  let dataPayments: (FinancePayment | InvestmentItem)[] = [];
+  let title: string = '';
+
+  if (isFinanceSource(item)) {
+    // For incomes/outcomes
+    title = item.sourceName;
+    datasInfo = [
+      { id: 1, infoPair: 'Description', data: item.description ?? '' },
+      {
+        id: 2,
+        infoPair: 'Monthly cycle amount',
+        data:
+          item.payments
+            .filter((p) => p.loop)
+            .reduce((sum, p) => sum + p.amount, 0)
+            .toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$',
+      },
+      {
+        id: 3,
+        infoPair: 'Current amount for this month',
+        data:
+          item.payments
+            .reduce((sum, p) => sum + p.amount, 0)
+            .toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$',
+      },
+      {
+        id: 4,
+        infoPair: 'Average monthly total payment',
+        data:
+          (
+            item.payments.reduce((sum, p) => sum + p.amount, 0) / (item.payments.length || 1)
+          ).toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$',
+      },
+    ];
+    dataPayments = item.payments;
+  } else if (isInvestmentSource(item)) {
+    // For investments
+    title = item.name ?? '';
+    datasInfo = [
+      { id: 1, infoPair: 'Description', data: item.description ?? '' },
+      {
+        id: 2,
+        infoPair: 'Total Invested Amount',
+        data:
+          item.items
+            .reduce((sum, i) => sum + Number(i.investedAmount ?? 0), 0)
+            .toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$',
+      },
+      {
+        id: 3,
+        infoPair: 'Total Number of Assets',
+        data: item.items.length,
+      },
+      {
+        id: 4,
+        infoPair: 'Closed Positions (count)',
+        data: item.items.filter((i) => i.status === 'closed').length,
+      },
+      {
+        id: 5,
+        infoPair: 'Open Positions (count)',
+        data: item.items.filter((i) => i.status === 'open').length,
+      },
+      {
+        id: 6,
+        infoPair: 'Total Profit/Loss (closed)',
+        data:
+          item.items
+            .filter((i) => i.status === 'closed')
+            .reduce((sum, i) => sum + Number(i.resultAmount ?? 0), 0)
+            .toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$',
+      },
+      {
+        id: 7,
+        infoPair: 'Average Invested per Asset',
+        data:
+          (item.items.length > 0
+            ? item.items.reduce((sum, i) => sum + Number(i.investedAmount ?? 0), 0) /
+              item.items.length
+            : 0
+          ).toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$',
+      },
+    ];
+    dataPayments = item.items;
   }
 
   return (
@@ -95,7 +119,6 @@ export default function SourceContainer({ source, open, onClick }: SourceContain
       }`}
     >
       <div className="flex flex-row mt-auto ml-0 items-center self-start">
-        {' '}
         <h1
           className={`text-2xl xs:text-3xl text-[#1E1552] ${
             open ? 'text-[#FFFFFF]' : ''
@@ -110,7 +133,7 @@ export default function SourceContainer({ source, open, onClick }: SourceContain
           tabIndex={0}
           role="button"
         >
-          {source}
+          {title}
         </h1>
         <Image
           onClick={onClick}
@@ -124,16 +147,15 @@ export default function SourceContainer({ source, open, onClick }: SourceContain
       <div className="flex flex-col xs:flex-row gap-2 w-full">
         {open && (
           <div className="mt-2 p-3 rounded transition-all">
-            {datasPaymentsOrEarnings.map((data) => (
+            {dataPayments.map((payment) => (
               <PaymentsContainer
-                key={data.id}
-                amount={data.amount}
-                name={data.name}
-                open={!!openPayments[data.id]}
+                key={payment.id}
+                payment={payment}
+                open={!!openPayments[payment.id]}
                 onClick={() =>
                   setOpenPayments((prev) => ({
                     ...prev,
-                    [data.id]: !prev[data.id],
+                    [payment.id]: !prev[payment.id],
                   }))
                 }
               />
@@ -142,12 +164,8 @@ export default function SourceContainer({ source, open, onClick }: SourceContain
         )}
         {open && (
           <div className="w-full bg-[#0D1A63] gap-2 rounded z-[9999] mt-auto p-1 relative">
-            {datasInfo.map((data) => (
-              <InformationContainer
-                key={data.id}
-                infoPair={data.infoPair}
-                data={data.data}
-              ></InformationContainer>
+            {datasInfo.map((info) => (
+              <InformationContainer key={info.id} infoPair={info.infoPair} data={info.data} />
             ))}
             {open && (
               <Image

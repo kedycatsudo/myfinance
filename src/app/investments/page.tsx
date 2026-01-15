@@ -23,7 +23,7 @@ import {
   OpenPositionsAmount,
   ClosedPositionsAmount,
 } from '@/utils/functions/dataCalculations/investmentDataCalculations';
-
+import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Investments() {
   const pathName = usePathname();
   const { data: investments, loading, error } = useInvestmentsContext();
@@ -48,7 +48,6 @@ export default function Investments() {
   const closedPositions = ClosedPositions({ data: investments });
   const closedPositionsAmount = ClosedPositionsAmount({ data: investments });
   const sourceList = InvestmentSourcesList({ data: investments });
-  console.log(sourceList);
   const quickCatchUp = [
     {
       name: 'Profits this month',
@@ -140,7 +139,13 @@ export default function Investments() {
           <PieChartData header="Pie Chart Data Investment Sources" items={pieChartData} />
         </div>
         <div className="flex flex-col w-full">
-          <SourcesDetailsContainer header="Investment sources" />
+          <SourcesDetailsContainer
+            header="Income Sources"
+            items={investments}
+            renderSource={(item, open, onClick) => (
+              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            )}
+          />
         </div>
       </section>
       <MobileMenuButton

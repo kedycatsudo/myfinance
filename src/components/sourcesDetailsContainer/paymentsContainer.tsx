@@ -1,90 +1,77 @@
 'use client';
-import { Dispatch, SetStateAction } from 'react';
-import { usePathname } from 'next/navigation';
-import Image from 'next/image';
-import { useState } from 'react';
+import { FinancePayment } from '@/types/finance';
+import { InvestmentItem } from '@/types/investments';
 import PaymentField from './paymentField';
+import Image from 'next/image';
+
 type PaymentsContainerProps = {
-  name: string;
-  onClick: () => void;
-  amount: number;
+  payment: FinancePayment | InvestmentItem;
   open: boolean;
-  openPayments: { [paymentId: string]: boolean };
-  setOpenPayments: Dispatch<SetStateAction<{ [paymentId: string]: boolean }>>;
+  onClick: () => void;
 };
 
-type Fields = { id: number; name: string };
+// Type guards for dynamic rendering
+function isFinancePayment(p: FinancePayment | InvestmentItem): p is FinancePayment {
+  return 'status' in p && 'loop' in p;
+}
+function isInvestmentItem(p: FinancePayment | InvestmentItem): p is InvestmentItem {
+  return 'assetName' in p && 'term' in p;
+}
 
-const paymentFields = [
-  { id: 1, field: 'Name', name: 'Kub' },
-  { id: 2, field: 'type', name: 'credit card' },
-  { id: 3, field: 'amount', name: '400' },
-  { id: 4, field: 'date', name: '12/25/2025' },
-  { id: 5, field: 'loop', name: 'true' },
-  { id: 6, field: 'status', name: 'paid' },
-];
-const investmentField = [
-  { id: 1, field: 'Name', name: 'Bitcoin' },
-  { id: 2, field: 'term', name: 'short' },
-  { id: 3, field: 'amount', name: '400' },
-  { id: 4, field: 'entry date', name: '12/25/2025' },
-  { id: 5, field: 'exit date', name: '12122025' },
-  { id: 6, field: 'result', name: 'profit' },
-  { id: 7, field: 'result amount', name: '100.00$' },
-  { id: 8, field: 'status', name: 'closed' },
-];
-export default function PaymentsContainer({
-  onClick,
-  open,
-  name,
-  amount,
-  openPayments,
-  setOpenPayments,
-}: PaymentsContainerProps) {
-  const [openPaymentFields, setOpenPaymentFields] = useState<{
-    [FieldId: string]: boolean;
-  }>({});
-  const pathName = usePathname();
-  let datasField: Fields[] = [];
-  if (pathName === '/investments') datasField = investmentField;
-  else datasField = paymentFields;
+export default function PaymentsContainer({ payment, open, onClick }: PaymentsContainerProps) {
+  // Define field labels for both types
+  const financeFieldLabels: { [K in keyof FinancePayment]?: string } = {
+    name: 'Name',
+    type: 'Type',
+    amount: 'Amount',
+    date: 'Date',
+    loop: 'Loop',
+    status: 'Status',
+  };
+
+  const investmentFieldLabels: { [K in keyof InvestmentItem]?: string } = {
+    assetName: 'Asset Name',
+    term: 'Term',
+    investedAmount: 'Invested Amount',
+    entryDate: 'Entry Date',
+    exitDate: 'Exit Date',
+    result: 'Result',
+    resultAmount: 'Result Amount',
+    status: 'Status',
+  };
+
+  // Choose the correct labels and keys
+  const fields: [string, string][] = isFinancePayment(payment)
+    ? Object.entries(financeFieldLabels)
+    : Object.entries(investmentFieldLabels);
+
   return (
     <div
-      className={` text-[#FFFFF] w-full flex flex-col rounded gap-2 p-2 cursor-pointer transition-all ${
+      className={`text-[#FFFFF] w-full flex flex-col rounded gap-2 p-2 cursor-pointer transition-all ${
         open ? 'bg-[#29388A]' : ''
       }`}
     >
-      <div></div>
       <div className="flex flex-row justify-start items-center">
         <h1
           className={`text-2xl xs:text-3xl text-[#FFFFF] font-bold mr-2`}
           onClick={onClick}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onClick();
-            }
-          }}
           tabIndex={0}
           role="button"
         >
-          {name}
+          {isFinancePayment(payment) ? payment.name : payment.assetName}
         </h1>
         <h1
           className={`text-2xl xs:text-3xl text-[#FFFFF] font-bold mr-2`}
           onClick={onClick}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onClick();
-            }
-          }}
           tabIndex={0}
           role="button"
         >
-          {amount + '.00$'}
+          {isFinancePayment(payment)
+            ? payment.amount.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' $'
+            : payment.investedAmount
+            ? payment.investedAmount.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' $'
+            : ''}
         </h1>
-
         <Image
           onClick={onClick}
           src="/sourceArrowBig.svg"
@@ -95,10 +82,25 @@ export default function PaymentsContainer({
         />
       </div>
       {open && (
-        <div className="">
-          {datasField.map((field) => (
-            <PaymentField key={field.id} field={field.field} name={field.name}></PaymentField>
-          ))}
+        <div>
+          {fields.map(([field, label]) => {
+            // @ts-ignore: Index dynamic field
+            const value = payment[field];
+            let displayValue =
+              typeof value === 'boolean'
+                ? value
+                  ? 'Yes'
+                  : 'No'
+                : field === 'amount' || field === 'investedAmount' || field === 'resultAmount'
+                ? value != null
+                  ? `${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2 })} $`
+                  : '--'
+                : value != null
+                ? String(value)
+                : '--';
+
+            return <PaymentField key={field} field={label!} name={displayValue} />;
+          })}
         </div>
       )}
     </div>

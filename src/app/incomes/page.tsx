@@ -19,6 +19,7 @@ import {
   UpcomingEarning,
   IncomeSourceList,
 } from '@/utils/functions/dataCalculations/incomesDataCalculations';
+import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Incomes() {
   const pathName = usePathname();
   const { data: incomes, loading, error } = useIncomesContext();
@@ -134,7 +135,13 @@ export default function Incomes() {
           <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>
         <div className="flex flex-col w-full">
-          <SourcesDetailsContainer header="Income Sources" />
+          <SourcesDetailsContainer
+            header="Income Sources"
+            items={incomes}
+            renderSource={(item, open, onClick) => (
+              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            )}
+          />
         </div>
       </section>
       <MobileMenuButton

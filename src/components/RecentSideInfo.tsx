@@ -15,7 +15,6 @@ type RecentSideInfoProps = {
   items: RecentSideInfoItem[];
   className?: string;
 };
-
 export default function RecentSideInfo({ header, items, className = '' }: RecentSideInfoProps) {
   const total = items.reduce((sum, item) => sum + Number(item.data), 0);
   return (

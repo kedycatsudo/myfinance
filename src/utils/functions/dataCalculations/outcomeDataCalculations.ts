@@ -37,7 +37,7 @@ export function UpcomingAmount({ data }: DataCalculationProps): number {
 }
 export function OutcomeSourcesList({ data }: DataCalculationProps): object {
     return data.map((d) => ({
-        name: d.name,
+        name: d.sourceName,
         amount: d.payments.reduce((sum, p) => sum + p.amount, 0),
         unit: '$'
     }))

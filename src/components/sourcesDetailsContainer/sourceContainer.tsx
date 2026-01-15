@@ -114,11 +114,11 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
 
   return (
     <div
-      className={`w-full flex flex-col xs:flex-col border-4 border-[#29388A] rounded items-center p-2 cursor-pointer transition-all ${
+      className={`w-full flex flex-col xs:flex-col border-4 border-[#29388A] rounded items-center p-2 cursor-pointer transition-all relative ${
         open ? 'bg-[#29388A]' : ''
       }`}
     >
-      <div className="flex flex-row mt-auto ml-0 items-center self-start">
+      <div className="flex flex-row mt-auto ml-0 items-center self-start ">
         <h1
           className={`text-2xl xs:text-3xl text-[#1E1552] ${
             open ? 'text-[#FFFFFF]' : ''
@@ -135,6 +135,7 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
         >
           {title}
         </h1>
+
         <Image
           onClick={onClick}
           src="/sourceArrowBig.svg"
@@ -143,7 +144,18 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
           height={32}
           className={`w-8 h-8 transition-transform ${open ? 'rotate-90' : ''}`}
         />
+        <Image
+          onClick={onClick}
+          src="/editIcon.svg"
+          alt="Menu icon"
+          width={32}
+          height={32}
+          className={`absolute top-0 right-0 w-8 h-8 transition-transform ${
+            open ? 'rotate-90' : ''
+          }`}
+        />
       </div>
+
       <div className="flex flex-col xs:flex-row gap-2 w-full">
         {open && (
           <div className="mt-2 p-3 rounded transition-all">

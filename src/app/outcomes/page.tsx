@@ -44,10 +44,10 @@ export default function Outcomes() {
   const upcomingAmount = UpcomingAmount({ data: outcomes });
   // For SourcesList: aggregate total amount per source
   const outcomeSourceList = OutcomeSourcesList({ data: outcomes });
-
+  console.log(outcomeSourceList);
   // ----- Consistent Color Picking: Assign colors in parent -----
   const pieDataRaw = outcomes.map((src) => ({
-    name: src.sourceName,
+    name: src.name,
     amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
     description: src.description,
   }));

@@ -142,8 +142,14 @@ export default function Investments() {
           <SourcesDetailsContainer
             header="Income Sources"
             items={investments}
-            renderSource={(item, open, onClick) => (
-              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            renderSource={(item, open, onClick, onEdit) => (
+              <SourceContainer
+                key={item.id}
+                item={item}
+                open={open}
+                onClick={onClick}
+                onEdit={onEdit}
+              />
             )}
           />
         </div>

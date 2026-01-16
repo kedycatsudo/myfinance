@@ -11,6 +11,7 @@ type SourceContainerProps = {
   item: FinanceSource | InvestmentSource;
   open: boolean;
   onClick: () => void;
+  onEdit: () => void;
 };
 
 // Type guards for discriminated union
@@ -21,7 +22,7 @@ function isInvestmentSource(a: FinanceSource | InvestmentSource): a is Investmen
   return 'items' in a;
 }
 
-export default function SourceContainer({ item, open, onClick }: SourceContainerProps) {
+export default function SourceContainer({ item, open, onClick, onEdit }: SourceContainerProps) {
   const [openPayments, setOpenPayments] = useState<{ [id: string]: boolean }>({});
 
   // Info content and payment/asset display
@@ -145,9 +146,12 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
           className={`w-8 h-8 transition-transform ${open ? 'rotate-90' : ''}`}
         />
         <Image
-          onClick={onClick}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent accidental open/close on edit
+            onEdit();
+          }}
           src="/editIcon.svg"
-          alt="Menu icon"
+          alt="Edit modal button"
           width={32}
           height={32}
           className={`absolute top-0 right-0 w-8 h-8 transition-transform ${
@@ -182,7 +186,7 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
             {open && (
               <Image
                 src="/infoIco.svg"
-                alt="Menu icon"
+                alt="Information icon"
                 width={36}
                 height={36}
                 className="absolute top-0 right-0"

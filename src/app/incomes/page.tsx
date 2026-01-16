@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import SideBar from '@/components/SideBar';
 import RecentSideInfo from '@/components/RecentSideInfo';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
@@ -9,6 +10,9 @@ import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/source
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useIncomesContext } from '@/context/FinanceGenericContext';
+import { FinanceSource } from '@/types/finance';
+import { InvestmentSource } from '@/types/investments';
+
 import {
   TotalIncomes,
   PaidIncomePayments,
@@ -19,8 +23,11 @@ import {
   UpcomingEarning,
   IncomeSourceList,
 } from '@/utils/functions/dataCalculations/incomesDataCalculations';
+import EditSourceModal from '@/components/modals/EditSourceModal';
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Incomes() {
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
   const pathName = usePathname();
   const { data: incomes, loading, error } = useIncomesContext();
 
@@ -138,10 +145,30 @@ export default function Incomes() {
           <SourcesDetailsContainer
             header="Income Sources"
             items={incomes}
-            renderSource={(item, open, onClick) => (
-              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            renderSource={(item, open, onClick, onEdit) => (
+              <SourceContainer
+                key={item.id}
+                item={item}
+                open={open}
+                onClick={onClick}
+                onEdit={() => {
+                  setEditSource(item);
+                  setEditModalOpen(true);
+                }}
+              />
             )}
           />
+          {editSource && (
+            <EditSourceModal
+              open={editModalOpen}
+              source={editSource}
+              onClose={() => setEditModalOpen(false)}
+              onSubmit={(updatedSource) => {
+                // call your context updateSource here!
+                // e.g., updateSource(updatedSource)
+              }}
+            />
+          )}
         </div>
       </section>
       <MobileMenuButton

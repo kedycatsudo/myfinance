@@ -142,8 +142,14 @@ export default function Outcomes() {
           <SourcesDetailsContainer
             header="Income Sources"
             items={outcomes}
-            renderSource={(item, open, onClick) => (
-              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            renderSource={(item, open, onClick, onEdit) => (
+              <SourceContainer
+                key={item.id}
+                item={item}
+                open={open}
+                onClick={onClick}
+                onEdit={onEdit}
+              />
             )}
           />
         </div>

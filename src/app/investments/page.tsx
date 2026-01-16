@@ -10,6 +10,11 @@ import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/source
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useInvestmentsContext } from '@/context/FinanceGenericContext';
+import { FinanceSource } from '@/types/finance';
+import { InvestmentSource } from '@/types/investments';
+import EditSourceModal from '@/components/modals/EditSourceModal';
+import { useState } from 'react';
+
 import {
   RecentProfits,
   RecentLoss,
@@ -26,6 +31,8 @@ import {
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Investments() {
   const pathName = usePathname();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
   const { data: investments, loading, error } = useInvestmentsContext();
   if (loading) {
     return <div>Loading...</div>;
@@ -148,10 +155,24 @@ export default function Investments() {
                 item={item}
                 open={open}
                 onClick={onClick}
-                onEdit={onEdit}
+                onEdit={() => {
+                  setEditSource(item);
+                  setEditModalOpen(true);
+                }}
               />
             )}
           />
+          {editSource && (
+            <EditSourceModal
+              open={editModalOpen}
+              source={editSource}
+              onClose={() => setEditModalOpen(false)}
+              onSubmit={(updatedSource) => {
+                // call your context updateSource here!
+                // e.g., updateSource(updatedSource)
+              }}
+            />
+          )}
         </div>
       </section>
       <MobileMenuButton

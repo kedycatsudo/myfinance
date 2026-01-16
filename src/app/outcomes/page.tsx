@@ -10,6 +10,11 @@ import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
 import { useOutcomesContext } from '@/context/FinanceGenericContext';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { FinanceSource } from '@/types/finance';
+import { InvestmentSource } from '@/types/investments';
+import EditSourceModal from '@/components/modals/EditSourceModal';
+
 import {
   RecentPaid,
   UpcomingPayment,
@@ -23,6 +28,8 @@ import { TotalIncomesPaidAmount } from '@/utils/functions/dataCalculations/incom
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Outcomes() {
   const pathName = usePathname();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
   const { data: outcomes, loading, error } = useOutcomesContext();
   if (loading) {
     return <div>Loading...</div>;
@@ -148,10 +155,24 @@ export default function Outcomes() {
                 item={item}
                 open={open}
                 onClick={onClick}
-                onEdit={onEdit}
+                onEdit={() => {
+                  setEditSource(item);
+                  setEditModalOpen(true);
+                }}
               />
             )}
           />
+          {editSource && (
+            <EditSourceModal
+              open={editModalOpen}
+              source={editSource}
+              onClose={() => setEditModalOpen(false)}
+              onSubmit={(updatedSource) => {
+                // call your context updateSource here!
+                // e.g., updateSource(updatedSource)
+              }}
+            />
+          )}
         </div>
       </section>
       <MobileMenuButton

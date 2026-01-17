@@ -147,7 +147,7 @@ export default function Investments() {
         </div>
         <div className="flex flex-col w-full">
           <SourcesDetailsContainer
-            header="Income Sources"
+            header="Investment Sources"
             items={investments}
             renderSource={(item, open, onClick, onEdit) => (
               <SourceContainer

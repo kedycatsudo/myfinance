@@ -147,7 +147,7 @@ export default function Outcomes() {
         </div>
         <div className="flex flex-col w-full">
           <SourcesDetailsContainer
-            header="Income Sources"
+            header="Outcome Sources"
             items={outcomes}
             renderSource={(item, open, onClick, onEdit) => (
               <SourceContainer

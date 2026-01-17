@@ -29,7 +29,19 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
     setOpenItemAccordions({});
     setErrors({});
   }, [source, open]);
-
+  useEffect(() => {
+    if (open) {
+      // Lock scroll
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Unlock scroll
+      document.body.style.overflow = '';
+    }
+    // Clean up when modal unmounts
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
   if (!open) return null;
 
   // Handle field changes for the source itself
@@ -102,9 +114,9 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   const renderSourceInputs = () => (
     <div className="flex flex-col gap-2 mb-4">
       <label>
-        <span className="block font-medium">Source Name</span>
+        <span className="block font-medium text-[#29388A]">Source Name</span>
         <input
-          className="rounded border px-2 py-1 mt-1 w-full text-black"
+          className="rounded border px-2 py-1 mt-1 w-full text-[#29388A]"
           value={localSource.sourceName}
           onChange={(e) => handleSourceInput('sourceName', e.target.value)}
         />
@@ -112,9 +124,9 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
       </label>
       {'description' in localSource && (
         <label>
-          <span className="block font-medium">Description</span>
+          <span className="block font-medium text-[#29388A]">Description</span>
           <input
-            className="rounded border px-2 py-1 mt-1 w-full text-black"
+            className="rounded border px-2 py-1 mt-1 w-full text-black text-[#29388A]"
             value={localSource.description || ''}
             onChange={(e) => handleSourceInput('description', e.target.value)}
           />
@@ -125,7 +137,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
           <span className="block font-medium">Date</span>
           <input
             type="date"
-            className="rounded border px-2 py-1 mt-1 w-full text-black"
+            className="rounded border px-2 py-1 mt-1 w-full text-[#29388A]"
             value={localSource.date || ''}
             onChange={(e) => handleSourceInput('date', e.target.value)}
           />
@@ -144,8 +156,8 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
         return (
           <div
             key={item.id}
-            className={`rounded border-2 px-2 py-2 transition-all cursor-pointer ${
-              isOpen ? 'bg-[#29388A] text-white' : 'bg-gray-200 bg-opacity-30 text-black'
+            className={`border-4 border-[#29388A] rounded rounded px-2 py-2 transition-all cursor-pointer ${
+              isOpen ? 'bg-[#3A4483]/75 text-white' : 'text-[#29388A]'
             }`}
           >
             {/* Accordion Head */}
@@ -158,7 +170,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
               }
               className="flex flex-row justify-between items-center"
             >
-              <span className="font-semibold">
+              <span className="font-semibold ">
                 {isFinance ? item.name : isInvestment ? item.assetName : ''}
               </span>
               <span className="text-sm text-gray-500">{isOpen ? '▼' : '▶'}</span>
@@ -294,13 +306,15 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
-      <div className="w-full max-w-lg bg-white rounded-lg shadow-2xl p-4 relative">
-        <h2 className="text-2xl font-bold mb-2 text-[#29388A]">
-          Edit "{localSource.sourceName || 'Source'}"
-        </h2>
-        {renderSourceInputs()}
-        {isFinanceSource(localSource) && renderItems(localSource.payments, 'payment')}
-        {isInvestmentSource(localSource) && renderItems(localSource.items, 'item')}
+      <div className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative max-h-[90vh] flex flex-col">
+        <div className="overflow-y-auto flex-1">
+          <h2 className="text-2xl font-bold mb-2 text-[#29388A] text-center">
+            Edit "{localSource.sourceName || 'Source'}"
+          </h2>
+          {renderSourceInputs()}
+          {isFinanceSource(localSource) && renderItems(localSource.payments, 'payment')}
+          {isInvestmentSource(localSource) && renderItems(localSource.items, 'item')}
+        </div>
         <div className="flex justify-end gap-2 mt-4">
           <button
             onClick={onClose}

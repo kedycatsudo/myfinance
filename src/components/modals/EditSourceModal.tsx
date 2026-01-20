@@ -34,6 +34,22 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   }, [open]);
   if (!open) return null;
   //source input
+  /**
+   * Handles input changes for fields in the source object.
+   *
+   * @param field - The name of the field to update in the local source state.
+   * @param value - The new value to set for the specified field.
+   *
+   * This function updates the local source state by creating a new object
+   * with the updated field value. If you are unable to edit the "Source Name"
+   * field while other fields are editable, possible reasons include:
+   * - The input for "Source Name" might have the `disabled` or `readOnly` attribute set.
+   * - The `field` parameter passed to this function for "Source Name" might not match the actual key in the state object.
+   * - There could be validation or logic elsewhere preventing updates to the "Source Name" field.
+   * - The value of the input might be controlled by a different state or prop.
+   *
+   * Review the input element for "Source Name" and ensure it is correctly wired to this handler and not restricted elsewhere.
+   */
   const handleSourceInput = (field: string, value: any) => {
     setLocalSource((prev) => ({ ...prev, [field]: value }) as any);
   };
@@ -91,7 +107,12 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
 
   //source fields
   const sourceFields = [
-    { label: ' Source Name', value: localSource.sourceName, err: errors.sourceName },
+    {
+      label: ' Source Name',
+      field: 'sourceName',
+      value: localSource.sourceName,
+      err: errors.sourceName,
+    },
     ...(localSource.description !== undefined
       ? [{ label: 'Description', field: 'description', value: localSource.description }]
       : []),
@@ -119,7 +140,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
                 value={f.value}
                 onChange={(v) => handleSourceInput(f.field ?? '', v)}
                 err={f.err}
-              ></FieldInput>
+              />
             ))}
           </div>
           {/* items grid */}

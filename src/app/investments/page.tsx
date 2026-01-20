@@ -77,7 +77,7 @@ export default function Investments() {
     },
     { name: 'Closed positions amount this month', data: closedPositionsAmount, unit: '$' },
   ];
-
+  console.log(openPositions);
   // ----- Consistent Color Picking: Assign colors in parent -----
   const pieDataRaw = investments.map((src) => ({
     name: src.sourceName,
@@ -91,7 +91,7 @@ export default function Investments() {
 
   // Pie chart data legend
   const pieChartData = pieDataWithColors.map((d) => ({
-    sourceName: d.sourceName,
+    sourceName: d.name,
     amount: d.amount,
     date: Date.now(),
     description: d.description,

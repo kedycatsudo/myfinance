@@ -55,7 +55,7 @@ export default function Outcomes() {
   console.log(outcomeSourceList);
   // ----- Consistent Color Picking: Assign colors in parent -----
   const pieDataRaw = outcomes.map((src) => ({
-    name: src.name,
+    name: src.sourceName,
     amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
     description: src.description,
   }));

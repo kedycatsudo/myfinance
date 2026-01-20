@@ -38,7 +38,7 @@ export function LosesThisMonthAmount({ data }: DataCalculationProps): number {
 export function OpenPositions({ data }: DataCalculationProps): object {
     return data.flatMap((investment) => investment.items).
         filter((item) => item.status === 'open').map((i) => ({
-            name: i.assetName, amount: i.investedAmount, unit: '$'
+            sourceName: i.assetName, amount: i.investedAmount, unit: '$'
 
         }))
 }

@@ -37,9 +37,13 @@ export default function Dashboard() {
     (sum, src) => sum + src.items.reduce((ss, i) => ss + i.investedAmount, 0),
     0,
   );
+  const outcomesDescription = outcomes.map((outcome) => ({ description: outcome.description }));
   // Pie data -- just use incomes & outcomes, add investments if needed
   const pieDataRaw = [
-    { name: 'Outcomes', amount: totalOutcomes },
+    {
+      name: 'Outcomes',
+      amount: totalOutcomes,
+    },
     { name: 'Incomes', amount: totalIncomes },
     { name: 'Investments', amount: totalInvested },
   ];
@@ -50,10 +54,9 @@ export default function Dashboard() {
 
   // Pie chart data legend
   const pieChartData = pieDataWithColors.map((d, idx) => ({
-    name: d.name,
+    sourceName: d.name,
     amount: d.amount,
     date: Date.now(),
-    description: d.name,
     color: d.color,
   }));
 

@@ -91,7 +91,7 @@ export default function Investments() {
 
   // Pie chart data legend
   const pieChartData = pieDataWithColors.map((d) => ({
-    sourceName: d.name,
+    sourceName: d.sourceName,
     amount: d.amount,
     date: Date.now(),
     description: d.description,

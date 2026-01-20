@@ -39,6 +39,17 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   };
 
   //Item input
+  /**
+   * Updates a specific field of an item within the local source state.
+   *
+   * Determines the array key (`payments` or `item`) based on whether the current source is a finance source.
+   * Then, finds the item by its `itemId` and updates the specified `field` with the new `value`.
+   * The state is updated immutably using the previous state.
+   *
+   * @param itemId - The unique identifier of the item to update.
+   * @param field - The field name within the item to update.
+   * @param value - The new value to assign to the specified field.
+   */
   const handleItemInput = (itemId: string, field: any, value: any) => {
     const arrKey = isFinanceSource(localSource) ? 'payments' : 'item';
     setLocalSource(
@@ -90,9 +101,12 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   ];
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40">
-      <div className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative max-h-[90vh] flex flex-col">
-        <div className="overflow-y-auto flex-1">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 p-1">
+      <div
+        className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative max-h-[90vh] flex flex-col
+        sm:max-w-full sm:rounded-none sm:h-full sm:justify-end sm:p-2"
+      >
+        <div className="overflow-y-auto flex-1 gap-3 flex flex-col">
           <h2 className="text-2xl font-bold mb-2 text-[#29388A] text-center">
             Edit "{localSource.sourceName}"
           </h2>
@@ -142,7 +156,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
               />
             ))}
         </div>
-        <div className="flex justify-end gap-2 mt-4">
+        <div className="flex justify-end gap-2 mt-4 justify-center">
           <button
             onClick={onClose}
             className="px-4 py-2 rounded bg-gray-200 text-gray-800 hover:bg-gray-300 font-semibold"

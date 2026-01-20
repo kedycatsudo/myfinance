@@ -64,7 +64,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
     dataPayments = item.payments;
   } else if (isInvestmentSource(item)) {
     // For investments
-    title = item.name ?? '';
+    title = item.sourceName ?? '';
     datasInfo = [
       { id: 1, infoPair: 'Description', data: item.description ?? '' },
       {

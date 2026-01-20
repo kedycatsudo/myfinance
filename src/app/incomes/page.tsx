@@ -29,8 +29,7 @@ export default function Incomes() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
   const pathName = usePathname();
-  const { data: incomes, loading, error } = useIncomesContext();
-
+  const { data: incomes, updateSource, loading, error } = useIncomesContext();
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -164,8 +163,8 @@ export default function Incomes() {
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                // call your context updateSource here!
-                // e.g., updateSource(updatedSource)
+                updateSource(updatedSource); // <-- This actually updates your context data!
+                setEditModalOpen(false); // Modal closes right after update
               }}
             />
           )}

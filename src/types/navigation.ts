@@ -1,5 +1,5 @@
 export type NavItem = {
     href: string
     label: string
-
+    onClick?: () => void
 }

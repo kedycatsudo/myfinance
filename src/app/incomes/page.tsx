@@ -52,22 +52,22 @@ export default function Incomes() {
 
   const catchUptheMonth = [
     {
-      name: 'Total Incomes',
+      name: 'Total Income',
       data: totalIncomes,
       unit: '$',
     },
     {
-      name: 'Got Paid Payments',
+      name: 'Payments Received',
       data: paidIncomePayments.length,
     },
     {
-      name: 'Got Paid Amount',
+      name: 'Amount Received',
       data: totalIncomesPaidAmount,
       unit: '$',
     },
 
     {
-      name: 'UpComing Payments',
+      name: 'Upcoming Payments',
       data: incomesUpcoming.length,
     },
     {
@@ -76,7 +76,7 @@ export default function Incomes() {
       unit: '$',
     },
     {
-      name: 'Reset Date',
+      name: 'Monthly Reset Date',
       data: '-/01-',
     },
   ];
@@ -110,8 +110,8 @@ export default function Incomes() {
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
         <div className="flex flex-row xs:flex-col relative gap-2 items-center">
-          <RecentSideInfo header="Recent Earned" items={recentEarned} />
-          <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
+          <RecentSideInfo header="Recent Received" items={recentEarned} />
+          <RecentSideInfo header="Upcoming Payment" items={upcomingEarning} />
         </div>
       </div>
       {/* Main Content */}
@@ -127,12 +127,12 @@ export default function Incomes() {
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
           <div className="flex flex-col w-full relative gap-1 items-center">
-            <RecentSideInfo header="Recent Earned" items={recentEarned} />
-            <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
+            <RecentSideInfo header="Recent Recieved" items={recentEarned} />
+            <RecentSideInfo header="Upcoming Payment" items={upcomingEarning} />
           </div>
         </div>
         <div className="flex flex-row justify-center items-center gap-1 w-full">
-          <CatchUpTheMonth header="Quick Monthly Catch Up" items={catchUptheMonth} />
+          <CatchUpTheMonth header="Month-to-Date Overview" items={catchUptheMonth} />
           <SourcesList header="Income Sources" items={incomesSourceList} />
         </div>
         {/* Core fix: Pass pieDataWithColors to BOTH components */}

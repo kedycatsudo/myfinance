@@ -62,7 +62,7 @@ export default function LoginPage() {
           </button>
         </form>
         <p className="text-xs text-white mt-4 opacity-70 text-center">
-          Don&apos;t forget to save your work!{' '}
+          You don&apos;t have an account yet?{' '}
           <Link
             href="/register"
             className="font-bold underline cursor-pointer hover:text-blue-200 ml-1"

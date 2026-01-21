@@ -37,7 +37,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
       { id: 1, infoPair: 'Description', data: item.description ?? '' },
       {
         id: 2,
-        infoPair: 'Monthly cycle amount',
+        infoPair: 'Monthly Recurring Amount',
         data:
           item.payments
             .filter((p) => p.loop)
@@ -54,7 +54,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
       },
       {
         id: 4,
-        infoPair: 'Average monthly total payment',
+        infoPair: 'Avg monthly total payment',
         data:
           (
             item.payments.reduce((sum, p) => sum + p.amount, 0) / (item.payments.length || 1)
@@ -69,7 +69,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
       { id: 1, infoPair: 'Description', data: item.description ?? '' },
       {
         id: 2,
-        infoPair: 'Total Invested Amount',
+        infoPair: 'Total Invested',
         data:
           item.items
             .reduce((sum, i) => sum + Number(i.investedAmount ?? 0), 0)
@@ -77,22 +77,22 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
       },
       {
         id: 3,
-        infoPair: 'Total Number of Assets',
+        infoPair: 'Number of Assets',
         data: item.items.length,
       },
       {
         id: 4,
-        infoPair: 'Closed Positions (count)',
+        infoPair: 'Closed Positions',
         data: item.items.filter((i) => i.status === 'closed').length,
       },
       {
         id: 5,
-        infoPair: 'Open Positions (count)',
+        infoPair: 'Open Positions ',
         data: item.items.filter((i) => i.status === 'open').length,
       },
       {
         id: 6,
-        infoPair: 'Total Profit/Loss (closed)',
+        infoPair: 'Realized P&L',
         data:
           item.items
             .filter((i) => i.status === 'closed')
@@ -101,7 +101,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
       },
       {
         id: 7,
-        infoPair: 'Average Invested per Asset',
+        infoPair: 'Avg Invested per Asset',
         data:
           (item.items.length > 0
             ? item.items.reduce((sum, i) => sum + Number(i.investedAmount ?? 0), 0) /

@@ -14,7 +14,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export function ThemeProvider({ children }: { children: ReactNode }): JSX.Element {
   const [theme, setTheme] = useState<Theme>('light');
   function toggleTheme() {
-    console.log('toggled');
+    console.log('theme toggled');
     setTheme((t) => (t === 'light' ? 'dark' : 'light'));
   }
   return (

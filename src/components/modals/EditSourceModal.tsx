@@ -7,7 +7,7 @@ import { PAYMENT_FIELDS, ITEM_FIELDS } from '@/constants/fieldConfig';
 import FieldInput from '../forms/FieldInput';
 import AccordionItem from '../forms/AccordionItem';
 import { isFinanceSource, isInvestmentSource } from '@/utils/functions/typeGuard';
-
+import AppModal from './AppModal';
 type EditSourceModalProps = {
   open: boolean;
   source: FinanceSource | InvestmentSource;
@@ -19,6 +19,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   const [localSource, setLocalSource] = useState<FinanceSource | InvestmentSource>(source);
   const [openItemAccordions, setOpenItemAccordions] = useState<{ [id: string]: boolean }>({});
   const [errors, setErrors] = useState<{ [field: string]: string }>({});
+  const [showAppModal, setShowAppModal] = useState<boolean | null>(null);
 
   useEffect(() => {
     setLocalSource(source);
@@ -102,6 +103,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
     if (validate()) {
       onSubmit?.(localSource);
       onClose();
+      setShowAppModal(true);
     }
   };
 
@@ -129,7 +131,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
       >
         <div className="overflow-y-auto flex-1 gap-3 flex flex-col">
           <h2 className="text-2xl font-bold mb-2 text-[#29388A] text-center">
-            Edit "{localSource.sourceName}"
+            Edit {localSource.sourceName}
           </h2>
           <div className="flex flex-col gap-2 mb-4">
             {sourceFields.map((f) => (
@@ -191,6 +193,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
             Submit
           </button>
         </div>
+        {showAppModal && <AppModal></AppModal>}
       </div>
     </div>
   );

@@ -1,9 +1,8 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '@/types/user';
-
 // If you want an initial users JSON import, set the path here:
-const USERS_DATA_PATH = '/data/users.json';
+const USERS_DATA_PATH = '/data/user.json';
 
 type AuthContextType = {
   currentUser: User | null;
@@ -64,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, message: 'User not found' };
     }
     // Plain match for MVP; use hash/secure backend for real
-    if (user.hashedPassword !== password) {
+    if (user.password !== password) {
       return { success: false, message: 'Login failed (incorrect password)' };
     }
     setCurrentUser(user);
@@ -73,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function logout() {
     setCurrentUser(null);
+    localStorage.clear();
   }
 
   // -- Register method --

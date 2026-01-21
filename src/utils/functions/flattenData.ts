@@ -16,14 +16,14 @@ export function flattenPayments<S extends { sourceName: string; payments: P[] },
 }
 
 // Utility for investments (for your InvestmentSource shape)
-export function flattenInvestments<S extends { name: string; type: string; items: I[] }, I extends { entryDate: string; exitDate?: string; assetName: string; term: string; investedAmount: number; result: string; resultAmount: number; status: string }>(
+export function flattenInvestments<S extends { sourceName: string; type: string; items: I[] }, I extends { entryDate: string; exitDate?: string; assetName: string; term: string; investedAmount: number; result: string; resultAmount: number; status: string }>(
     sources: S[]
 ): (I & { sourceName: string; sourceType: string })[] {
     return sources
         .flatMap(src =>
             src.items.map(item => ({
                 ...item,
-                sourceName: src.name,
+                sourceName: src.sourceName,
                 sourceType: src.type,
                 assetName: item.assetName,
                 status: item.status,

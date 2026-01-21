@@ -106,7 +106,7 @@ export default function Dashboard() {
       date: item.entryDate || '',
       unit: '$',
     }));
-
+  allInvestmentPositions.map((item) => console.log(item.sourceName));
   const recentMisc = allInvestmentPositions
     .filter((item) => item.status === 'open')
     .slice(0, 5)

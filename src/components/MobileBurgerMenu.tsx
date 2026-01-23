@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { assetPrefix, basePath } from '@/constants/config';
 export type MenuItem = {
   href: string;
   label: string;
@@ -23,7 +24,13 @@ export default function MobileMenuButton({ menuItems }: MobileMenuButtonProps) {
           className="bg-[#727272] rounded-full p-4 shadow-lg"
           aria-label="Open menu"
         >
-          <Image src="/Menu.svg" alt="Menu icon" width={32} height={32} className="w-8 h-8" />
+          <Image
+            src={`${assetPrefix}images/Menu.svg`}
+            alt="Menu icon"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
         </button>
       </div>
 

@@ -6,6 +6,7 @@ import PaymentsContainer from './paymentsContainer';
 import InformationContainer from './informationContainer';
 import { FinanceSource, FinancePayment } from '@/types/finance';
 import { InvestmentSource, InvestmentItem } from '@/types/investments';
+import { assetPrefix } from '@/constants/config';
 
 type SourceContainerProps = {
   item: FinanceSource | InvestmentSource;
@@ -139,7 +140,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
 
         <Image
           onClick={onClick}
-          src="/sourceArrowBig.svg"
+          src={`${assetPrefix}/sourceArrowBig.svg`}
           alt="Menu icon"
           width={32}
           height={32}
@@ -150,7 +151,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
             e.stopPropagation(); // Prevent accidental open/close on edit
             onEdit();
           }}
-          src="/editIcon.svg"
+          src={`${assetPrefix}/editIcon.svg`}
           alt="Edit modal button"
           width={32}
           height={32}
@@ -185,7 +186,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
             ))}
             {open && (
               <Image
-                src="/infoIco.svg"
+                src={`${assetPrefix}/infoIco.svg`}
                 alt="Information icon"
                 width={36}
                 height={36}

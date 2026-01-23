@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useModal } from '@/context/ModalContext';
 import { useRouter } from 'next/navigation';
-
+import Image from 'next/image';
+import { assetPrefix, basePath } from '@/constants/config';
 export default function LoginPage() {
   const { login } = useAuth();
   const { showModal } = useModal();
   const router = useRouter();
-
+  console.log(assetPrefix);
   // Form State
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -30,6 +31,13 @@ export default function LoginPage() {
   }
   return (
     <main className="flex flex-col items-center justify-center relative px-2 sm:px-4">
+      <Image
+        src={`${assetPrefix}images/MyFinanceLogo.png`}
+        alt="MyFinance Logo"
+        width={250}
+        height={250}
+        className=" shadow-lg rounded-full object-cover z-[9999] mt-2"
+      ></Image>
       <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] mb-8 w-full text-center z-10">
         Login
       </h1>

@@ -3,6 +3,7 @@ import { FinancePayment } from '@/types/finance';
 import { InvestmentItem } from '@/types/investments';
 import PaymentField from './paymentField';
 import Image from 'next/image';
+import { assetPrefix } from '@/constants/config';
 
 type PaymentsContainerProps = {
   payment: FinancePayment | InvestmentItem;
@@ -74,7 +75,7 @@ export default function PaymentsContainer({ payment, open, onClick }: PaymentsCo
         </h1>
         <Image
           onClick={onClick}
-          src="/sourceArrowBig.svg"
+          src={`${assetPrefix}images/sourceArrowBig.svg`}
           alt="Menu icon"
           width={32}
           height={32}

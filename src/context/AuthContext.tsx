@@ -13,6 +13,7 @@ type AuthContextType = {
     message: string;
   };
   isAuthenticated: boolean;
+  error: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-
+  const [error, setError] = useState<string | null>(null);
   // Load users from JSON file on 1st load (MVP)
   useEffect(() => {
     fetch(USERS_DATA_PATH)
@@ -32,7 +33,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUsers(data);
         // Optionally, you could auto-login the first user for MVP/demo purpose
       })
-      .catch(() => setUsers([]));
+      .catch((err) => {
+        setError(err.message || 'Internal Server Error');
+        setUsers([]);
+      });
   }, []);
 
   // Persist users to localStorage for demo register-after-refresh
@@ -99,6 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         register,
         isAuthenticated: !!currentUser,
+        error,
       }}
     >
       {children}

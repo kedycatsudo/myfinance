@@ -30,7 +30,7 @@ export default function Outcomes() {
   const pathName = usePathname();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
-  const { data: outcomes, loading, error } = useOutcomesContext();
+  const { data: outcomes, updateSource, loading, error } = useOutcomesContext();
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -168,8 +168,8 @@ export default function Outcomes() {
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                // call your context updateSource here!
-                // e.g., updateSource(updatedSource)
+                updateSource(updatedSource);
+                setEditModalOpen(false); // Modal closes right after update
               }}
             />
           )}

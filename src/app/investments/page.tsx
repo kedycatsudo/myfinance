@@ -33,7 +33,7 @@ export default function Investments() {
   const pathName = usePathname();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
-  const { data: investments, loading, error } = useInvestmentsContext();
+  const { data: investments, updateSource, loading, error } = useInvestmentsContext();
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -167,8 +167,8 @@ export default function Investments() {
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                // call your context updateSource here!
-                // e.g., updateSource(updatedSource)
+                updateSource(updatedSource);
+                setEditModalOpen(false); // Modal closes right after update
               }}
             />
           )}

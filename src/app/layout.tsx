@@ -5,7 +5,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { ModalProvider } from '@/context/ModalContext';
 import AppModal from '@/components/modals/AppModal';
-
+import { ProfileProvider } from '@/context/ProfileContext';
 // Import ONLY from your generic context now!
 import {
   InvestmentsProvider,
@@ -18,21 +18,23 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className="gap-6 p-1 bg-[#DCDDE3]">
         <AuthProvider>
-          <ThemeProvider>
-            <ModalProvider>
-              <InvestmentsProvider>
-                <IncomesProvider>
-                  <OutcomesProvider>
-                    {' '}
-                    {/* spelling! */}
-                    <Header />
-                    {children}
-                    <AppModal />
-                  </OutcomesProvider>
-                </IncomesProvider>
-              </InvestmentsProvider>
-            </ModalProvider>
-          </ThemeProvider>
+          <ProfileProvider>
+            <ThemeProvider>
+              <ModalProvider>
+                <InvestmentsProvider>
+                  <IncomesProvider>
+                    <OutcomesProvider>
+                      {' '}
+                      {/* spelling! */}
+                      <Header />
+                      {children}
+                      <AppModal />
+                    </OutcomesProvider>
+                  </IncomesProvider>
+                </InvestmentsProvider>
+              </ModalProvider>
+            </ThemeProvider>
+          </ProfileProvider>
         </AuthProvider>
       </body>
     </html>

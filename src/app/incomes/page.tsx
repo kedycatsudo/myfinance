@@ -163,7 +163,7 @@ export default function Incomes() {
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                updateSource(updatedSource); // <-- This actually updates your context data!
+                updateSource(updatedSource);
                 setEditModalOpen(false); // Modal closes right after update
               }}
             />

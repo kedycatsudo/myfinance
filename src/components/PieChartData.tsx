@@ -46,7 +46,7 @@ export default function PieChartData({ header, items, className }: InOutSnapshot
               </div>
               <div className="flex flex-col xs:flex-row gap-1">
                 <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
-                  {item.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}$
+                  {item.amount.toLocaleString(undefined)}$
                 </span>
               </div>
             </div>

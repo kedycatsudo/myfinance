@@ -3,5 +3,5 @@ export interface User {
   username: string;
   email: string;
   monthlyCircleDate: string;
-  hashedPassword: string;
+  password: string;
 }

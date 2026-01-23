@@ -1,6 +1,7 @@
 'use client';
 
 import { useModal } from '@/context/ModalContext';
+
 export default function AppModal() {
   const { modal, closeModal } = useModal();
   if (!modal.isOpen) return null;
@@ -22,7 +23,7 @@ export default function AppModal() {
               Cancel
             </button>
             <button
-              className="bg-[#29388A]-600 text-white p-2 rounded"
+              className="bg-[#29388A]-600 text-white p-2 rounded hover "
               onClick={() => {
                 modal.onConfirm?.();
                 closeModal();
@@ -32,7 +33,7 @@ export default function AppModal() {
             </button>
           </div>
         ) : (
-          <button className="bg-[#29388A] text-white p-2 rounded w-full" onClick={closeModal}>
+          <button className="bg-[#18123d] text-white p-2 rounded w-full" onClick={closeModal}>
             OK
           </button>
         )}

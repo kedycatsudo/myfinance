@@ -10,6 +10,11 @@ import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
 import { useOutcomesContext } from '@/context/FinanceGenericContext';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { FinanceSource } from '@/types/finance';
+import { InvestmentSource } from '@/types/investments';
+import EditSourceModal from '@/components/modals/EditSourceModal';
+
 import {
   RecentPaid,
   UpcomingPayment,
@@ -23,6 +28,8 @@ import { TotalIncomesPaidAmount } from '@/utils/functions/dataCalculations/incom
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Outcomes() {
   const pathName = usePathname();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
   const { data: outcomes, loading, error } = useOutcomesContext();
   if (loading) {
     return <div>Loading...</div>;
@@ -48,7 +55,7 @@ export default function Outcomes() {
   console.log(outcomeSourceList);
   // ----- Consistent Color Picking: Assign colors in parent -----
   const pieDataRaw = outcomes.map((src) => ({
-    name: src.name,
+    name: src.sourceName,
     amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
     description: src.description,
   }));
@@ -140,12 +147,32 @@ export default function Outcomes() {
         </div>
         <div className="flex flex-col w-full">
           <SourcesDetailsContainer
-            header="Income Sources"
+            header="Outcome Sources"
             items={outcomes}
-            renderSource={(item, open, onClick) => (
-              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            renderSource={(item, open, onClick, onEdit) => (
+              <SourceContainer
+                key={item.id}
+                item={item}
+                open={open}
+                onClick={onClick}
+                onEdit={() => {
+                  setEditSource(item);
+                  setEditModalOpen(true);
+                }}
+              />
             )}
           />
+          {editSource && (
+            <EditSourceModal
+              open={editModalOpen}
+              source={editSource}
+              onClose={() => setEditModalOpen(false)}
+              onSubmit={(updatedSource) => {
+                // call your context updateSource here!
+                // e.g., updateSource(updatedSource)
+              }}
+            />
+          )}
         </div>
       </section>
       <MobileMenuButton

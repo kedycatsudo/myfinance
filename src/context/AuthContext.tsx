@@ -1,9 +1,8 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '@/types/user';
-
 // If you want an initial users JSON import, set the path here:
-const USERS_DATA_PATH = '/data/users.json';
+const USERS_DATA_PATH = '/data/user.json';
 
 type AuthContextType = {
   currentUser: User | null;
@@ -14,6 +13,7 @@ type AuthContextType = {
     message: string;
   };
   isAuthenticated: boolean;
+  error: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-
+  const [error, setError] = useState<string | null>(null);
   // Load users from JSON file on 1st load (MVP)
   useEffect(() => {
     fetch(USERS_DATA_PATH)
@@ -33,7 +33,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUsers(data);
         // Optionally, you could auto-login the first user for MVP/demo purpose
       })
-      .catch(() => setUsers([]));
+      .catch((err) => {
+        setError(err.message || 'Internal Server Error');
+        setUsers([]);
+      });
   }, []);
 
   // Persist users to localStorage for demo register-after-refresh
@@ -64,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, message: 'User not found' };
     }
     // Plain match for MVP; use hash/secure backend for real
-    if (user.hashedPassword !== password) {
+    if (user.password !== password) {
       return { success: false, message: 'Login failed (incorrect password)' };
     }
     setCurrentUser(user);
@@ -73,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function logout() {
     setCurrentUser(null);
+    localStorage.clear();
   }
 
   // -- Register method --
@@ -99,6 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         logout,
         register,
         isAuthenticated: !!currentUser,
+        error,
       }}
     >
       {children}

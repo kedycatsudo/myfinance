@@ -38,7 +38,7 @@ export function LosesThisMonthAmount({ data }: DataCalculationProps): number {
 export function OpenPositions({ data }: DataCalculationProps): object {
     return data.flatMap((investment) => investment.items).
         filter((item) => item.status === 'open').map((i) => ({
-            name: i.assetName, amount: i.investedAmount, unit: '$'
+            sourceName: i.assetName, amount: i.investedAmount, unit: '$'
 
         }))
 }
@@ -59,7 +59,7 @@ export function ClosedPositionsAmount({ data }: DataCalculationProps): number {
 export function InvestmentSourcesList({ data }: DataCalculationProps): object {
 
     return data.map((d) => ({
-        name: d.name,
+        sourceName: d.sourceName,
         amount: d.items.reduce((sum, p) => sum + p.investedAmount, 0),
         unit: '$'
     }))

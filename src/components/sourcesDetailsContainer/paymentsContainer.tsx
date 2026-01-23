@@ -67,10 +67,10 @@ export default function PaymentsContainer({ payment, open, onClick }: PaymentsCo
           role="button"
         >
           {isFinancePayment(payment)
-            ? payment.amount.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' $'
+            ? payment.amount.toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$'
             : payment.investedAmount
-            ? payment.investedAmount.toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' $'
-            : ''}
+              ? payment.investedAmount.toLocaleString(undefined, { minimumFractionDigits: 2 }) + '$'
+              : ''}
         </h1>
         <Image
           onClick={onClick}
@@ -92,12 +92,12 @@ export default function PaymentsContainer({ payment, open, onClick }: PaymentsCo
                   ? 'Yes'
                   : 'No'
                 : field === 'amount' || field === 'investedAmount' || field === 'resultAmount'
-                ? value != null
-                  ? `${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2 })} $`
-                  : '--'
-                : value != null
-                ? String(value)
-                : '--';
+                  ? value != null
+                    ? `${Number(value).toLocaleString(undefined, { minimumFractionDigits: 2 })} $`
+                    : '--'
+                  : value != null
+                    ? String(value)
+                    : '--';
 
             return <PaymentField key={field} field={label!} name={displayValue} />;
           })}

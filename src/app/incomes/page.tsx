@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import SideBar from '@/components/SideBar';
 import RecentSideInfo from '@/components/RecentSideInfo';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
@@ -9,6 +10,9 @@ import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/source
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useIncomesContext } from '@/context/FinanceGenericContext';
+import { FinanceSource } from '@/types/finance';
+import { InvestmentSource } from '@/types/investments';
+
 import {
   TotalIncomes,
   PaidIncomePayments,
@@ -19,11 +23,13 @@ import {
   UpcomingEarning,
   IncomeSourceList,
 } from '@/utils/functions/dataCalculations/incomesDataCalculations';
+import EditSourceModal from '@/components/modals/EditSourceModal';
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Incomes() {
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
   const pathName = usePathname();
-  const { data: incomes, loading, error } = useIncomesContext();
-
+  const { data: incomes, updateSource, loading, error } = useIncomesContext();
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -46,22 +52,22 @@ export default function Incomes() {
 
   const catchUptheMonth = [
     {
-      name: 'Total Incomes',
+      name: 'Total Income',
       data: totalIncomes,
       unit: '$',
     },
     {
-      name: 'Got Paid Payments',
+      name: 'Payments Received',
       data: paidIncomePayments.length,
     },
     {
-      name: 'Got Paid Amount',
+      name: 'Amount Received',
       data: totalIncomesPaidAmount,
       unit: '$',
     },
 
     {
-      name: 'UpComing Payments',
+      name: 'Upcoming Payments',
       data: incomesUpcoming.length,
     },
     {
@@ -70,7 +76,7 @@ export default function Incomes() {
       unit: '$',
     },
     {
-      name: 'Reset Date',
+      name: 'Monthly Reset Date',
       data: '-/01-',
     },
   ];
@@ -104,8 +110,8 @@ export default function Incomes() {
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
         <div className="flex flex-row xs:flex-col relative gap-2 items-center">
-          <RecentSideInfo header="Recent Earned" items={recentEarned} />
-          <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
+          <RecentSideInfo header="Recent Received" items={recentEarned} />
+          <RecentSideInfo header="Upcoming Payment" items={upcomingEarning} />
         </div>
       </div>
       {/* Main Content */}
@@ -121,12 +127,12 @@ export default function Incomes() {
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
           <div className="flex flex-col w-full relative gap-1 items-center">
-            <RecentSideInfo header="Recent Earned" items={recentEarned} />
-            <RecentSideInfo header="Upcoming Earning" items={upcomingEarning} />
+            <RecentSideInfo header="Recent Recieved" items={recentEarned} />
+            <RecentSideInfo header="Upcoming Payment" items={upcomingEarning} />
           </div>
         </div>
         <div className="flex flex-row justify-center items-center gap-1 w-full">
-          <CatchUpTheMonth header="Quick Monthly Catch Up" items={catchUptheMonth} />
+          <CatchUpTheMonth header="Month-to-Date Overview" items={catchUptheMonth} />
           <SourcesList header="Income Sources" items={incomesSourceList} />
         </div>
         {/* Core fix: Pass pieDataWithColors to BOTH components */}
@@ -138,10 +144,30 @@ export default function Incomes() {
           <SourcesDetailsContainer
             header="Income Sources"
             items={incomes}
-            renderSource={(item, open, onClick) => (
-              <SourceContainer key={item.id} item={item} open={open} onClick={onClick} />
+            renderSource={(item, open, onClick, onEdit) => (
+              <SourceContainer
+                key={item.id}
+                item={item}
+                open={open}
+                onClick={onClick}
+                onEdit={() => {
+                  setEditSource(item);
+                  setEditModalOpen(true);
+                }}
+              />
             )}
           />
+          {editSource && (
+            <EditSourceModal
+              open={editModalOpen}
+              source={editSource}
+              onClose={() => setEditModalOpen(false)}
+              onSubmit={(updatedSource) => {
+                updateSource(updatedSource); // <-- This actually updates your context data!
+                setEditModalOpen(false); // Modal closes right after update
+              }}
+            />
+          )}
         </div>
       </section>
       <MobileMenuButton

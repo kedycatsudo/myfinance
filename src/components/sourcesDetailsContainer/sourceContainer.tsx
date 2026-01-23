@@ -11,6 +11,7 @@ type SourceContainerProps = {
   item: FinanceSource | InvestmentSource;
   open: boolean;
   onClick: () => void;
+  onEdit: () => void;
 };
 
 // Type guards for discriminated union
@@ -21,7 +22,7 @@ function isInvestmentSource(a: FinanceSource | InvestmentSource): a is Investmen
   return 'items' in a;
 }
 
-export default function SourceContainer({ item, open, onClick }: SourceContainerProps) {
+export default function SourceContainer({ item, open, onClick, onEdit }: SourceContainerProps) {
   const [openPayments, setOpenPayments] = useState<{ [id: string]: boolean }>({});
 
   // Info content and payment/asset display
@@ -36,7 +37,7 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
       { id: 1, infoPair: 'Description', data: item.description ?? '' },
       {
         id: 2,
-        infoPair: 'Monthly cycle amount',
+        infoPair: 'Monthly Recurring Amount',
         data:
           item.payments
             .filter((p) => p.loop)
@@ -53,7 +54,7 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
       },
       {
         id: 4,
-        infoPair: 'Average monthly total payment',
+        infoPair: 'Avg monthly total payment',
         data:
           (
             item.payments.reduce((sum, p) => sum + p.amount, 0) / (item.payments.length || 1)
@@ -63,12 +64,12 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
     dataPayments = item.payments;
   } else if (isInvestmentSource(item)) {
     // For investments
-    title = item.name ?? '';
+    title = item.sourceName ?? '';
     datasInfo = [
       { id: 1, infoPair: 'Description', data: item.description ?? '' },
       {
         id: 2,
-        infoPair: 'Total Invested Amount',
+        infoPair: 'Total Invested',
         data:
           item.items
             .reduce((sum, i) => sum + Number(i.investedAmount ?? 0), 0)
@@ -76,22 +77,22 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
       },
       {
         id: 3,
-        infoPair: 'Total Number of Assets',
+        infoPair: 'Number of Assets',
         data: item.items.length,
       },
       {
         id: 4,
-        infoPair: 'Closed Positions (count)',
+        infoPair: 'Closed Positions',
         data: item.items.filter((i) => i.status === 'closed').length,
       },
       {
         id: 5,
-        infoPair: 'Open Positions (count)',
+        infoPair: 'Open Positions ',
         data: item.items.filter((i) => i.status === 'open').length,
       },
       {
         id: 6,
-        infoPair: 'Total Profit/Loss (closed)',
+        infoPair: 'Realized P&L',
         data:
           item.items
             .filter((i) => i.status === 'closed')
@@ -100,7 +101,7 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
       },
       {
         id: 7,
-        infoPair: 'Average Invested per Asset',
+        infoPair: 'Avg Invested per Asset',
         data:
           (item.items.length > 0
             ? item.items.reduce((sum, i) => sum + Number(i.investedAmount ?? 0), 0) /
@@ -114,11 +115,11 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
 
   return (
     <div
-      className={`w-full flex flex-col xs:flex-col border-4 border-[#29388A] rounded items-center p-2 cursor-pointer transition-all ${
+      className={`w-full flex flex-col xs:flex-col border-4 border-[#29388A] rounded items-center p-2 cursor-pointer transition-all relative ${
         open ? 'bg-[#29388A]' : ''
       }`}
     >
-      <div className="flex flex-row mt-auto ml-0 items-center self-start">
+      <div className="flex flex-row mt-auto ml-0 items-center self-start ">
         <h1
           className={`text-2xl xs:text-3xl text-[#1E1552] ${
             open ? 'text-[#FFFFFF]' : ''
@@ -135,6 +136,7 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
         >
           {title}
         </h1>
+
         <Image
           onClick={onClick}
           src="/sourceArrowBig.svg"
@@ -143,7 +145,21 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
           height={32}
           className={`w-8 h-8 transition-transform ${open ? 'rotate-90' : ''}`}
         />
+        <Image
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent accidental open/close on edit
+            onEdit();
+          }}
+          src="/editIcon.svg"
+          alt="Edit modal button"
+          width={32}
+          height={32}
+          className={`absolute top-0 right-0 w-8 h-8 transition-transform ${
+            open ? 'rotate-90' : ''
+          }`}
+        />
       </div>
+
       <div className="flex flex-col xs:flex-row gap-2 w-full">
         {open && (
           <div className="mt-2 p-3 rounded transition-all">
@@ -170,7 +186,7 @@ export default function SourceContainer({ item, open, onClick }: SourceContainer
             {open && (
               <Image
                 src="/infoIco.svg"
-                alt="Menu icon"
+                alt="Information icon"
                 width={36}
                 height={36}
                 className="absolute top-0 right-0"

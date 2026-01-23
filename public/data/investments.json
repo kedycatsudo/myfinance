@@ -1,7 +1,7 @@
 [
   {
     "id": "binance",
-    "name": "Binance",
+    "sourceName": "Binance",
     "type": "crypto",
     "description": "Crypto investments on Binance exchange",
     "items": [
@@ -31,7 +31,7 @@
   },
   {
     "id": "kucoin",
-    "name": "KuCoin",
+    "sourceName": "KuCoin",
     "type": "crypto",
     "description": "KuCoin spot assets",
     "items": [
@@ -50,7 +50,7 @@
   },
   {
     "id": "forex_com",
-    "name": "Forex.com",
+    "sourceName": "Forex.com",
     "type": "forex",
     "description": "Forex trading positions",
     "items": [

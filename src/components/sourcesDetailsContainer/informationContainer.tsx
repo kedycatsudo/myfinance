@@ -1,8 +1,7 @@
 'use client';
-import Image from 'next/image';
 type InformationContainerProps = {
   infoPair: string;
-  data: string;
+  data: string | number;
 };
 
 export default function InformationContainer({ infoPair, data }: InformationContainerProps) {

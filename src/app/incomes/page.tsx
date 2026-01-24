@@ -27,7 +27,7 @@ import EditSourceModal from '@/components/modals/EditSourceModal';
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 export default function Incomes() {
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
+  const [editSource, setEditSource] = useState<FinanceSource | null>(null);
   const pathName = usePathname();
   const { data: incomes, updateSource, loading, error } = useIncomesContext();
   if (loading) {
@@ -58,7 +58,9 @@ export default function Incomes() {
     },
     {
       name: 'Payments Received',
-      data: paidIncomePayments.length,
+      data: Array.isArray(paidIncomePayments)
+        ? paidIncomePayments.length
+        : Object.values(paidIncomePayments).length,
     },
     {
       name: 'Amount Received',
@@ -68,7 +70,9 @@ export default function Incomes() {
 
     {
       name: 'Upcoming Payments',
-      data: incomesUpcoming.length,
+      data: Array.isArray(incomesUpcoming)
+        ? incomesUpcoming.length
+        : Object.values(incomesUpcoming).length,
     },
     {
       name: 'Upcoming Amount',
@@ -163,7 +167,10 @@ export default function Incomes() {
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                updateSource(updatedSource);
+                // Only update if it's a FinanceSource (has 'payments' property)
+                if ('payments' in updatedSource) {
+                  updateSource(updatedSource);
+                }
                 setEditModalOpen(false); // Modal closes right after update
               }}
             />

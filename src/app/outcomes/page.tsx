@@ -29,7 +29,7 @@ import SourceContainer from '@/components/sourcesDetailsContainer/sourceContaine
 export default function Outcomes() {
   const pathName = usePathname();
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
+  const [editSource, setEditSource] = useState<FinanceSource | null>(null);
   const { data: outcomes, updateSource, loading, error } = useOutcomesContext();
   if (loading) {
     return <div>Loading...</div>;
@@ -82,7 +82,9 @@ export default function Outcomes() {
     },
     {
       name: 'Got Paid Payments',
-      data: paidOutcomePayments.length,
+      data: Array.isArray(paidOutcomePayments)
+        ? paidOutcomePayments.length
+        : Object.values(paidOutcomePayments).length,
     },
     {
       name: 'Got Paid Amount',
@@ -92,7 +94,9 @@ export default function Outcomes() {
 
     {
       name: 'UpComing Payments',
-      data: upcomginPayments.length,
+      data: Array.isArray(upcomginPayments)
+        ? upcomginPayments.length
+        : Object.values(upcomginPayments).length,
     },
     {
       name: 'Upcoming Amount',
@@ -168,7 +172,9 @@ export default function Outcomes() {
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                updateSource(updatedSource);
+                if ('payments' in updatedSource) {
+                  updateSource(updatedSource);
+                }
                 setEditModalOpen(false); // Modal closes right after update
               }}
             />

@@ -75,7 +75,7 @@ export default function PaymentsContainer({ payment, open, onClick }: PaymentsCo
         </h1>
         <Image
           onClick={onClick}
-          src={`${assetPrefix}images/sourceArrowBig.svg`}
+          src={`${assetPrefix}sourceArrowBig.svg`}
           alt="Menu icon"
           width={32}
           height={32}

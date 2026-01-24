@@ -1,7 +1,9 @@
 import { FinanceSource } from "@/types/finance";
-
+import type { RecentSideInfoItem } from "@/types/financeRecentSideInfoItem";
+import { SourceListItem } from "@/types/sourceListItem";
 type DataCalculationProps = {
     data: FinanceSource[];
+
 };
 
 // incomes calculations
@@ -26,7 +28,7 @@ export function PaidIncomePayments({ data }: DataCalculationProps): object {
         .flatMap((income) => income.payments)
         .filter((payment) => payment.status === 'paid')
 }
-export function RecentEarned({ data }: DataCalculationProps): object {
+export function RecentEarned({ data }: DataCalculationProps): RecentSideInfoItem[] {
     return data.flatMap((income) => income.payments).filter((payment) => payment.status === 'paid').map((p) => ({
         name: p.name,
         data: p.amount,
@@ -35,7 +37,7 @@ export function RecentEarned({ data }: DataCalculationProps): object {
 
     }))
 }
-export function UpcomingEarning({ data }: DataCalculationProps): object {
+export function UpcomingEarning({ data }: DataCalculationProps): RecentSideInfoItem[] {
     return data.flatMap((income) => income.payments).filter((payment) => payment.status === 'paid').map((p) => ({
         name: p.name,
         data: p.amount,
@@ -52,7 +54,7 @@ export function UpcomingIncomeAmount({ data }: DataCalculationProps): number {
         .filter((payment) => payment.status === 'coming')
         .reduce((sum, payment) => sum + payment.amount, 0);
 }
-export function IncomeSourceList({ data }: DataCalculationProps): object {
+export function IncomeSourceList({ data }: DataCalculationProps): SourceListItem[] {
     return data.map((d) => ({
         sourceName: d.sourceName,
         amount: d.payments.reduce((sum, p) => sum + p.amount, 0),

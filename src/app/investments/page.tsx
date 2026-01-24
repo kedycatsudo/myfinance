@@ -32,7 +32,7 @@ import SourceContainer from '@/components/sourcesDetailsContainer/sourceContaine
 export default function Investments() {
   const pathName = usePathname();
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editSource, setEditSource] = useState<FinanceSource | InvestmentSource | null>(null);
+  const [editSource, setEditSource] = useState<InvestmentSource | null>(null);
   const { data: investments, updateSource, loading, error } = useInvestmentsContext();
   if (loading) {
     return <div>Loading...</div>;
@@ -58,22 +58,30 @@ export default function Investments() {
   const quickCatchUp = [
     {
       name: 'Profits this month',
-      data: profitThisMonth.length,
+      data: Array.isArray(profitThisMonth)
+        ? profitThisMonth.length
+        : Object.values(profitThisMonth).length,
     },
     { name: 'Profit amount this month', data: profitThisMonthAmount, unit: '$' },
     {
       name: 'Loses this month',
-      data: losesThisMonth.length,
+      data: Array.isArray(losesThisMonth)
+        ? losesThisMonth.length
+        : Object.values(losesThisMonth).length,
     },
     { name: 'Loses amount this month', data: losesThisMonthAmount, unit: '$' },
     {
       name: 'Open Positions',
-      data: openPositions.length,
+      data: Array.isArray(openPositions)
+        ? openPositions.length
+        : Object.values(openPositions).length,
     },
     { name: 'Open positions amount', data: openPositionsAmount, unit: '$' },
     {
       name: 'Closed Positions',
-      data: closedPositions.length,
+      data: Array.isArray(closedPositions)
+        ? closedPositions.length
+        : Object.values(closedPositions).length,
     },
     { name: 'Closed positions amount this month', data: closedPositionsAmount, unit: '$' },
   ];
@@ -167,7 +175,9 @@ export default function Investments() {
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                updateSource(updatedSource);
+                if ('type' in updatedSource && 'items' in updatedSource) {
+                  updateSource(updatedSource);
+                }
                 setEditModalOpen(false); // Modal closes right after update
               }}
             />

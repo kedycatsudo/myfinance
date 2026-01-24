@@ -62,7 +62,7 @@ export default function RegisterPage() {
   return (
     <main className="flex flex-col items-center justify-center relative px-2 sm:px-4">
       <Image
-        src={`${assetPrefix}images/MyFinanceLogo.png`}
+        src={`${assetPrefix}images/myFinanceLogo.png`}
         alt="MyFinance Logo"
         width={250}
         height={250}

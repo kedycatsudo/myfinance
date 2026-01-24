@@ -2,11 +2,7 @@
 import React from 'react';
 import TotalRow from './TotalRow';
 import { FinancePayment } from '@/types/finance';
-type SourceListItem = {
-  sourceName: string;
-  amount: number;
-  unit?: string;
-};
+import { SourceListItem } from '@/types/sourceListItem';
 type SourcesListProps = {
   header: string;
   items: SourceListItem[];

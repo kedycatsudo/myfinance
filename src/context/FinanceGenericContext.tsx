@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
+import { basePath } from '@/constants/config';
 type DataKey = 'incomes' | 'outcomes' | 'investments';
 
 import { FinanceSource } from '@/types/finance';
@@ -30,7 +30,7 @@ function createGenericContext<K extends DataKey>(file: K) {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-      fetch(`/data/${file}.json`)
+      fetch(`${basePath}/data/${file}.json`)
         .then((res) => {
           if (!res.ok) throw new Error(`Could not fetch /data/${file}.json`);
           return res.json();

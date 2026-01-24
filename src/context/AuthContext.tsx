@@ -1,8 +1,9 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '@/types/user';
+import { assetPrefix, basePath } from '@/constants/config';
 // If you want an initial users JSON import, set the path here:
-const USERS_DATA_PATH = '/data/user.json';
+const USERS_DATA_PATH = `${assetPrefix}data/user.json`;
 
 type AuthContextType = {
   currentUser: User | null;
@@ -17,7 +18,6 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -88,7 +88,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const user: User = {
       ...newUser,
       id: 'user' + (users.length + 1),
-      hashedPassword: fakeHashed,
     };
     setUsers((prev) => [...prev, user]);
     setCurrentUser(user);

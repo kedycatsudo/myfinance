@@ -140,7 +140,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
 
         <Image
           onClick={onClick}
-          src={`${assetPrefix}/sourceArrowBig.svg`}
+          src={`${assetPrefix}sourceArrowBig.svg`}
           alt="Menu icon"
           width={32}
           height={32}
@@ -151,7 +151,7 @@ export default function SourceContainer({ item, open, onClick, onEdit }: SourceC
             e.stopPropagation(); // Prevent accidental open/close on edit
             onEdit();
           }}
-          src={`${assetPrefix}/editIcon.svg`}
+          src={`${assetPrefix}editIcon.svg`}
           alt="Edit modal button"
           width={32}
           height={32}

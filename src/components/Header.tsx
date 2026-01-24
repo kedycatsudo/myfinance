@@ -7,7 +7,7 @@ export default function Header() {
     <header>
       <div className="flex m-2 items-center justify-center xs:justify-start gap-2">
         <Image
-          src={`${assetPrefix}images/myfinance.png`}
+          src={`${assetPrefix}images/myfinancelogo.png`}
           alt="MyFinance Logo"
           width={80}
           height={80}

@@ -18,7 +18,7 @@ export const DEFAULT_CHART_COLORS = [
 ];
 
 type PieData = {
-  sourceName: string;
+  name: string;
   amount: number;
   color?: string; // color assigned by parent--no longer picked here!
 };

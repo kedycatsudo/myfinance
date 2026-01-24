@@ -7,6 +7,7 @@ import FinancialSnapShot from '@/components/dashboard/inOutMiniSnaps';
 import PieChartData from '@/components/PieChartData';
 import PieChart, { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
 import { usePathname } from 'next/navigation';
+import { assetPrefix, basePath } from '@/constants/config';
 import {
   useIncomesContext,
   useOutcomesContext,

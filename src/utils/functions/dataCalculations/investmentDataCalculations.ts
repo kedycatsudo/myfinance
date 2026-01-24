@@ -1,20 +1,28 @@
 import { InvestmentSource } from "@/types/investments";
-
+import type { RecentSideInfoItem } from "@/types/financeRecentSideInfoItem";
+import type { SourceListItem } from "@/types/sourceListItem";
 type DataCalculationProps = {
     data: InvestmentSource[]
 }
 
 //investment calculations
 
-export function RecentProfits({ data }: DataCalculationProps): object {
+export function RecentProfits({ data }: DataCalculationProps): RecentSideInfoItem[] {
     return data.flatMap((investment) => investment.items).
-        filter((item) => item.status === 'closed' && item.result === 'profit').
-        map((i) => ({ name: i.assetName, data: i.resultAmount, date: i.exitDate, unit: '$' }))
+        filter((item) => item.status === 'closed' && item.result === 'profit').map((i) => ({
+            name: i.assetName,
+            data: i.resultAmount ?? 0, // fallback to 0 if null
+            date: i.exitDate ?? '',    // fallback to empty string if null
+            unit: '$'
+        }))
 }
-export function RecentLoss({ data }: DataCalculationProps): object {
-    return data.flatMap((investment) => investment.items).
-        filter((item) => item.status === 'closed' && item.result === 'loss').
-        map((i) => ({ name: i.assetName, data: i.resultAmount, date: i.exitDate, unit: '$' }))
+export function RecentLoss({ data }: DataCalculationProps): RecentSideInfoItem[] {
+    return data.flatMap((investment) => investment.items).map((i) => ({
+        name: i.assetName,
+        data: i.resultAmount ?? 0, // fallback to 0 if null
+        date: i.exitDate ?? '',    // fallback to empty string if null
+        unit: '$'
+    }))
 }
 export function ProfitsThisMonth({ data }: DataCalculationProps): object {
     return data.flatMap((investment) => investment.items).
@@ -24,7 +32,7 @@ export function ProfitsThisMonth({ data }: DataCalculationProps): object {
 export function ProfitThisMonthAmount({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
         filter((item) => item.status === 'closed' && item.result === 'profit').
-        reduce((sum, item) => sum + item.resultAmount, 0)
+        reduce((sum, item) => sum + (item.resultAmount ?? 0), 0)
 }
 export function LosesThisMonth({ data }: DataCalculationProps): object {
     return data.flatMap((investment) => investment.items).
@@ -33,9 +41,9 @@ export function LosesThisMonth({ data }: DataCalculationProps): object {
 export function LosesThisMonthAmount({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
         filter((item) => item.status === 'closed' && item.result === 'loss').
-        reduce((sum, item) => sum + item.resultAmount, 0)
+        reduce((sum, item) => sum + (item.resultAmount ?? 0), 0)
 }
-export function OpenPositions({ data }: DataCalculationProps): object {
+export function OpenPositions({ data }: DataCalculationProps): SourceListItem[] {
     return data.flatMap((investment) => investment.items).
         filter((item) => item.status === 'open').map((i) => ({
             sourceName: i.assetName, amount: i.investedAmount, unit: '$'
@@ -45,7 +53,7 @@ export function OpenPositions({ data }: DataCalculationProps): object {
 export function OpenPositionsAmount({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
         filter((item) => item.status === 'open').
-        reduce((sum, item) => sum + item.resultAmount, 0)
+        reduce((sum, item) => sum + (item.resultAmount ?? 0), 0)
 }
 export function ClosedPositions({ data }: DataCalculationProps): object {
     return data.flatMap((investment) => investment.items).
@@ -54,9 +62,9 @@ export function ClosedPositions({ data }: DataCalculationProps): object {
 export function ClosedPositionsAmount({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
         filter((item) => item.status === 'closed').
-        reduce((sum, item) => sum + item.resultAmount, 0)
+        reduce((sum, item) => sum + (item.resultAmount ?? 0), 0)
 }
-export function InvestmentSourcesList({ data }: DataCalculationProps): object {
+export function InvestmentSourcesList({ data }: DataCalculationProps): SourceListItem[] {
 
     return data.map((d) => ({
         sourceName: d.sourceName,

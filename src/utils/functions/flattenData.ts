@@ -23,8 +23,8 @@ export function flattenInvestments<S extends { sourceName: string | null; type: 
         .flatMap(src =>
             src.items.map(item => ({
                 ...item,
-                sourceName: src.sourceName,
-                sourceType: src.type,
+                sourceName: src.sourceName ?? '',
+                sourceType: src.type ?? '',
                 assetName: item.assetName,
                 status: item.status,
                 investedAmount: item.investedAmount,
@@ -33,8 +33,7 @@ export function flattenInvestments<S extends { sourceName: string | null; type: 
             }))
         )
         .sort((a, b) => {
-            const dateA = new Date(a.exitDate ?? a.entryDate).getTime();
-            const dateB = new Date(b.exitDate ?? b.entryDate).getTime();
-            return dateB - dateA;
+            const dateA = new Date(a.exitDate ?? a.entryDate ?? '1881-01-01').getTime();
+            const dateB = new Date(b.exitDate ?? b.entryDate ?? '1881-01-01').getTime(); return dateB - dateA;
         });
 }

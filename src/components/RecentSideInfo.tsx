@@ -1,14 +1,8 @@
 'use client';
 import React from 'react';
 import TotalRow from './TotalRow';
-
+import { RecentSideInfoItem } from '@/types/financeRecentSideInfoItem';
 // Define the type directly for clarity since RecentItem is obsolete.
-type RecentSideInfoItem = {
-  name: string;
-  data: number;
-  date: string | number;
-  unit?: string;
-};
 
 type RecentSideInfoProps = {
   header: string;

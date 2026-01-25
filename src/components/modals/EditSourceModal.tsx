@@ -7,7 +7,9 @@ import { PAYMENT_FIELDS, ITEM_FIELDS } from '@/constants/fieldConfig';
 import FieldInput from '../forms/FieldInput';
 import AccordionItem from '../forms/AccordionItem';
 import { isFinanceSource, isInvestmentSource } from '@/utils/functions/typeGuard';
+import { assetPrefix } from '@/constants/config';
 import AppModal from './AppModal';
+import Image from 'next/image';
 type EditSourceModalProps = {
   open: boolean;
   source: FinanceSource | InvestmentSource;
@@ -129,6 +131,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
         className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative max-h-[90vh] flex flex-col
         sm:max-w-full sm:rounded-none sm:h-full sm:justify-end sm:p-2"
       >
+        {' '}
         <div className="overflow-y-auto flex-1 gap-3 flex flex-col">
           <h2 className="text-2xl font-bold mb-2 text-[#29388A] text-center">
             Edit {localSource.sourceName}
@@ -178,6 +181,11 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
                 errors={errors}
               />
             ))}
+        </div>
+        <div
+          className={`border-4 border-[#29388A] rounded px-2 py-2 transition-all cursor-pointer text-[#29388A] mt-3 `}
+        >
+          + Add Income Payment
         </div>
         <div className="flex justify-end gap-2 mt-4 justify-center">
           <button

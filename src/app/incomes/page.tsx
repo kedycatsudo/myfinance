@@ -30,6 +30,7 @@ export default function Incomes() {
   const [editSource, setEditSource] = useState<FinanceSource | null>(null);
   const pathName = usePathname();
   const { data: incomes, updateSource, loading, error } = useIncomesContext();
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -49,7 +50,6 @@ export default function Incomes() {
   const upcomingEarning = UpcomingEarning({ data: incomes });
   const incomesSourceList = IncomeSourceList({ data: incomes });
   // Catch up: catch the month, using core summary of payments
-
   const catchUptheMonth = [
     {
       name: 'Total Income',

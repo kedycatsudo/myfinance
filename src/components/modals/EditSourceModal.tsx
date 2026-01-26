@@ -7,9 +7,9 @@ import { PAYMENT_FIELDS, ITEM_FIELDS } from '@/constants/fieldConfig';
 import FieldInput from '../forms/FieldInput';
 import AccordionItem from '../forms/AccordionItem';
 import { isFinanceSource, isInvestmentSource } from '@/utils/functions/typeGuard';
-import { assetPrefix } from '@/constants/config';
 import AppModal from './AppModal';
-import Image from 'next/image';
+import AddInvestmentItemModal from './AddInvestmentItem';
+import AddPaymentModal from './AddFinanceItem';
 type EditSourceModalProps = {
   open: boolean;
   source: FinanceSource | InvestmentSource;
@@ -22,12 +22,15 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   const [openItemAccordions, setOpenItemAccordions] = useState<{ [id: string]: boolean }>({});
   const [errors, setErrors] = useState<{ [field: string]: string }>({});
   const [showAppModal, setShowAppModal] = useState<boolean | null>(null);
+  const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
+  const [showAddInvestmentItemModal, setShowAddInvestmentItemModal] = useState(false);
 
   useEffect(() => {
     setLocalSource(source);
     setOpenItemAccordions({});
     setErrors({});
   }, [source, open]);
+
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = '';
@@ -35,42 +38,15 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
       document.body.style.overflow = '';
     };
   }, [open]);
+
   if (!open) return null;
-  //source input
-  /**
-   * Handles input changes for fields in the source object.
-   *
-   * @param field - The name of the field to update in the local source state.
-   * @param value - The new value to set for the specified field.
-   *
-   * This function updates the local source state by creating a new object
-   * with the updated field value. If you are unable to edit the "Source Name"
-   * field while other fields are editable, possible reasons include:
-   * - The input for "Source Name" might have the `disabled` or `readOnly` attribute set.
-   * - The `field` parameter passed to this function for "Source Name" might not match the actual key in the state object.
-   * - There could be validation or logic elsewhere preventing updates to the "Source Name" field.
-   * - The value of the input might be controlled by a different state or prop.
-   *
-   * Review the input element for "Source Name" and ensure it is correctly wired to this handler and not restricted elsewhere.
-   */
+
   const handleSourceInput = (field: string, value: any) => {
     setLocalSource((prev) => ({ ...prev, [field]: value }) as any);
   };
 
-  //Item input
-  /**
-   * Updates a specific field of an item within the local source state.
-   *
-   * Determines the array key (`payments` or `item`) based on whether the current source is a finance source.
-   * Then, finds the item by its `itemId` and updates the specified `field` with the new `value`.
-   * The state is updated immutably using the previous state.
-   *
-   * @param itemId - The unique identifier of the item to update.
-   * @param field - The field name within the item to update.
-   * @param value - The new value to assign to the specified field.
-   */
   const handleItemInput = (itemId: string, field: any, value: any) => {
-    const arrKey = isFinanceSource(localSource) ? 'payments' : 'item';
+    const arrKey = isFinanceSource(localSource) ? 'payments' : 'items';
     setLocalSource(
       (prev) =>
         ({
@@ -81,8 +57,6 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
         }) as any,
     );
   };
-
-  // validation
 
   function validate() {
     const err: Record<string, string> = {};
@@ -109,7 +83,6 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
     }
   };
 
-  //source fields
   const sourceFields = [
     {
       label: ' Source Name',
@@ -131,7 +104,6 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
         className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative max-h-[90vh] flex flex-col
         sm:max-w-full sm:rounded-none sm:h-full sm:justify-end sm:p-2"
       >
-        {' '}
         <div className="overflow-y-auto flex-1 gap-3 flex flex-col">
           <h2 className="text-2xl font-bold mb-2 text-[#29388A] text-center">
             Edit {localSource.sourceName}
@@ -159,11 +131,14 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
                 itemTypeKey="payment"
                 isOpen={!!openItemAccordions[payment.id]}
                 toggleOpen={() =>
-                  setOpenItemAccordions((prev) => ({ ...prev, [payment.id]: !prev[payment.id] }))
+                  setOpenItemAccordions((prev) => ({
+                    ...prev,
+                    [payment.id]: !prev[payment.id],
+                  }))
                 }
                 handleItemInput={handleItemInput}
                 errors={errors}
-              ></AccordionItem>
+              />
             ))}
           {isInvestmentSource(localSource) &&
             localSource.items &&
@@ -175,18 +150,60 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
                 itemTypeKey="item"
                 isOpen={!!openItemAccordions[item.id]}
                 toggleOpen={() =>
-                  setOpenItemAccordions((prev) => ({ ...prev, [item.id]: !prev[item.id] }))
+                  setOpenItemAccordions((prev) => ({
+                    ...prev,
+                    [item.id]: !prev[item.id],
+                  }))
                 }
                 handleItemInput={handleItemInput}
                 errors={errors}
               />
             ))}
         </div>
-        <div
-          className={`border-4 border-[#29388A] rounded px-2 py-2 transition-all cursor-pointer text-[#29388A] mt-3 `}
-        >
-          + Add Income Payment
-        </div>
+        {/* + Add Income Payment button & modal */}
+        {isFinanceSource(localSource) && (
+          <>
+            <div
+              className="border-4 border-[#29388A] rounded px-2 py-2 transition-all cursor-pointer text-[#29388A] mt-3"
+              onClick={() => setShowAddPaymentModal(true)}
+            >
+              + Add Item
+            </div>
+            <AddPaymentModal
+              open={showAddPaymentModal}
+              onClose={() => setShowAddPaymentModal(false)}
+              onSubmit={(newPayment) => {
+                setLocalSource((prev) =>
+                  isFinanceSource(prev)
+                    ? { ...prev, payments: [...(prev.payments ?? []), newPayment] }
+                    : prev,
+                );
+              }}
+            />
+          </>
+        )}
+        {/* + Add Investment Item button & modal */}
+        {isInvestmentSource(localSource) && (
+          <>
+            <div
+              className="border-4 border-[#29388A] rounded px-2 py-2 transition-all cursor-pointer text-[#29388A] mt-3"
+              onClick={() => setShowAddInvestmentItemModal(true)}
+            >
+              + Add Investment Item
+            </div>
+            <AddInvestmentItemModal
+              open={showAddInvestmentItemModal}
+              onClose={() => setShowAddInvestmentItemModal(false)}
+              onSubmit={(newItem) => {
+                setLocalSource((prev) =>
+                  isInvestmentSource(prev)
+                    ? { ...prev, items: [...(prev.items ?? []), newItem] }
+                    : prev,
+                );
+              }}
+            />
+          </>
+        )}
         <div className="flex justify-end gap-2 mt-4 justify-center">
           <button
             onClick={onClose}
@@ -201,7 +218,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
             Submit
           </button>
         </div>
-        {showAppModal && <AppModal></AppModal>}
+        {showAppModal && <AppModal />}
       </div>
     </div>
   );

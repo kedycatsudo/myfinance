@@ -12,7 +12,6 @@ import { useOutcomesContext } from '@/context/FinanceGenericContext';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { FinanceSource } from '@/types/finance';
-import { InvestmentSource } from '@/types/investments';
 import EditSourceModal from '@/components/modals/EditSourceModal';
 
 import {

@@ -11,6 +11,11 @@ type RecentSideInfoProps = {
 };
 export default function RecentSideInfo({ header, items, className = '' }: RecentSideInfoProps) {
   const total = items.reduce((sum, item) => sum + Number(item.data), 0);
+
+  const sortedItems = [...items]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
+  console.log(sortedItems);
   return (
     <div className={`flex-1 w-full ${className}`}>
       <div className="w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg">
@@ -20,7 +25,7 @@ export default function RecentSideInfo({ header, items, className = '' }: Recent
           {items.length === 0 && (
             <div className="w-full text-center text-white opacity-60 py-5">No items</div>
           )}
-          {items.map((item, idx) => (
+          {sortedItems.map((item, idx) => (
             <React.Fragment key={item.name + '-' + item.date}>
               <div className="w-full flex flex-row justify-between items-center py-2 gap-1">
                 <span className="text-white">{item.name}</span>

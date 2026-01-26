@@ -9,7 +9,7 @@
         "name": "Spaces in the City",
         "type": "bank_transfer",
         "amount": 5600.0,
-        "date": "2026-10-12",
+        "date": "2025-10-12",
         "loop": true,
         "status": "paid"
       },
@@ -18,7 +18,7 @@
         "name": "Monthly Bonus",
         "type": "cash",
         "amount": 500.0,
-        "date": "2026-10-15",
+        "date": "2025-10-15",
         "loop": true,
         "status": "coming"
       }
@@ -34,7 +34,7 @@
         "name": "Client Alpha",
         "type": "bank_transfer",
         "amount": 1200.0,
-        "date": "2026-10-07",
+        "date": "2025-10-07",
         "loop": false,
         "status": "paid"
       },
@@ -43,7 +43,7 @@
         "name": "Client Beta",
         "type": "bank_transfer",
         "amount": 850.0,
-        "date": "2026-10-14",
+        "date": "2025-10-14",
         "loop": false,
         "status": "coming"
       }
@@ -59,7 +59,7 @@
         "name": "Quarterly Dividends",
         "type": "bank_transfer",
         "amount": 400.0,
-        "date": "2026-09-30",
+        "date": "2025-09-30",
         "loop": true,
         "status": "paid"
       },
@@ -68,7 +68,7 @@
         "name": "Crypto Gains",
         "type": "bank_transfer",
         "amount": 320.0,
-        "date": "2026-10-17",
+        "date": "2025-10-17",
         "loop": false,
         "status": "coming"
       }
@@ -84,7 +84,7 @@
         "name": "Credit Card Cashback",
         "type": "credit_card",
         "amount": 25.0,
-        "date": "2026-10-22",
+        "date": "2025-10-22",
         "loop": true,
         "status": "coming"
       },
@@ -93,7 +93,7 @@
         "name": "Birthday Gift",
         "type": "cash",
         "amount": 100.0,
-        "date": "2026-10-10",
+        "date": "2025-10-10",
         "loop": false,
         "status": "paid"
       }

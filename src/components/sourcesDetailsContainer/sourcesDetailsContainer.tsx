@@ -34,9 +34,9 @@ export default function SourcesDetailsContainer<T extends { id: string }>({
           // The new edit callback for this item
           () => setOpenSources((prev) => ({ ...prev, [item.id]: true })), // This will be replaced by parent modal handler later!
         ),
-      )}
+      )}{' '}
       <div
-        className={`w-full flex flex-col xs:flex-col border-4 border-[#29388A] rounded p-2 cursor-pointer transition-all relative text-2xl xs:text-3xl text-[#1E1552]  font-bold mr-2
+        className={`w-full flex flex-col xs:flex-col border-4 border-[#29388A] rounded mx-2 p-2 cursor-pointer transition-all relative text-2xl xs:text-3xl text-[#1E1552]  font-bold mr-2
         }`}
       >
         +Add Income Source

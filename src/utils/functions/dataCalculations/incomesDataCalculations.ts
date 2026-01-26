@@ -38,7 +38,7 @@ export function RecentEarned({ data }: DataCalculationProps): RecentSideInfoItem
     }))
 }
 export function UpcomingEarning({ data }: DataCalculationProps): RecentSideInfoItem[] {
-    return data.flatMap((income) => income.payments).filter((payment) => payment.status === 'paid').map((p) => ({
+    return data.flatMap((income) => income.payments).filter((payment) => payment.status === 'coming').map((p) => ({
         name: p.name,
         data: p.amount,
         unit: '$',

@@ -9,7 +9,7 @@
         "name": "Kub",
         "type": "credit_card",
         "amount": 400.0,
-        "date": "2026-12-25",
+        "date": "2025-12-25",
         "loop": true,
         "status": "paid"
       },
@@ -18,7 +18,7 @@
         "name": "Cell",
         "type": "credit_card",
         "amount": 50.0,
-        "date": "2026-12-01",
+        "date": "2025-12-01",
         "loop": true,
         "status": "coming"
       },
@@ -27,7 +27,7 @@
         "name": "WiFi",
         "type": "bank_transfer",
         "amount": 45.99,
-        "date": "2026-12-10",
+        "date": "2025-12-10",
         "loop": true,
         "status": "paid"
       }
@@ -43,7 +43,7 @@
         "name": "Car Payment",
         "type": "bank_transfer",
         "amount": 300.0,
-        "date": "2026-12-08",
+        "date": "2025-12-08",
         "loop": true,
         "status": "coming"
       },
@@ -52,7 +52,7 @@
         "name": "Visa Card",
         "type": "credit_card",
         "amount": 150.0,
-        "date": "2026-12-12",
+        "date": "2025-12-12",
         "loop": true,
         "status": "paid"
       }
@@ -68,7 +68,7 @@
         "name": "Supermarket",
         "type": "debit_card",
         "amount": 120.25,
-        "date": "2026-12-03",
+        "date": "2025-12-03",
         "loop": false,
         "status": "paid"
       },
@@ -77,7 +77,7 @@
         "name": "Farmer's Market",
         "type": "cash",
         "amount": 34.1,
-        "date": "2026-12-10",
+        "date": "2025-12-10",
         "loop": false,
         "status": "coming"
       }
@@ -93,7 +93,7 @@
         "name": "Clothing Store",
         "type": "credit_card",
         "amount": 65.0,
-        "date": "2026-12-15",
+        "date": "2025-12-15",
         "loop": false,
         "status": "paid"
       },
@@ -102,7 +102,7 @@
         "name": "Birthday Gift",
         "type": "cash",
         "amount": 40.0,
-        "date": "2026-12-20",
+        "date": "2025-12-20",
         "loop": false,
         "status": "coming"
       }

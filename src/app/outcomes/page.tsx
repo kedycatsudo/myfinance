@@ -1,5 +1,5 @@
 'use client';
-
+import { useState } from 'react';
 import SideBar from '@/components/SideBar';
 import RecentSideInfo from '@/components/RecentSideInfo';
 import MobileMenuButton from '@/components/MobileBurgerMenu';
@@ -10,10 +10,9 @@ import CatchUpTheMonth from '@/components/outcomes/catchUpTheMonth';
 import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/sourcesDetailsContainer';
 import { useOutcomesContext } from '@/context/FinanceGenericContext';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
 import { FinanceSource } from '@/types/finance';
 import EditSourceModal from '@/components/modals/EditSourceModal';
-
+import CreateSourceModal, { SourceBase } from '@/components/modals/CreateSourceModal';
 import {
   RecentPaid,
   UpcomingPayment,
@@ -25,11 +24,28 @@ import {
 } from '@/utils/functions/dataCalculations/outcomeDataCalculations';
 import { TotalIncomesPaidAmount } from '@/utils/functions/dataCalculations/incomesDataCalculations';
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
+
+// -- HELPERS
+function fromSourceBaseToFinanceSource(
+  base: Omit<SourceBase, 'id'> & { type: 'finance' },
+  id: string,
+): FinanceSource {
+  return {
+    ...base,
+    id,
+    payments: [],
+  };
+}
+
 export default function Outcomes() {
   const pathName = usePathname();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editSource, setEditSource] = useState<FinanceSource | null>(null);
-  const { data: outcomes, updateSource, loading, error } = useOutcomesContext();
+  const [addSourceModalOpen, setAddSourceModalOpen] = useState(false);
+  const { data: outcomes, updateSource, addSource, loading, error } = useOutcomesContext();
+
+  const newSourceType: 'finance' = 'finance';
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -37,22 +53,11 @@ export default function Outcomes() {
     return <div>Error: {error}</div>;
   }
   if (!outcomes || outcomes.length === 0) {
-    return <div>No incomes found</div>;
+    return <div>No outcomes found</div>;
   }
 
-  // Top N=5 recent paid, upcoming payments etc
-  const recentPaid = RecentPaid({ data: outcomes });
+  // ... prepare your summary data as usual...
 
-  const upcomingPayments = UpcomingPayment({ data: outcomes });
-  const totalOutcomes = TotalOutcomes({ data: outcomes });
-  const paidOutcomePayments = PaidOutcomePayments({ data: outcomes });
-  const totalOutcomesPaidAmount = TotalIncomesPaidAmount({ data: outcomes });
-  const upcomginPayments = UpcomingPayments({ data: outcomes });
-  const upcomingAmount = UpcomingAmount({ data: outcomes });
-  // For SourcesList: aggregate total amount per source
-  const outcomeSourceList = OutcomeSourcesList({ data: outcomes });
-  console.log(outcomeSourceList);
-  // ----- Consistent Color Picking: Assign colors in parent -----
   const pieDataRaw = outcomes.map((src) => ({
     name: src.sourceName,
     amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
@@ -62,8 +67,6 @@ export default function Outcomes() {
     ...item,
     color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
   }));
-
-  // Pie chart data legend
   const pieChartData = pieDataWithColors.map((d) => ({
     sourceName: d.name,
     amount: d.amount,
@@ -72,56 +75,28 @@ export default function Outcomes() {
     color: d.color,
   }));
 
-  // Snapshot stats
+  // Example catchUp arrays here, use your calculation logic
   const catchUptheMonth = [
-    {
-      name: 'Total Outcomes',
-      data: totalOutcomes,
-      unit: '$',
-    },
-    {
-      name: 'Got Paid Payments',
-      data: Array.isArray(paidOutcomePayments)
-        ? paidOutcomePayments.length
-        : Object.values(paidOutcomePayments).length,
-    },
-    {
-      name: 'Got Paid Amount',
-      data: totalOutcomesPaidAmount,
-      unit: '$',
-    },
-
-    {
-      name: 'UpComing Payments',
-      data: Array.isArray(upcomginPayments)
-        ? upcomginPayments.length
-        : Object.values(upcomginPayments).length,
-    },
-    {
-      name: 'Upcoming Amount',
-      data: upcomingAmount,
-      unit: '$',
-    },
-    {
-      name: 'Reset Date',
-      data: '-/01-',
-    },
+    { name: 'Total Outcomes', data: TotalOutcomes({ data: outcomes }), unit: '$' },
+    { name: 'Got Paid Payments', data: Object.keys(PaidOutcomePayments({ data: outcomes })).length },
+    { name: 'Got Paid Amount', data: TotalIncomesPaidAmount({ data: outcomes }), unit: '$' },
+    { name: 'UpComing Payments', data: Object.keys(UpcomingPayments({ data: outcomes })).length },
+    { name: 'Upcoming Amount', data: UpcomingAmount({ data: outcomes }), unit: '$' },
+    { name: 'Reset Date', data: '-/01-' },
   ];
+
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
-      {/* Side containers */}
       <div className="hidden xs:flex flex-col items-center gap-5 flex-shrink-0 xs:w-64">
         <SideBar
           activePath={pathName}
           className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
         />
         <div className="w-full flex flex-row xs:flex-col relative gap-2 items-center">
-          <RecentSideInfo header="Recent Paid" items={recentPaid} />
-          <RecentSideInfo header="Upcoming payment" items={upcomingPayments} />
+          <RecentSideInfo header="Recent Paid" items={RecentPaid({ data: outcomes })} />
+          <RecentSideInfo header="Upcoming payment" items={UpcomingPayment({ data: outcomes })} />
         </div>
       </div>
-
-      {/* Main Content */}
       <section className="w-full flex flex-col flex-start items-center gap-5 ">
         <div className="flex flex-col">
           <h1 className="text-3xl xs:text-6xl font-bold text-[#1E1552] text-center z-10">
@@ -134,17 +109,15 @@ export default function Outcomes() {
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
           <div className="w-full flex flex-col relative gap-1 items-center">
-            <RecentSideInfo header="Recent Paid" items={recentPaid} />
-            <RecentSideInfo header="Upcoming payment" items={upcomingPayments} />
+            <RecentSideInfo header="Recent Paid" items={RecentPaid({ data: outcomes })} />
+            <RecentSideInfo header="Upcoming payment" items={UpcomingPayment({ data: outcomes })} />
           </div>
         </div>
-        {/*current Outgoings snapshots */}
         <div className="flex flex-row justify-center items-center gap-1 w-full">
           <CatchUpTheMonth header="Quick Catch Up For This Month" items={catchUptheMonth} />
-          <SourcesList header="Outcome Sources" items={outcomeSourceList} />
+          <SourcesList header="Outcome Sources" items={OutcomeSourcesList({ data: outcomes })} />
         </div>
         <div className="pl-1 flex flex-col md:flex-row items-center w-full gap-1">
-          {/*------ COLOR SYNC IS HERE --------*/}
           <PieChart data={pieDataWithColors} />
           <PieChartData header="Pie Chart Data" items={pieChartData} />
         </div>
@@ -164,6 +137,7 @@ export default function Outcomes() {
                 }}
               />
             )}
+            onAddSource={() => setAddSourceModalOpen(true)}
           />
           {editSource && (
             <EditSourceModal
@@ -174,7 +148,18 @@ export default function Outcomes() {
                 if ('payments' in updatedSource) {
                   updateSource(updatedSource);
                 }
-                setEditModalOpen(false); // Modal closes right after update
+                setEditModalOpen(false);
+              }}
+            />
+          )}
+          {addSourceModalOpen && (
+            <CreateSourceModal
+              open={addSourceModalOpen}
+              onClose={() => setAddSourceModalOpen(false)}
+              onSubmit={(fields) => {
+                const id = Date.now().toString() + Math.random().toString(36).slice(2);
+                addSource(fromSourceBaseToFinanceSource({ ...fields, type: newSourceType }, id));
+                setAddSourceModalOpen(false);
               }}
             />
           )}

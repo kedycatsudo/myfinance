@@ -90,12 +90,14 @@ export default function Dashboard() {
     name: p.name,
     data: p.amount,
     unit: '$',
+    date: p.date,
   }));
 
   const recentIncomes = allIncomePayments.slice(0, 5).map((p) => ({
     name: p.name,
     data: p.amount,
     unit: '$',
+    date: p.date,
   }));
 
   const recentInvestments = allInvestmentPositions

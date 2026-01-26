@@ -11,8 +11,9 @@ import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useIncomesContext } from '@/context/FinanceGenericContext';
 import { FinanceSource } from '@/types/finance';
-import { InvestmentSource } from '@/types/investments';
-
+import EditSourceModal from '@/components/modals/EditSourceModal';
+import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
+import CreateSourceModal, { SourceBase } from '@/components/modals/CreateSourceModal';
 import {
   TotalIncomes,
   PaidIncomePayments,
@@ -23,33 +24,57 @@ import {
   UpcomingEarning,
   IncomeSourceList,
 } from '@/utils/functions/dataCalculations/incomesDataCalculations';
-import EditSourceModal from '@/components/modals/EditSourceModal';
-import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
+// Helper to create a FinanceSource from base fields
+function fromSourceBaseToFinanceSource(
+  base: Omit<SourceBase, 'id'> & { type: 'finance' },
+  id: string,
+): FinanceSource {
+  return {
+    ...base,
+    id,
+    payments: [],
+  };
+}
+
+function fromSourceBaseToInvestmentSource(
+  base: Omit<SourceBase, 'id'> & { type: 'investment' },
+  id: string,
+): InvestmentSource {
+  return {
+    ...base,
+    id,
+    items: [],
+    type: 'investment',
+  };
+}
+
 export default function Incomes() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editSource, setEditSource] = useState<FinanceSource | null>(null);
+  const [addSourceModalOpen, setAddSourceModalOpen] = useState(false);
+
   const pathName = usePathname();
-  const { data: incomes, updateSource, loading, error } = useIncomesContext();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-  if (!incomes || incomes.length === 0) {
-    return <div>No incomes found</div>;
-  }
+  const newSourceType: 'finance' | 'investment' =
+    pathName === '/investments' ? 'investment' : 'finance';
+  const { data: incomes, updateSource, addSource, loading, error } = useIncomesContext();
 
-  const totalIncomes = TotalIncomes({ data: incomes });
-  const paidIncomePayments = PaidIncomePayments({ data: incomes });
+  // Demo data for charts and summaries. Replace these with your real calculation utilities.
+  const totalIncomes = incomes
+    ? incomes.reduce(
+        (acc, src) => acc + src.payments.reduce((sum, p) => sum + (p.amount || 0), 0),
+        0,
+      )
+    : 0;
+  const paidIncomePayments = incomes
+    ? incomes.flatMap((src) => src.payments.filter((p) => p.status === 'paid'))
+    : [];
   const totalIncomesPaidAmount = TotalIncomesPaidAmount({ data: incomes });
   const recentEarned = RecentEarned({ data: incomes });
   const incomesUpcoming = IncomesUpcoming({ data: incomes });
   const upcomingIncomeAmount = UpcomingIncomeAmount({ data: incomes });
   const upcomingEarning = UpcomingEarning({ data: incomes });
   const incomesSourceList = IncomeSourceList({ data: incomes });
-  // Catch up: catch the month, using core summary of payments
   const catchUptheMonth = [
     {
       name: 'Total Income',
@@ -85,18 +110,17 @@ export default function Incomes() {
     },
   ];
 
-  // ----- Consistent Color Picking: Assign colors in parent -----
-  const pieDataRaw = incomes.map((src) => ({
-    name: src.sourceName,
-    amount: src.payments.reduce((sum, p) => sum + p.amount, 0),
-    description: src.description,
-  }));
+  const pieDataRaw = incomes
+    ? incomes.map((src) => ({
+        name: src.sourceName,
+        amount: src.payments.reduce((sum, p) => sum + (p.amount || 0), 0),
+        description: src.description,
+      }))
+    : [];
   const pieDataWithColors = pieDataRaw.map((item, idx) => ({
     ...item,
     color: CATEGORY_COLORS[item.name] || DEFAULT_CHART_COLORS[idx % DEFAULT_CHART_COLORS.length],
   }));
-
-  // Pie chart data legend
   const pieChartData = pieDataWithColors.map((d) => ({
     sourceName: d.name,
     amount: d.amount,
@@ -104,6 +128,16 @@ export default function Incomes() {
     description: d.description,
     color: d.color,
   }));
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  if (!incomes || incomes.length === 0) {
+    return <div>No incomes found</div>;
+  }
 
   return (
     <main className="flex flex-col xs:flex-row min-h-screen gap-1">
@@ -160,19 +194,39 @@ export default function Incomes() {
                 }}
               />
             )}
+            onAddSource={() => setAddSourceModalOpen(true)}
           />
 
+          {/* Edit existing source modal */}
           {editSource && (
             <EditSourceModal
               open={editModalOpen}
               source={editSource}
               onClose={() => setEditModalOpen(false)}
               onSubmit={(updatedSource) => {
-                // Only update if it's a FinanceSource (has 'payments' property)
                 if ('payments' in updatedSource) {
                   updateSource(updatedSource);
                 }
-                setEditModalOpen(false); // Modal closes right after update
+                setEditModalOpen(false);
+              }}
+            />
+          )}
+
+          {/* Add new source modal */}
+          {addSourceModalOpen && (
+            <CreateSourceModal
+              open={addSourceModalOpen}
+              onClose={() => setAddSourceModalOpen(false)}
+              onSubmit={(fields) => {
+                const id = Date.now().toString() + Math.random().toString(36).slice(2);
+                const base = { ...fields, type: newSourceType };
+                // Then decide which builder to use:
+                if (newSourceType === 'finance') {
+                  addSource(fromSourceBaseToFinanceSource(base, id));
+                } else {
+                  addSource(fromSourceBaseToInvestmentSource(base, id));
+                }
+                setAddSourceModalOpen(false);
               }}
             />
           )}

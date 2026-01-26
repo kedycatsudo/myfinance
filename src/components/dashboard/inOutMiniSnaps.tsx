@@ -6,6 +6,7 @@ type FinancialSnapshotItem = {
   name: string;
   data: number;
   unit?: string;
+  date?: string | number;
 };
 type FinancialSnapShotProps = {
   header: string;
@@ -22,6 +23,9 @@ export default function FinancialSnapShot({
   className = '',
 }: FinancialSnapShotProps) {
   const total = items.reduce((sum, item) => sum + item.data, 0);
+  const sortedItems = [...items]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
   return (
     <div
       className={`w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg ${className}`}
@@ -30,7 +34,7 @@ export default function FinancialSnapShot({
       <div className="w-full h-1 mb-0.5 bg-[#29388A] rounded" />
       {/* Items */}
       <div className="w-full">
-        {items.map((item, idx) => (
+        {sortedItems.map((item, idx) => (
           <React.Fragment key={item.name + '-' + item.data}>
             <div className="flex flex-row justify-between items-center py-2 gap-1">
               <span className="text-white text-s xs:text-xl">{item.name}</span>
@@ -39,8 +43,14 @@ export default function FinancialSnapShot({
                   {item.data.toLocaleString(undefined)}
                   {item.unit ? item.unit : ''}
                 </span>
+                {item.date && (
+                  <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-s xs:text-xl shadow-inner text-[#a9deff]">
+                    {item.date ? item.date : ''}
+                  </span>
+                )}
                 {/* <span className="mt-0.5 bg-[#29388A] bg-opacity-60 border border-[#29388A] rounded px-2 py-0.5 font-bold text-[#a9deff] text-s xs:text-xl shadow-inner">
                   {new Date(item.date).toLocaleDateString()}
+                  
                 </span> */}
               </div>
             </div>

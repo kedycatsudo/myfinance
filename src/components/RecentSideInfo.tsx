@@ -15,7 +15,6 @@ export default function RecentSideInfo({ header, items, className = '' }: Recent
   const sortedItems = [...items]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
-  console.log(sortedItems);
   return (
     <div className={`flex-1 w-full ${className}`}>
       <div className="w-full bg-[#3A4483]/75 rounded-[16px] p-1 flex flex-col items-center shadow-lg">

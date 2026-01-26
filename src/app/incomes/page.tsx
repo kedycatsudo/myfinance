@@ -10,7 +10,7 @@ import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/source
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useIncomesContext } from '@/context/FinanceGenericContext';
-import { FinanceSource } from '@/types/finance';
+import { FinanceSource, FinancePayment } from '@/types/finance';
 import EditSourceModal from '@/components/modals/EditSourceModal';
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 import CreateSourceModal, { SourceBase } from '@/components/modals/CreateSourceModal';
@@ -32,19 +32,8 @@ function fromSourceBaseToFinanceSource(
   return {
     ...base,
     id,
-    payments: [],
-  };
-}
-
-function fromSourceBaseToInvestmentSource(
-  base: Omit<SourceBase, 'id'> & { type: 'investment' },
-  id: string,
-): InvestmentSource {
-  return {
-    ...base,
-    id,
-    items: [],
-    type: 'investment',
+    payments: [] as FinancePayment[],
+    type: 'finance',
   };
 }
 
@@ -219,13 +208,7 @@ export default function Incomes() {
               onClose={() => setAddSourceModalOpen(false)}
               onSubmit={(fields) => {
                 const id = Date.now().toString() + Math.random().toString(36).slice(2);
-                const base = { ...fields, type: newSourceType };
-                // Then decide which builder to use:
-                if (newSourceType === 'finance') {
-                  addSource(fromSourceBaseToFinanceSource(base, id));
-                } else {
-                  addSource(fromSourceBaseToInvestmentSource(base, id));
-                }
+                addSource(fromSourceBaseToFinanceSource({ ...fields, type: 'finance' }, id));
                 setAddSourceModalOpen(false);
               }}
             />

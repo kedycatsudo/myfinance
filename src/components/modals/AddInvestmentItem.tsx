@@ -48,8 +48,7 @@ export default function AddInvestmentItemModal({
     const err: typeof errors = {};
     if (!form.assetName) err.assetName = 'Asset name required';
     if (!form.term) err.term = 'Term required';
-    if (form.investedAmount == null || form.investedAmount === '')
-      err.investedAmount = 'Amount required';
+    if (form.investedAmount === null) err.investedAmount = 'Amount required';
     if (!form.entryDate) err.entryDate = 'Entry date required';
     setErrors(err);
     return Object.keys(err).length === 0;

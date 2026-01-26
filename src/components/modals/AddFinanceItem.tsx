@@ -42,7 +42,7 @@ export default function AddPaymentModal({ open, onClose, onSubmit }: AddPaymentM
     const err: typeof errors = {};
     if (!form.name) err.name = 'Name required';
     if (!form.type) err.type = 'Type required';
-    if (form.amount == null || form.amount === '') err.amount = 'Amount required';
+    if (form.amount == null) err.amount = 'Amount required';
     if (!form.date) err.date = 'Date required';
     setErrors(err);
     return Object.keys(err).length === 0;

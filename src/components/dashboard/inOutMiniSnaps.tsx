@@ -24,7 +24,7 @@ export default function FinancialSnapShot({
 }: FinancialSnapShotProps) {
   const total = items.reduce((sum, item) => sum + item.data, 0);
   const sortedItems = [...items]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .sort((a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime())
     .slice(0, 5);
   return (
     <div

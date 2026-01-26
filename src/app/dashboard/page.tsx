@@ -7,7 +7,6 @@ import FinancialSnapShot from '@/components/dashboard/inOutMiniSnaps';
 import PieChartData from '@/components/PieChartData';
 import PieChart, { CATEGORY_COLORS, DEFAULT_CHART_COLORS } from '@/components/PieChart';
 import { usePathname } from 'next/navigation';
-import { assetPrefix, basePath } from '@/constants/config';
 import {
   useIncomesContext,
   useOutcomesContext,
@@ -15,6 +14,7 @@ import {
 } from '@/context/FinanceGenericContext';
 import { useMemo } from 'react';
 import { flattenInvestments, flattenPayments } from '@/utils/functions/flattenData';
+import { InvestmentItem, InvestmentSource } from '@/types/investments';
 export default function Dashboard() {
   const pathName = usePathname();
 
@@ -27,15 +27,16 @@ export default function Dashboard() {
   const allInvestmentPositions = useMemo(() => flattenInvestments(investments), [investments]);
   // For pie chart & summary
   const totalIncomes = incomes.reduce(
-    (sum, src) => sum + src.payments.reduce((s, p) => s + p.amount, 0),
+    (sum, src) => sum + src.payments.reduce((s: number, p) => s + p.amount, 0),
     0,
   );
   const totalOutcomes = outcomes.reduce(
-    (sum, src) => sum + src.payments.reduce((s, p) => s + p.amount, 0),
+    (sum, src) => sum + src.payments.reduce((s: number, p) => s + p.amount, 0),
     0,
   );
   const totalInvested = investments.reduce(
-    (sum, src) => sum + src.items.reduce((ss, i) => ss + i.investedAmount, 0),
+    (sum: number, src: InvestmentSource) =>
+      sum + src.items.reduce((ss: number, i: InvestmentItem) => ss + i.investedAmount, 0),
     0,
   );
   const outcomesDescription = outcomes.map((outcome) => ({ description: outcome.description }));

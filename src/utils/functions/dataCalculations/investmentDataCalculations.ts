@@ -24,9 +24,9 @@ export function RecentLoss({ data }: DataCalculationProps): RecentSideInfoItem[]
         unit: '$'
     }))
 }
-export function ProfitsThisMonth({ data }: DataCalculationProps): object {
+export function ProfitsThisMonth({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
-        filter((item) => item.status === 'closed' && item.result === 'profit')
+        filter((item) => item.status === 'closed' && item.result === 'profit').length
 
 }
 export function ProfitThisMonthAmount({ data }: DataCalculationProps): number {
@@ -34,9 +34,9 @@ export function ProfitThisMonthAmount({ data }: DataCalculationProps): number {
         filter((item) => item.status === 'closed' && item.result === 'profit').
         reduce((sum, item) => sum + (item.resultAmount ?? 0), 0)
 }
-export function LosesThisMonth({ data }: DataCalculationProps): object {
+export function LosesThisMonth({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
-        filter((item) => item.status === 'closed' && item.result === 'loss')
+        filter((item) => item.status === 'closed' && item.result === 'loss').length
 }
 export function LosesThisMonthAmount({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
@@ -55,9 +55,9 @@ export function OpenPositionsAmount({ data }: DataCalculationProps): number {
         filter((item) => item.status === 'open').
         reduce((sum, item) => sum + (item.resultAmount ?? 0), 0)
 }
-export function ClosedPositions({ data }: DataCalculationProps): object {
+export function ClosedPositions({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).
-        filter((item) => item.status === 'closed')
+        filter((item) => item.status === 'closed').length
 }
 export function ClosedPositionsAmount({ data }: DataCalculationProps): number {
     return data.flatMap((investment) => investment.items).

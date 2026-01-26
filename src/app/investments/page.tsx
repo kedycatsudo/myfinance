@@ -10,7 +10,7 @@ import SourcesDetailsContainer from '@/components/sourcesDetailsContainer/source
 import SourcesList from '@/components/SourcesList';
 import { usePathname } from 'next/navigation';
 import { useInvestmentsContext } from '@/context/FinanceGenericContext';
-import { InvestmentSource } from '@/types/investments';
+import { InvestmentSource, InvestmentItem } from '@/types/investments';
 import EditSourceModal from '@/components/modals/EditSourceModal';
 import SourceContainer from '@/components/sourcesDetailsContainer/sourceContainer';
 import CreateSourceModal, { SourceBase } from '@/components/modals/CreateSourceModal';
@@ -36,7 +36,7 @@ function fromSourceBaseToInvestmentSource(
   return {
     ...base,
     id,
-    items: [],
+    items: [] as InvestmentItem[], // Explicitly type the empty array
     type: 'investment',
   };
 }
@@ -47,7 +47,44 @@ export default function Investments() {
   const [editSource, setEditSource] = useState<InvestmentSource | null>(null);
   const [addSourceModalOpen, setAddSourceModalOpen] = useState(false);
   const { data: investments, updateSource, addSource, loading, error } = useInvestmentsContext();
-
+  const catchUpTheMonth = [
+    {
+      name: 'Profits this month',
+      data: ProfitsThisMonth({ data: investments }),
+    },
+    {
+      name: 'Profit amount this month',
+      data: ProfitThisMonthAmount({ data: investments }),
+      unit: '$',
+    },
+    {
+      name: 'Loses this month',
+      data: LosesThisMonth({ data: investments }),
+    },
+    {
+      name: 'Loses amount this month',
+      data: LosesThisMonthAmount({ data: investments }),
+      unit: '$',
+    },
+    {
+      name: 'Open Positions',
+      data: OpenPositions({ data: investments }).length,
+    },
+    {
+      name: 'Open positions amount',
+      data: OpenPositionsAmount({ data: investments }),
+      unit: '$',
+    },
+    {
+      name: 'Closed Positions',
+      data: ClosedPositions({ data: investments }),
+    },
+    {
+      name: 'Closed positions amount',
+      data: ClosedPositionsAmount({ data: investments }),
+      unit: '$',
+    },
+  ];
   const newSourceType: 'investment' = 'investment';
 
   // --- stats, chart, etc. code same as before ---
@@ -112,6 +149,26 @@ export default function Investments() {
           <div className="flex flex-row xs:flex-col relative gap-1 items-center">
             <RecentSideInfo header="Recent Profit" items={RecentProfits({ data: investments })} />
             <RecentSideInfo header="Recent Lose" items={RecentLoss({ data: investments })} />
+          </div>
+        </div>
+        <div className="flex flex-col xs:flex-row justify-center items-center gap-1 w-full">
+          <div className="w-full flex flex-col md:flex-row gap-2">
+            <CatchUpTheMonth
+              header="Month-to-Date Overview"
+              items={catchUpTheMonth}
+            ></CatchUpTheMonth>
+            <SourcesList
+              header="Open Positions and Sizes"
+              items={OpenPositions({ data: investments })}
+            ></SourcesList>
+          </div>
+          <div className="w-full flex flex-col gap-2">
+            <SourcesList
+              header="Investment Source List"
+              items={InvestmentSourcesList({ data: investments })}
+            ></SourcesList>
+
+            <CatchUpTheMonth header="Quick Summary" items={catchUpTheMonth}></CatchUpTheMonth>
           </div>
         </div>
         {/* ... More chart/stat components here ... */}

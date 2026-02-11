@@ -65,7 +65,7 @@ export default function AddInvestmentItemModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 p-1">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-40 p-1">
       <div className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative flex flex-col overflow-y-auto max-h-[90vh]">
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <h2 className="text-2xl font-bold mb-2 text-[#29388A] text-center">

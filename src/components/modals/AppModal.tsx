@@ -7,7 +7,7 @@ export default function AppModal() {
   if (!modal.isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-[#989899] rounded p-6 shadow-lg min-w-[250px] text-center mt-24">
         {' '}
         <p className="mb-4">{modal.message}</p>

@@ -59,7 +59,7 @@ export default function AddPaymentModal({ open, onClose, onSubmit }: AddPaymentM
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 p-1">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-40 p-1">
       <div className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative flex flex-col max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#29388A] scrollbar-track-[#989899]">
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <h2 className="text-2xl font-bold mb-2 text-[#29388A] text-center">Add Payment</h2>

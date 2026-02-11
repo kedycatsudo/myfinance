@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { assetPrefix, basePath } from '@/constants/config';
+import { assetPrefix } from '@/constants/config';
+
 export type MenuItem = {
   href: string;
   label: string;
@@ -15,61 +16,76 @@ type MobileMenuButtonProps = {
 export default function MobileMenuButton({ menuItems }: MobileMenuButtonProps) {
   const [open, setOpen] = useState(false);
 
+  // Helper to close menu when clicking a link or backdrop
+  function handleClose() {
+    setOpen(false);
+  }
+
   return (
     <>
-      {/* Floating Mobile Menu Button */}
-      <div className="flex justify-center [@media(min-width:450px)]:hidden fixed bottom-4 left-0 w-full z-50">
+      {/* Floating Mobile Menu Button (does not render when open) */}
+      {!open && (
         <button
+          type="button"
           onClick={() => setOpen(true)}
-          className="bg-[#727272] rounded-full p-4 shadow-lg"
+          className="flex 
+    items-center 
+    justify-center 
+    [@media(min-width:450px)]:hidden 
+    fixed 
+    bottom-4 
+    left-1/2 
+    transform 
+    -translate-x-1/2 
+    z-50 
+    bg-[#727272] 
+    rounded-full 
+    p-4 
+    shadow-lg"
           aria-label="Open menu"
         >
-          <Image
-            src={`${assetPrefix}images/Menu.svg`}
-            alt="Menu icon"
-            width={32}
-            height={32}
-            className="w-8 h-8"
-          />
+          <Image src={`${assetPrefix}images/Menu.svg`} alt="Menu icon" width={20} height={20} />
         </button>
-      </div>
+      )}
 
-      {/* Modal Overlay */}
+      {/* Only button for modal/menu */}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Background overlay with fade-in */}
-          <div
-            className="fixed inset-0 bg-black bg-opacity-60 transition-opacity duration-300 animate-fade-in"
-            onClick={() => setOpen(false)}
-          />
-          {/* Menu modal with scale & slide animation */}
-          <div className="relative z-10 mx-4 w-full max-w-xs bg-[#3A4483] rounded-2xl shadow-2xl p-6 animate-slide-down">
+        <button
+          type="button"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent"
+          style={{ background: 'rgba(0,0,0,0.60)' }}
+          aria-label="Mobile menu modal"
+          onClick={handleClose}
+        >
+          {/* Stop click in modal from closing it */}
+          <span
+            className="relative z-10 mx-4 w-full max-w-xs bg-[#3A4483] rounded-2xl shadow-2xl p-6 animate-slide-down flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Close button */}
             <button
+              type="button"
               className="absolute top-3 right-3 text-white text-2xl"
               aria-label="Close menu"
-              onClick={() => setOpen(false)}
+              onClick={handleClose}
             >
               ×
             </button>
-            <nav className="flex flex-col gap-6 text-center">
+            <nav className="flex flex-col gap-6 text-center w-full">
               {menuItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className="text-white font-bold text-xl hover:text-blue-200"
-                  onClick={() => setOpen(false)} // close when clicking a link
+                  onClick={handleClose}
                 >
                   {item.label}
                 </Link>
               ))}
             </nav>
-          </div>
-        </div>
+          </span>
+        </button>
       )}
-
-      {/* Tailwind/Custom Animations */}
-      {/* Custom animations moved to globals.css for SSR consistency */}
     </>
   );
 }

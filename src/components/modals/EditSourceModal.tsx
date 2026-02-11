@@ -99,7 +99,7 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   ];
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 p-1">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-opacity-40 p-1">
       <div
         className="w-full max-w-lg bg-[#989899] rounded-lg shadow-2xl p-4 relative max-h-[90vh] flex flex-col
         sm:max-w-full sm:rounded-none sm:h-full sm:justify-end sm:p-2"

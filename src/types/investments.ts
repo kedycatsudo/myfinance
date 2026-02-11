@@ -20,5 +20,5 @@ export type InvestmentItem = {
 export type InvestmentSource = SourceBase & {
     type: "crypto" | "forex" | "investment";
     items: InvestmentItem[];
-    name?: string
+    //name?: string IF THERE IS A TYPE ERROR LOOK HERE
 };

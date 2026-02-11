@@ -2,7 +2,7 @@ import { SourceBase } from "./shared";
 
 // Optionally: extend to include source-level total
 export type PaymentStatus = "paid" | "coming";
-
+export type FinanceSourceType = 'outcome' | 'income'
 export type FinancePayment = {
     id: string;
     name: string;
@@ -14,6 +14,8 @@ export type FinancePayment = {
 };
 
 export type FinanceSource = SourceBase & {
+
+    type: FinanceSourceType;
     payments: FinancePayment[];
     name?: string
     // Optionally add this, or compute on the fly:

@@ -30,7 +30,7 @@ import {
 
 // -- HELPERS
 function fromSourceBaseToInvestmentSource(
-  base: Omit<SourceBase, 'id'> & { type: 'investment' },
+  base: Omit<SourceBase, 'id'> & { sourceType: 'investment' },
   id: string,
 ): InvestmentSource {
   return {
@@ -141,12 +141,12 @@ export default function Investments() {
             INVESTMENTS
           </h1>
         </div>
-        <div className="flex xs:hidden flex-col items-center gap-5">
+        <div className="w-full flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
           />
-          <div className="flex flex-row xs:flex-col relative gap-1 items-center">
+          <div className="w-full flex flex-col relative gap-1 items-center">
             <RecentSideInfo header="Recent Profit" items={RecentProfits({ data: investments })} />
             <RecentSideInfo header="Recent Lose" items={RecentLoss({ data: investments })} />
           </div>
@@ -213,7 +213,9 @@ export default function Investments() {
               onClose={() => setAddSourceModalOpen(false)}
               onSubmit={(fields) => {
                 const id = Date.now().toString() + Math.random().toString(36).slice(2);
-                addSource(fromSourceBaseToInvestmentSource({ ...fields, type: newSourceType }, id));
+                addSource(
+                  fromSourceBaseToInvestmentSource({ ...fields, sourceType: newSourceType }, id),
+                );
                 setAddSourceModalOpen(false);
               }}
             />

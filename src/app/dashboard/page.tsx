@@ -15,19 +15,22 @@ import {
 import { useMemo } from 'react';
 import { flattenInvestments, flattenPayments } from '@/utils/functions/flattenData';
 import { InvestmentItem, InvestmentSource } from '@/types/investments';
+import { FinanceSource, FinancePayment } from '@/types/finance';
 export default function Dashboard() {
   const pathName = usePathname();
 
   // Get live data from generic contexts
   const { data: incomes } = useIncomesContext();
+  const incomesArray = incomes as FinanceSource[];
   const { data: outcomes } = useOutcomesContext();
   const { data: investments } = useInvestmentsContext();
   const allIncomePayments = useMemo(() => flattenPayments(incomes), [incomes]);
   const allOutcomePayments = useMemo(() => flattenPayments(outcomes), [outcomes]);
   const allInvestmentPositions = useMemo(() => flattenInvestments(investments), [investments]);
   // For pie chart & summary
-  const totalIncomes = incomes.reduce(
-    (sum, src) => sum + src.payments.reduce((s: number, p) => s + p.amount, 0),
+  const totalIncomes = incomesArray.reduce(
+    (sum: number, src: FinanceSource) =>
+      sum + src.payments.reduce((s: number, p: FinancePayment) => s + p.amount, 0),
     0,
   );
   const totalOutcomes = outcomes.reduce(

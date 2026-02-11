@@ -27,13 +27,14 @@ import SourceContainer from '@/components/sourcesDetailsContainer/sourceContaine
 
 // -- HELPERS
 function fromSourceBaseToFinanceSource(
-  base: Omit<SourceBase, 'id'> & { type: 'finance' },
+  base: Omit<SourceBase, 'id'> & { sourceType: 'finance' },
   id: string,
 ): FinanceSource {
   return {
     ...base,
     id,
     payments: [],
+    type: 'outcome',
   };
 }
 
@@ -78,7 +79,10 @@ export default function Outcomes() {
   // Example catchUp arrays here, use your calculation logic
   const catchUptheMonth = [
     { name: 'Total Outcomes', data: TotalOutcomes({ data: outcomes }), unit: '$' },
-    { name: 'Got Paid Payments', data: Object.keys(PaidOutcomePayments({ data: outcomes })).length },
+    {
+      name: 'Got Paid Payments',
+      data: Object.keys(PaidOutcomePayments({ data: outcomes })).length,
+    },
     { name: 'Got Paid Amount', data: TotalIncomesPaidAmount({ data: outcomes }), unit: '$' },
     { name: 'UpComing Payments', data: Object.keys(UpcomingPayments({ data: outcomes })).length },
     { name: 'Upcoming Amount', data: UpcomingAmount({ data: outcomes }), unit: '$' },
@@ -113,7 +117,7 @@ export default function Outcomes() {
             <RecentSideInfo header="Upcoming payment" items={UpcomingPayment({ data: outcomes })} />
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center gap-1 w-full">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-1 w-full">
           <CatchUpTheMonth header="Quick Catch Up For This Month" items={catchUptheMonth} />
           <SourcesList header="Outcome Sources" items={OutcomeSourcesList({ data: outcomes })} />
         </div>
@@ -158,7 +162,9 @@ export default function Outcomes() {
               onClose={() => setAddSourceModalOpen(false)}
               onSubmit={(fields) => {
                 const id = Date.now().toString() + Math.random().toString(36).slice(2);
-                addSource(fromSourceBaseToFinanceSource({ ...fields, type: newSourceType }, id));
+                addSource(
+                  fromSourceBaseToFinanceSource({ ...fields, sourceType: newSourceType }, id),
+                );
                 setAddSourceModalOpen(false);
               }}
             />

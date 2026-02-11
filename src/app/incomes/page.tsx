@@ -26,14 +26,14 @@ import {
 } from '@/utils/functions/dataCalculations/incomesDataCalculations';
 // Helper to create a FinanceSource from base fields
 function fromSourceBaseToFinanceSource(
-  base: Omit<SourceBase, 'id'> & { type: 'finance' },
+  base: Omit<SourceBase, 'id'> & { sourceType: 'finance' },
   id: string,
 ): FinanceSource {
   return {
     ...base,
     id,
     payments: [] as FinancePayment[],
-    type: 'finance',
+    type: 'income',
   };
 }
 
@@ -148,7 +148,7 @@ export default function Incomes() {
             INCOMES
           </h1>
         </div>
-        <div className=" flex xs:hidden flex-col items-center gap-5">
+        <div className="w-full flex xs:hidden flex-col items-center gap-5">
           <SideBar
             activePath={pathName}
             className="hidden [@media(min-width:450px)]:flex rounded-lg ..."
@@ -158,7 +158,7 @@ export default function Incomes() {
             <RecentSideInfo header="Upcoming Payment" items={upcomingEarning} />
           </div>
         </div>
-        <div className="flex flex-row justify-center items-center gap-1 w-full">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-1 w-full">
           <CatchUpTheMonth header="Month-to-Date Overview" items={catchUptheMonth} />
           <SourcesList header="Income Sources" items={incomesSourceList} />
         </div>
@@ -208,7 +208,7 @@ export default function Incomes() {
               onClose={() => setAddSourceModalOpen(false)}
               onSubmit={(fields) => {
                 const id = Date.now().toString() + Math.random().toString(36).slice(2);
-                addSource(fromSourceBaseToFinanceSource({ ...fields, type: 'finance' }, id));
+                addSource(fromSourceBaseToFinanceSource({ ...fields, sourceType: 'finance' }, id));
                 setAddSourceModalOpen(false);
               }}
             />

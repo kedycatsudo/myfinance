@@ -3,5 +3,5 @@ export type SourceBase = {
     sourceName: string;
     description?: string;
     date?: string;
-    type: 'finance' | 'investment';
+    sourceType: 'finance' | 'investment';
 };

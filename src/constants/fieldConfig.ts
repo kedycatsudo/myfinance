@@ -1,7 +1,7 @@
 import { FinancePayment } from '@/types/finance';
 import { InvestmentItem } from '@/types/investments';
 
-export const PAYMENT_FIELDS: Array<{ field: keyof FinancePayment, label: string, type?: string, enumOptions?: string[] }> = [
+export const PAYMENT_FIELDS: Array<{ field: keyof FinancePayment, label: string, type?: string, enumOptions?: string[], }> = [
     { field: "name", label: "Name" },
     { field: "type", label: "Type" },
     { field: "amount", label: "Amount", type: "number" },

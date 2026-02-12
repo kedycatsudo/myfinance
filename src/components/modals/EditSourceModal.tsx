@@ -61,17 +61,22 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
   function validate() {
     const err: Record<string, string> = {};
     if (!localSource.sourceName?.trim()) err.sourceName = 'Source name required';
-    const items = isFinanceSource(localSource)
-      ? localSource.payments
-      : isInvestmentSource(localSource)
-        ? localSource.items
-        : [];
-    for (const item of items) {
-      if ('name' in item && !item.name?.trim()) err[`item.${item.id}.name`] = 'Name required';
-      if ('assetName' in item && !item.assetName?.trim())
-        err[`item.${item.id}.assetName`] = 'Asset name required';
+
+    if (isFinanceSource(localSource)) {
+      for (const payment of localSource.payments ?? []) {
+        if ('name' in payment && typeof payment.name === 'string' && !payment.name?.trim()) {
+          err[`payment.${payment.id}.name`] = 'Name is required';
+        }
+      }
+    } else if (isInvestmentSource(localSource)) {
+      for (const item of localSource.items ?? []) {
+        if ('assetName' in item && typeof item.assetName === 'string' && !item.assetName?.trim()) {
+          err[`item.${item.id}.assetName`] = 'Asset name required';
+        }
+      }
     }
     setErrors(err);
+
     return Object.keys(err).length === 0;
   }
 
@@ -82,7 +87,6 @@ export default function EditSourceModal({ open, source, onClose, onSubmit }: Edi
       setShowAppModal(true);
     }
   };
-
   const sourceFields = [
     {
       label: ' Source Name',

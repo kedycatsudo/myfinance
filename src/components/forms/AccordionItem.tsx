@@ -17,7 +17,7 @@ type AccordionItemProps = {
   isOpen: boolean;
   toggleOpen: () => void;
   handleItemInput: (itemId: string, field: string, value: any) => void;
-  errors?: Record<string, string>;
+  errors?: Record<string, any>;
 };
 
 //Renders on item(payment/investment) accordion, reusable
@@ -31,6 +31,22 @@ export default function AccordionItem({
   handleItemInput,
   errors,
 }: AccordionItemProps) {
+  function getError(
+    errors: Record<string, any> | undefined,
+    itemTypeKey: string,
+    itemId: string | number,
+    field: string,
+  ) {
+    if (!errors) return undefined;
+    const flatKey = `${itemTypeKey}.${itemId}.${field}`;
+    if (flatKey in errors) return errors[flatKey];
+    const typeObj = errors[itemTypeKey];
+    if (typeObj && typeof typeObj === 'object') {
+      const idObj = typeObj[itemId];
+      if (idObj && typeof idObj === 'object') return idObj[field];
+    }
+    return undefined;
+  }
   return (
     <div
       className={`border-4 border-[#29388A] rounded px-2 py-2 transition-all cursor-pointer ${isOpen ? 'bg-[#3A4483]/75 text-white' : 'text-[#29388A]'}`}
@@ -50,12 +66,12 @@ export default function AccordionItem({
                 enumOptions={f.enumOptions}
                 value={item[f.field]}
                 onChange={(v) => handleItemInput(item.id, f.field, v)}
-                err={errors?.[`${itemTypeKey}.${item.id}.${f.field}`]}
+                err={getError(errors, itemTypeKey, item.id, f.field)}
               ></FieldInput>
             ),
           )}
         </div>
-      )}
+      )}{' '}
     </div>
   );
 }

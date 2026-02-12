@@ -1,6 +1,6 @@
 1:"$Sreact.fragment"
 3:I[97367,["/myfinance/_next/static/chunks/ff1a16fafef87110.js","/myfinance/_next/static/chunks/7340adf74ff47ec0.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"buildId":"GcA1B8pBefVVJDCig1Rvi","rsc":["$","$1","c",{"children":["$L2",null,["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
+0:{"buildId":"T4Sa0gMXxuMimhS0h2XPj","rsc":["$","$1","c",{"children":["$L2",null,["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"loading":null,"isPartial":false}
 5:null
 2:E{"digest":"NEXT_REDIRECT;replace;/login;307;"}

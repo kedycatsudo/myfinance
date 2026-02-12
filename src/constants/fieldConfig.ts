@@ -3,7 +3,7 @@ import { InvestmentItem } from '@/types/investments';
 
 export const PAYMENT_FIELDS: Array<{ field: keyof FinancePayment, label: string, type?: string, enumOptions?: string[], }> = [
     { field: "name", label: "Name" },
-    { field: "type", label: "Type" },
+    { field: "type", label: "Type", enumOptions: ["credit", "cash"] },
     { field: "amount", label: "Amount", type: "number" },
     { field: "date", label: "Date", type: "date" },
     { field: "loop", label: "Loop", type: "checkbox" },

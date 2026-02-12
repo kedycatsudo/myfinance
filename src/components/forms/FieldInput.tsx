@@ -43,7 +43,7 @@ export default function FieldInput({
 }: FieldInputProps) {
   if (enumOptions)
     return (
-      <label>
+      <label className="block">
         {' '}
         <span className="block">{label}</span>
         <select
